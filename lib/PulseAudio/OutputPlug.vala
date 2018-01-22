@@ -64,6 +64,7 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
         }
     }
 
+    [CCode (notify = false)]
     public override unowned PantheonSoundControl.Channel? channel {
         get {
             return m_Channel;
@@ -74,10 +75,12 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
                     ((Manager) manager).operations.move_sink_input_by_index (index, ((Channel) value).index, (s) => {
                         if (s) {
                             m_Channel = (Channel)value;
+                            notify_property("channel");
                         }
                     });
                 } else {
                     m_Channel = (Channel)value;
+                    notify_property("channel");
                 }
             }
         }
