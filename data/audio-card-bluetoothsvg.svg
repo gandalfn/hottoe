@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32"
+   width="32"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="audio-card-bluetoothsvg.svg"
+   inkscape:export-filename="/usr/share/icons/elementary/status/symbolic/bluetooth-active-symbolic.svg.png"
+   inkscape:export-xdpi="192"
+   inkscape:export-ydpi="192"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="21.086899"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <g
+     id="g4542"
+     transform="translate(0.63486568)">
+    <g
+       style="color:#bebebe"
+       id="g4"
+       transform="matrix(2.1331719,0,0,2.1331719,-589.60128,534.36077)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2"
+         style="overflow:visible;fill:#666666;marker:none"
+         overflow="visible"
+         d="m 280.5,-250 c -0.277,0 -0.5,0.223 -0.5,0.5 v 4.875 l -1.719,-1.5 c -0.312,-0.273 -0.757,-0.22 -1.03,0.094 a 0.753,0.753 0 0 0 0.062,1.062 l 2.25,1.969 -2.25,1.969 a 0.753,0.753 0 0 0 -0.063,1.062 c 0.274,0.313 0.719,0.367 1.031,0.094 l 1.72,-1.5 v 4.875 c 0,0.277 0.222,0.5 0.5,0.5 0.282,0 0.437,-0.02 0.655,-0.188 l 3.532,-3.156 a 0.78,0.78 0 0 0 0.218,-0.375 0.745,0.745 0 0 0 0.032,-0.281 0.723,0.723 0 0 0 -0.032,-0.156 0.78,0.78 0 0 0 -0.218,-0.375 l -2.813,-2.47 2.813,-2.468 a 0.78,0.78 0 0 0 0.218,-0.375 0.712,0.712 0 0 0 0,-0.437 0.78,0.78 0 0 0 -0.218,-0.375 l -3.532,-3.157 c -0.199,-0.16 -0.427,-0.187 -0.656,-0.187 z m 0.5,2.063 2.094,1.875 -2.094,1.812 z m 0,6.187 2.094,1.813 -2.094,1.875 z" />
+    </g>
+    <path
+       d="m 20.818011,15.988625 c 0,-2.246689 -0.854359,-4.209967 -2.143628,-5.446675 l -1.100673,0.982153 c 0.994522,1.057387 1.636579,2.660987 1.636579,4.464522 0,1.803535 -0.642057,3.407133 -1.636579,4.46452 l 1.100673,0.982152 c 1.289269,-1.236708 2.143628,-3.198953 2.143628,-5.446672 z"
+       overflow="visible"
+       style="color:#bebebe;overflow:visible;fill:#666666;stroke-width:1.03059125;marker:none"
+       id="path4"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 29.313804,15.566139 c 0,-4.756532 -1.783108,-8.8228117 -4.36299,-10.6929763 L 23.240272,6.407052 c 2.221483,1.5663369 3.764673,5.092805 3.764673,9.159087 0,4.06628 -1.54319,7.592753 -3.764673,9.159087 l 1.710542,1.53389 c 2.579882,-1.870165 4.36299,-5.936447 4.36299,-10.692977 z"
+       overflow="visible"
+       style="color:#bebebe;overflow:visible;fill:#666666;stroke-width:1.47793746;marker:none"
+       id="path2-7"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 24.7805,15.566139 c 0,-3.215268 -1.227742,-6.0249388 -3.080456,-7.7948105 l -1.581695,1.4055722 c 1.429152,1.5132403 2.35181,3.8081753 2.35181,6.3892383 0,2.581064 -0.922658,4.875996 -2.35181,6.389239 l 1.581695,1.405572 C 23.552758,21.591078 24.7805,18.782881 24.7805,15.566139 Z"
+       overflow="visible"
+       style="color:#bebebe;overflow:visible;fill:#666666;stroke-width:1.47793746;marker:none"
+       id="path4-5"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
