@@ -42,12 +42,23 @@ public class PantheonSoundControl.Widgets.DeviceList : Gtk.ScrolledWindow {
         m_DefaultDeviceGroup = new Gtk.RadioButton (null);
 
         manager.device_added.connect (on_device_added);
+        manager.device_removed.connect (on_device_removed);
     }
 
     private void on_device_added (Device inDevice) {
         var view = new DeviceView (inDevice);
         view.hexpand = true;
         view.group = m_DefaultDeviceGroup;
+        view.show_all ();
         m_ListGrid.add (view);
+    }
+
+    private void on_device_removed (Device inDevice) {
+        m_ListGrid.get_children ().foreach ((child) => {
+            unowned DeviceView? view = child as DeviceView;
+            if (view != null && view.device == inDevice) {
+                child.destroy ();
+            }
+        });
     }
 }
