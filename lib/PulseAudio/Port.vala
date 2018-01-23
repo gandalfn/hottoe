@@ -21,11 +21,15 @@
 
 internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port {
     public Port (Device inDevice, global::PulseAudio.CardPortInfo inInfo) {
+        var icon_name = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME);
+        if (icon_name == null) {
+            icon_name = inInfo.name;
+        }
         Object (
             device: inDevice,
             name: inInfo.name,
             description: inInfo.description,
-            icon_name: inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME),
+            icon_name: icon_name,
             direction: direction_from_pa_direction (inInfo.direction)
         );
 
