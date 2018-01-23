@@ -17,7 +17,7 @@ shared_module(
         'Widgets/DeviceSettingsPage.vala',
         'Widgets/DeviceSettingsListRow.vala',
         'Widgets/DeviceSettingsList.vala',
-        'Widgets/DisplayWidget.vala',
+        'Widgets/IndicatorIcon.vala',
         'Widgets/MainView.vala'
     ],
     dependencies: [

@@ -21,7 +21,7 @@
 
 public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
     private Manager m_Manager;
-    private Widgets.DisplayWidget? m_IndicatorIcon;
+    private Widgets.IndicatorIcon? m_IndicatorIcon;
     private Widgets.MainView m_MainView;
     private uint m_TimeoutActive;
 
@@ -39,7 +39,7 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (m_IndicatorIcon == null) {
-            m_IndicatorIcon = new Widgets.DisplayWidget (m_Manager);
+            m_IndicatorIcon = new Widgets.IndicatorIcon (m_Manager);
 
             m_Manager.start ();
         }

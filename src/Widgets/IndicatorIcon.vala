@@ -1,6 +1,6 @@
 /* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * DisplayWidget.vala
+ * IndicatorIcon.vala
  * Copyright (C) Nicolas Bruguier 2018 <gandalfn@club-internet.fr>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.DisplayWidget  : Gtk.Grid {
+public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
     private Gtk.Image m_IconDevice;
     private unowned GLib.Binding m_ChannelBind;
 
@@ -41,7 +41,7 @@ public class PantheonSoundControl.Widgets.DisplayWidget  : Gtk.Grid {
         add (m_IconDevice);
     }
 
-    public DisplayWidget (Manager inManager) {
+    public IndicatorIcon (Manager inManager) {
         GLib.Object (
             manager: inManager
         );
