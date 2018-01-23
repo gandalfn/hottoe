@@ -72,11 +72,12 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
         m_CheckIcon.valign = Gtk.Align.START;
 
         var overlay = new Gtk.Overlay ();
-        overlay.width_request = 34;
-        overlay.height_request = 34;
+        overlay.width_request = 32;
+        overlay.height_request = 32;
         overlay.add (icon);
         overlay.add_overlay (m_CheckIcon);
 
+        content_widget.hexpand = false;
         content_widget.add (overlay);
 
         channel.bind_property ("port", icon, "icon-name", GLib.BindingFlags.DEFAULT, (b, f, ref t) => {
