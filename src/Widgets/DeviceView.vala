@@ -19,6 +19,7 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
+    private int m_NbPorts;
     private Gtk.Label m_TitleLabel;
     private Gtk.Revealer m_Content;
     private Gtk.RadioButton m_DefaultCheck;
@@ -114,24 +115,23 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
             }
         });
 
-
         device.changed.connect (on_device_changed);
         on_device_changed ();
     }
 
     private void on_device_changed () {
-        PantheonSoundControl.Port? hdmiPort = null;
-        foreach (var port in device.get_output_ports ()) {
-            if (port.name.has_prefix ("hdmi")) {
-                hdmiPort = port;
-                break;
+        int nbPorts = device.get_output_ports().length + device.get_input_ports().length;
+
+        // device ports has changed check default profile
+        if (nbPorts != m_NbPorts) {
+            // If device profile is set to "off" on nb ports change set top most priority profile
+            if (device.active_profile != null && device.active_profile.name == "off") {
+                var profile = device.get_profiles ()[0];
+                if (profile != null && profile.name != device.active_profile.name) {
+                    device.active_profile = profile;
+                }
             }
-        }
-        if (hdmiPort != null) {
-            var profile = device.get_profiles ()[0];
-            if (profile != null) {
-                device.active_profile = profile;
-            }
+            m_NbPorts = nbPorts;
         }
     }
 }
