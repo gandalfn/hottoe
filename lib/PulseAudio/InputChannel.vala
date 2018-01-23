@@ -112,6 +112,13 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
         update (inSourceInfo);
     }
 
+    ~InputChannel () {
+        if (m_ActivePort != null) {
+            m_ActivePort.weak_unref (on_active_port_destroyed);
+            m_ActivePort = null;
+        }
+    }
+
     public bool update (global::PulseAudio.SourceInfo inSourceInfo) {
         bool updated = false;
 
