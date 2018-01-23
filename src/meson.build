@@ -18,7 +18,7 @@ shared_module(
         'Widgets/DeviceSettingsListRow.vala',
         'Widgets/DeviceSettingsList.vala',
         'Widgets/IndicatorIcon.vala',
-        'Widgets/MainView.vala'
+        'Widgets/IndicatorView.vala'
     ],
     dependencies: [
         pantheon_sound_control_dep,

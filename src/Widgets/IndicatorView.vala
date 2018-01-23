@@ -1,6 +1,6 @@
 /* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * MainView.vala
+ * IndicatorView.vala
  * Copyright (C) Nicolas Bruguier 2018 <gandalfn@club-internet.fr>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.MainView  : Gtk.Box {
+public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
     private DeviceList m_DeviceList;
     private ClientList m_ClientList;
 
@@ -51,7 +51,7 @@ public class PantheonSoundControl.Widgets.MainView  : Gtk.Box {
         add (settings_button);
     }
 
-    public MainView (Manager inManager) {
+    public IndicatorView (Manager inManager) {
         GLib.Object (
             manager: inManager
         );
