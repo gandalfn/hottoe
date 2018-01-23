@@ -77,7 +77,7 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
         overlay.add (icon);
         overlay.add_overlay (m_CheckIcon);
 
-        add (overlay);
+        content_widget.add (overlay);
 
         channel.bind_property ("port", icon, "icon-name", GLib.BindingFlags.DEFAULT, (b, f, ref t) => {
             unowned Port? port = (Port)f;
@@ -100,6 +100,7 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
 
     public ChannelRadioButton (Channel inChannel, Gee.LinkedList<ChannelRadioButton> inGroup) {
         GLib.Object (
+            content_widget: new Gtk.Grid (),
             channel: inChannel,
             group: inGroup
         );
