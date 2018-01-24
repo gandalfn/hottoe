@@ -36,9 +36,10 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
             }
         }
         set {
-            foreach (unowned Gtk.Widget m_ListBox_child in m_ListBox.get_children ()) {
-                if (((DeviceSettingsListRow) m_ListBox_child).page.device.name == value) {
-                    m_ListBox.select_row ((Gtk.ListBoxRow) m_ListBox_child);
+            foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
+                if (((DeviceSettingsListRow) child).page.device.name == value) {
+                    m_ListBox.select_row ((Gtk.ListBoxRow) child);
+                    break;
                 }
             }
         }
@@ -68,26 +69,8 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
         stack = new Gtk.Stack ();
         stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
-        on_sidebar_changed ();
-        stack.add.connect (on_sidebar_changed);
-        stack.remove.connect (on_sidebar_changed);
-
         manager.device_added.connect (on_device_added);
-    }
-
-    private void on_sidebar_changed () {
-        m_ListBox.get_children ().foreach ((m_ListBox_child) => {
-            m_ListBox_child.destroy ();
-        });
-
-        stack.get_children ().foreach ((child) => {
-            if (child is DeviceSettingsPage) {
-                var row = new DeviceSettingsListRow ((DeviceSettingsPage) child);
-                m_ListBox.add (row);
-            }
-        });
-
-        m_ListBox.show_all ();
+        manager.device_removed.connect (on_device_removed);
     }
 
     private void on_device_added (Device inDevice) {
@@ -95,8 +78,23 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
         page.show_all ();
         stack.add_named (page, inDevice.name);
 
-        if (page.active_device && visible_device == null) {
+        var row = new DeviceSettingsListRow (page);
+        row.show_all ();
+        m_ListBox.add (row);
+
+        if (inDevice.active && visible_device == null) {
             visible_device = inDevice.name;
+        }
+    }
+
+    private void on_device_removed (Device inDevice) {
+        foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
+            unowned DeviceSettingsListRow? row = child as DeviceSettingsListRow;
+            if (row != null && row.page.device == inDevice) {
+                row.page.destroy ();
+                row.destroy ();
+                break;
+            }
         }
     }
 }

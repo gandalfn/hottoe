@@ -25,7 +25,6 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
     private Gtk.Label m_TitleLabel;
 
     public unowned DeviceSettingsPage page { get; construct; }
-    public bool enabled { get; set; }
 
     public string status {
         set {
@@ -55,7 +54,7 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
 
         m_StatusIcon = new Gtk.Image ();
         m_StatusIcon.halign = Gtk.Align.END;
-        m_StatusIcon.valign = Gtk.Align.END;
+        m_StatusIcon.valign = Gtk.Align.START;
 
         m_StatusLabel = new Gtk.Label (null);
         m_StatusLabel.no_show_all = true;
@@ -86,10 +85,22 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
 
         add (m_Content);
 
-        page.bind_property ("icon-name", icon, "icon-name", GLib.BindingFlags.DEFAULT);
-        page.bind_property ("status", this, "status", GLib.BindingFlags.DEFAULT);
-        page.bind_property ("title", this, "title", GLib.BindingFlags.DEFAULT);
-        page.bind_property ("active-device", m_Content, "reveal_child", GLib.BindingFlags.DEFAULT | GLib.BindingFlags.SYNC_CREATE);
+        page.bind_property ("icon-name", icon, "icon-name");
+        page.bind_property ("status", this, "status");
+        page.bind_property ("title", this, "title");
+        page.device.bind_property ("active", m_Content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
+        page.device.manager.bind_property ("default-output-device", m_StatusIcon, "icon-name",
+                                           GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+            unowned Device? defaultDevice = (Device)f;
+            if (defaultDevice == page.device) {
+                t.set_string ("account-logged-in");
+                m_StatusIcon.show ();
+            } else {
+                t.set_string ("");
+                m_StatusIcon.hide ();
+            }
+            return true;
+        });
 
         if (page.status != null) {
             status = page.status;

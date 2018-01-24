@@ -21,14 +21,35 @@
 
 public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.SimpleSettingsPage {
     public unowned Device device { get; construct; }
-    public bool active_device { get; private set; }
 
     construct {
-        hscrollbar_policy = Gtk.PolicyType.NEVER;
-        vscrollbar_policy = Gtk.PolicyType.NEVER;
+        status_switch.notify["active"].connect (() => {
+            if (!status_switch.active && device.manager.default_output_device == device) {
+                status_switch.active = true;
+            } else if (status_switch.active && device.manager.default_output_device != device) {
+                device.manager.default_output_device = device;
+            }
+        });
 
-        device.changed.connect (on_device_changed);
-        on_device_changed ();
+        device.manager.bind_property ("default-output-device", status_switch, "active",
+                                      GLib.BindingFlags.SYNC_CREATE,
+                                      (b, f, ref t) => {
+            unowned Device? defaultDevice = (Device)f;
+            t.set_boolean (defaultDevice == device);
+            return true;
+        });
+
+        device.manager.bind_property ("default-output-device", this, "status",
+                                     GLib.BindingFlags.SYNC_CREATE,
+                                     (b, f, ref t) => {
+            unowned Device? defaultDevice = (Device)f;
+            if (defaultDevice == device) {
+                t.set_string (device.description + _(" (Default)"));
+            } else {
+                t.set_string (device.description);
+            }
+            return true;
+        });
     }
 
     public DeviceSettingsPage (Device inDevice) {
@@ -40,24 +61,5 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.SimpleSe
             title: inDevice.display_name,
             status: inDevice.description
         );
-
-        update_status ();
-
-        status_switch.notify["active"].connect (update_status);
-    }
-
-    private void update_status () {
-        if (status_switch.active) {
-            status_type = Granite.SettingsPage.StatusType.SUCCESS;
-            status = device.description + _(" (Default)");
-        } else {
-            status_type = Granite.SettingsPage.StatusType.NONE;
-            status = device.description;
-        }
-    }
-
-    private void on_device_changed () {
-        active_device = device.get_output_ports ().length > 0 ||
-                        device.get_input_ports ().length > 0;
     }
 }
