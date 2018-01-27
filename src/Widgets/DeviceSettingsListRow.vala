@@ -26,20 +26,6 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
 
     public unowned DeviceSettingsPage page { get; construct; }
 
-    public string status {
-        set {
-            m_StatusLabel.label = "<span font_size='small'>%s</span>".printf (value);
-            m_StatusLabel.no_show_all = false;
-            m_StatusLabel.show ();
-        }
-    }
-
-    public string title {
-        set {
-            m_TitleLabel.label = value;
-        }
-    }
-
     public DeviceSettingsListRow (DeviceSettingsPage page) {
         Object (
             page: page
@@ -47,7 +33,7 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
     }
 
     construct {
-        m_TitleLabel = new Gtk.Label (page.title);
+        m_TitleLabel = new Gtk.Label (page.device.display_name);
         m_TitleLabel.ellipsize = Pango.EllipsizeMode.END;
         m_TitleLabel.xalign = 0;
         m_TitleLabel.get_style_context ().add_class ("h3");
@@ -57,13 +43,12 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
         m_StatusIcon.valign = Gtk.Align.START;
 
         m_StatusLabel = new Gtk.Label (null);
-        m_StatusLabel.no_show_all = true;
         m_StatusLabel.use_markup = true;
         m_StatusLabel.ellipsize = Pango.EllipsizeMode.END;
         m_StatusLabel.xalign = 0;
 
         var icon = new Gtk.Image ();
-        icon.icon_name = page.icon_name;
+        icon.icon_name = page.device.icon_name;
         icon.pixel_size =  32;
 
         var overlay = new Gtk.Overlay ();
@@ -85,9 +70,8 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
 
         add (m_Content);
 
-        page.bind_property ("icon-name", icon, "icon-name");
-        page.bind_property ("status", this, "status");
-        page.bind_property ("title", this, "title");
+        page.device.bind_property ("icon-name", icon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
+        page.device.bind_property ("display-name", m_TitleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
         page.device.bind_property ("active", m_Content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
         page.device.manager.bind_property ("default-output-device", m_StatusIcon, "icon-name",
                                            GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
@@ -101,9 +85,15 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
             }
             return true;
         });
-
-        if (page.status != null) {
-            status = page.status;
-        }
+        page.device.bind_property ("active-profile", m_StatusLabel, "label",
+                                   GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+            unowned Profile? profile = (Profile)f;
+            if (profile != null) {
+                t.set_string (profile.description);
+            } else {
+                t.set_string ("");
+            }
+            return true;
+        });
     }
 }

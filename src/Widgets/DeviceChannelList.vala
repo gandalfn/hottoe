@@ -20,10 +20,17 @@
 
 public class PantheonSoundControl.Widgets.DeviceChannelList : Gtk.Grid {
     public unowned Device device { get; construct; }
+    public Direction direction { get; construct; }
+    public Gtk.IconSize icon_size { get; set; default = Gtk.IconSize.DND; }
+    public int icon_pixel_size { get; set; default = 32; }
+    public bool show_labels { get; set; default = false; }
+    public bool show_balance { get; set; default = false; }
+    public double monitor_nb_bars { get; set; default = 8.0; }
 
-    public DeviceChannelList (Device inDevice) {
+    public DeviceChannelList (Device inDevice, Direction inDirection = Direction.INPUT | Direction.OUTPUT) {
         Object (
-            device: inDevice
+            device: inDevice,
+            direction: inDirection
         );
     }
 
@@ -40,9 +47,16 @@ public class PantheonSoundControl.Widgets.DeviceChannelList : Gtk.Grid {
     }
 
     private void on_channel_added (Channel inChannel) {
-        var view = new ChannelView (inChannel);
-        view.show_all ();
-        add (view);
+        if (inChannel.direction in direction) {
+            var view = new ChannelView (inChannel);
+            bind_property("icon-size", view, "icon-size", GLib.BindingFlags.SYNC_CREATE);
+            bind_property("icon-pixel-size", view, "icon-pixel-size", GLib.BindingFlags.SYNC_CREATE);
+            bind_property("show-labels", view, "show-labels", GLib.BindingFlags.SYNC_CREATE);
+            bind_property("show-balance", view, "show-balance", GLib.BindingFlags.SYNC_CREATE);
+            bind_property("monitor-nb-bars", view, "monitor-nb-bars", GLib.BindingFlags.SYNC_CREATE);
+            view.show_all ();
+            add (view);
+        }
     }
 
     private void on_channel_removed (Channel inChannel) {

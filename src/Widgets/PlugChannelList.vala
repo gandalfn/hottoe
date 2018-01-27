@@ -34,9 +34,9 @@ public class PantheonSoundControl.Widgets.PlugChannelList : Gtk.Grid {
         m_Group = new Gee.LinkedList<ChannelRadioButton> ();
 
         Channel[] channels;
-        if (plug.direction == Channel.Direction.INPUT) {
+        if (plug.direction == Direction.INPUT) {
             channels = plug.manager.get_input_channels ();
-        } else if (plug.direction == Channel.Direction.OUTPUT) {
+        } else if (plug.direction == Direction.OUTPUT) {
             channels = plug.manager.get_output_channels ();
         }
 

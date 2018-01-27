@@ -52,9 +52,15 @@ public class PantheonSoundControl.SwitchboardPlug : Switchboard.Plug {
     }
 
     public override void shown () {
+        if (m_Manager != null) {
+            m_Manager.enable_monitoring = true;
+        }
     }
 
     public override void hidden () {
+        if (m_Manager != null) {
+            m_Manager.enable_monitoring = false;
+        }
     }
 
     public override void search_callback (string inLocation) {

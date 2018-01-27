@@ -24,6 +24,8 @@ public class PantheonSoundControl.Widgets.DeviceSettingsView : Gtk.Grid {
     public unowned Manager manager { get; construct; }
 
     construct {
+        expand = true;
+
         orientation = Gtk.Orientation.HORIZONTAL;
 
         m_DevicesList = new DeviceSettingsList (manager);

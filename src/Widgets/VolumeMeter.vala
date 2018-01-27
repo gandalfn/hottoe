@@ -19,8 +19,6 @@
  */
 
 public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
-    const double NB_BARS = 8.0;
-
     private int m_Current;
     private double m_Levels[5];
     private Monitor m_Monitor;
@@ -32,15 +30,16 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
     }
 
     public double volume_level { get; set; }
+    public double nb_bars { get; set; default = 8.0; }
 
     construct {
         mode = Gtk.LevelBarMode.DISCRETE;
         min_value = 0.0;
-        max_value = NB_BARS;
+        max_value = nb_bars;
 
-        add_offset_value ("low",    8.0);
-        add_offset_value ("middle", 7.9);
-        add_offset_value ("high",   7.6);
+        add_offset_value ("low",    nb_bars);
+        add_offset_value ("middle", nb_bars * 0.9875);
+        add_offset_value ("high",   nb_bars * 0.95);
     }
 
     public VolumeMeter (Channel inChannel) {
@@ -51,6 +50,14 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
         inChannel.manager.bind_property ("enable-monitoring", m_Monitor, "active", GLib.BindingFlags.SYNC_CREATE);
         m_Monitor.bind_property ("active", this, "sensitive");
         inChannel.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
+
+        notify["nb-bars"].connect (() => {
+            max_value = nb_bars;
+
+            add_offset_value ("low",    nb_bars);
+            add_offset_value ("middle", nb_bars * 0.9875);
+            add_offset_value ("high",   nb_bars * 0.95);
+        });
     }
 
     private void on_monitor_peak (float inData) {
@@ -59,9 +66,10 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
         foreach (var level in m_Levels) {
             sum += level;
         }
-        value = ((sum / m_Levels.length) * NB_BARS).clamp (0.0, 8.0);
+        value = ((sum / m_Levels.length) * nb_bars).clamp (0.0, nb_bars);
 
         m_Current = (m_Current + 1) % m_Levels.length;
+        message (@"value: $(value)");
     }
 
     private void on_monitor_paused () {
