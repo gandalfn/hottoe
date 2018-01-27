@@ -103,7 +103,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
     public OutputChannel (Manager inManager, global::PulseAudio.SinkInfo inSinkInfo) {
         GLib.Object (
             manager: inManager,
-            direction: PantheonSoundControl.Channel.Direction.OUTPUT,
+            direction: PantheonSoundControl.Direction.OUTPUT,
             index: inSinkInfo.index,
             monitor_index: inSinkInfo.monitor_source,
             name: inSinkInfo.name,
@@ -155,6 +155,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
         cvolume = inSinkInfo.volume;
         if (sendVolumeUpdate) {
             notify_property ("volume");
+            notify_property ("balance");
             updated = true;
         }
 

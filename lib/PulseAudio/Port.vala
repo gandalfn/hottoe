@@ -44,15 +44,15 @@ internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port 
         return GLib.strcmp (inA.name, inB.name);
     }
 
-    private static PantheonSoundControl.Port.Direction direction_from_pa_direction (global::PulseAudio.Direction inDirection) {
+    private static PantheonSoundControl.Direction direction_from_pa_direction (global::PulseAudio.Direction inDirection) {
         switch (inDirection) {
             case global::PulseAudio.Direction.INPUT:
-                return PantheonSoundControl.Port.Direction.INPUT;
+                return PantheonSoundControl.Direction.INPUT;
 
             case global::PulseAudio.Direction.OUTPUT:
-                return PantheonSoundControl.Port.Direction.OUTPUT;
+                return PantheonSoundControl.Direction.OUTPUT;
         }
 
-        return PantheonSoundControl.Port.Direction.OUTPUT;
+        return PantheonSoundControl.Direction.OUTPUT;
     }
 }

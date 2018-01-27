@@ -195,7 +195,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
     public override Port[] get_output_ports () {
         Port[] ret = {};
         foreach (var port in m_Ports) {
-            if (port.direction == PantheonSoundControl.Port.Direction.OUTPUT) {
+            if (port.direction == PantheonSoundControl.Direction.OUTPUT) {
                 ret += port;
             }
         }
@@ -205,7 +205,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
     public override Port[] get_input_ports () {
         Port[] ret = {};
         foreach (var port in m_Ports) {
-            if (port.direction == PantheonSoundControl.Port.Direction.INPUT) {
+            if (port.direction == PantheonSoundControl.Direction.INPUT) {
                 ret += port;
             }
         }

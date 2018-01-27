@@ -27,7 +27,7 @@ public abstract class PantheonSoundControl.Plug : GLib.Object {
     public unowned Manager manager { get; construct; }
     public abstract unowned Client client { get; }
     public abstract unowned Channel? channel { get; set; }
-    public Channel.Direction direction { get; construct; }
+    public Direction direction { get; construct; }
 
     public string name { get; construct; }
     public abstract double volume { get; set; }

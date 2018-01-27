@@ -20,11 +20,6 @@
  */
 
 public abstract class PantheonSoundControl.Channel : GLib.Object {
-    public enum Direction {
-        INPUT,
-        OUTPUT
-    }
-
     public abstract class Monitor : PantheonSoundControl.Monitor {
         public unowned Channel? channel { get; construct; }
     }

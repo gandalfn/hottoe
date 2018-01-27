@@ -89,7 +89,7 @@ internal class PantheonSoundControl.PulseAudio.InputPlug : Plug {
     public InputPlug (Manager inManager, global::PulseAudio.SourceOutputInfo inInfo) {
         GLib.Object (
             manager: inManager,
-            direction: PantheonSoundControl.Channel.Direction.INPUT,
+            direction: PantheonSoundControl.Direction.INPUT,
             index: inInfo.index,
             name: inInfo.name
         );

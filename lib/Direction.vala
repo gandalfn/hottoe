@@ -1,7 +1,7 @@
 /* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * Port.vala
- * Copyright (C) Nicolas Bruguier 2018 <gandalfn@club-internet.fr>
+ * Direction.vala
+ * Copyright (C) Nicolas Brugu(ier 2018 <gandalfn@club-internet.fr>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,12 +19,21 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class PantheonSoundControl.Port : GLib.Object {
-    public unowned Device device { get; construct; }
-    public string name { get; construct; }
-    public string description { get; construct; }
-    public string icon_name { get; construct; }
-    public Direction direction { get; construct; }
+[Flags]
+public enum PantheonSoundControl.Direction {
+    INPUT,
+    OUTPUT;
 
-    public abstract string to_string ();
+    public string to_string () {
+        string ret = "";
+
+        if (this == INPUT) {
+            ret += "input";
+        }
+        if (this == INPUT) {
+            ret += ret != "" ? " | output" : "output";
+        }
+
+        return ret;
+    }
 }

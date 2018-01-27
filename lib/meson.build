@@ -5,6 +5,7 @@ libpantheon_sound_control_inc = include_directories('.')
 libpantheon_sound_control = library(
     meson.project_name(),
     [
+        'Direction.vala',
         'Plug.vala',
         'Client.vala',
         'Monitor.vala',
