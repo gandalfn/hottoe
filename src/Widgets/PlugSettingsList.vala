@@ -115,6 +115,10 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
     private void on_plug_channel_changed (GLib.Object inObject, GLib.ParamSpec? inSpec) {
         unowned Plug plug = (Plug)inObject;
 
-        add_plug (plug);
+        if (plug.channel != null && plug.channel in device && plug.direction in direction) {
+            add_plug (plug);
+        } else {
+            remove_plug (plug);
+        }
     }
 }
