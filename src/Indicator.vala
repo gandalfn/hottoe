@@ -50,6 +50,7 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
     public override Gtk.Widget? get_widget () {
         if (m_IndicatorView == null) {
             m_IndicatorView = new Widgets.IndicatorView (m_Manager);
+            m_IndicatorView.open_settings.connect (show_settings);
         }
 
         visible = true;
@@ -79,6 +80,16 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
 
                 return true;
             });
+        }
+    }
+
+    private void show_settings () {
+        close ();
+
+        try {
+            GLib.AppInfo.launch_default_for_uri ("settings://sound-devices", null);
+        } catch (Error e) {
+            warning ("%s\n", e.message);
         }
     }
 }

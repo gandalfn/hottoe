@@ -25,6 +25,8 @@ public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
 
     public unowned Manager manager { get; construct; }
 
+    public signal void open_settings ();
+
     construct {
         orientation = Gtk.Orientation.VERTICAL;
 
@@ -49,6 +51,9 @@ public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
 
         var settings_button = new Wingpanel.Widgets.Button (_("Sound Devices Settings…"));
         add (settings_button);
+        settings_button.clicked.connect (() => {
+            open_settings ();
+        });
     }
 
     public IndicatorView (Manager inManager) {
