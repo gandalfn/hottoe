@@ -55,7 +55,10 @@ internal interface PantheonSoundControl.PulseAudio.Monitor : PantheonSoundContro
         if (inStream != null) {
             paused ();
 
+            inStream.set_read_callback (null);
+            inStream.set_suspended_callback (null);
             inStream.disconnect ();
+            inStream.flush ();
         }
     }
 
