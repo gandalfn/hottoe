@@ -60,6 +60,24 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
         });
     }
 
+    public VolumeMeter.plug (Plug inPlug) {
+        m_Monitor = inPlug.create_monitor ();
+        m_Monitor.peak.connect (on_monitor_peak);
+        m_Monitor.paused.connect (on_monitor_paused);
+
+        inPlug.manager.bind_property ("enable-monitoring", m_Monitor, "active", GLib.BindingFlags.SYNC_CREATE);
+        m_Monitor.bind_property ("active", this, "sensitive");
+        inPlug.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
+
+        notify["nb-bars"].connect (() => {
+            max_value = nb_bars;
+
+            add_offset_value ("low",    nb_bars);
+            add_offset_value ("middle", nb_bars * 0.9875);
+            add_offset_value ("high",   nb_bars * 0.95);
+        });
+    }
+
     private void on_monitor_peak (float inData) {
         m_Levels[m_Current] = inData * (volume_level / 100.0);
         double sum = 0.0;
@@ -69,7 +87,6 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
         value = ((sum / m_Levels.length) * nb_bars).clamp (0.0, nb_bars);
 
         m_Current = (m_Current + 1) % m_Levels.length;
-        message (@"value: $(value)");
     }
 
     private void on_monitor_paused () {
