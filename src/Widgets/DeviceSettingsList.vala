@@ -89,7 +89,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
 
     private void on_device_removed (Device inDevice) {
         foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
-            unowned DeviceSettingsListRow? row = child as DeviceSettingsListRow;
+            unowned DeviceSettingsListRow? row = ((Gtk.ListBoxRow) child).get_child () as DeviceSettingsListRow;
             if (row != null && row.page.device == inDevice) {
                 row.page.destroy ();
                 row.destroy ();
