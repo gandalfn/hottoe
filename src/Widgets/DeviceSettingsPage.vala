@@ -20,6 +20,8 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.SettingsPage {
+    private Gtk.ComboBox m_ProfileSettings;
+
     public unowned Device device { get; construct; }
 
     construct {
@@ -40,11 +42,28 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         var renderer = new Gtk.CellRendererText ();
 
         var combo = new Gtk.ComboBox ();
-        var profileSettings = new Gtk.ComboBox ();
-        profileSettings.width_request = 180;
-        profileSettings.pack_start (renderer, true);
-        profileSettings.add_attribute (renderer, "text", 0);
-        headerArea.attach (profileSettings, 1, 1, 1, 1);
+        m_ProfileSettings = new Gtk.ComboBox ();
+        m_ProfileSettings.width_request = 180;
+        m_ProfileSettings.pack_start (renderer, true);
+        m_ProfileSettings.add_attribute (renderer, "text", 0);
+
+        Gtk.ListStore profilesList = new Gtk.ListStore (2, typeof (string), typeof (string));
+        m_ProfileSettings.set_model (profilesList);
+
+        m_ProfileSettings.changed.connect (() => {
+            Gtk.TreeIter iter;
+            if (m_ProfileSettings.get_active_iter (out iter)) {
+                GLib.Value name;
+                m_ProfileSettings.get_model ().get_value (iter, 1, out name);
+                foreach (var profile in device.get_profiles ()) {
+                    if (profile.name == (string)name) {
+                        device.active_profile = profile;
+                        break;
+                    }
+                }
+            }
+        });
+        headerArea.attach (m_ProfileSettings, 1, 1, 1, 1);
 
         var statusSwitch = new Gtk.Switch ();
         statusSwitch.hexpand = true;
@@ -54,22 +73,6 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         statusSwitch.button_press_event.connect (() => {
             return statusSwitch.active;
         });
-
-        Gtk.ListStore profilesList = new Gtk.ListStore (2, typeof (string), typeof (string));
-        Gtk.TreeIter iter;
-
-        int activeRow = 0, cpt = 0;
-        foreach (var profile in device.get_profiles ()) {
-            profilesList.append (out iter);
-            profilesList.set (iter, 0, profile.description, 1, profile.name);
-
-            if (device.active_profile == profile) {
-                activeRow = cpt;
-            }
-            cpt++;
-        }
-        profileSettings.set_model (profilesList);
-        profileSettings.set_active (activeRow);
 
         var contentArea = new Gtk.Grid ();
         contentArea.orientation = Gtk.Orientation.VERTICAL;
@@ -148,11 +151,33 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
 
         device.bind_property ("display-name", titleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
         device.bind_property ("icon-name", headerIcon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
+
+        device.changed.connect (on_device_changed);
+        on_device_changed ();
     }
 
     public DeviceSettingsPage (Device inDevice) {
         GLib.Object (
             device: inDevice
         );
+    }
+
+    private void on_device_changed () {
+        Gtk.ListStore profilesList = (Gtk.ListStore)m_ProfileSettings.get_model ();
+        Gtk.TreeIter iter;
+
+        int activeRow = 0, cpt = 0;
+        profilesList.clear ();
+
+        foreach (var profile in device.get_profiles ()) {
+            profilesList.append (out iter);
+            profilesList.set (iter, 0, profile.description, 1, profile.name);
+
+            if (device.active_profile == profile) {
+                activeRow = cpt;
+            }
+            cpt++;
+        }
+        m_ProfileSettings.set_active (activeRow);
     }
 }
