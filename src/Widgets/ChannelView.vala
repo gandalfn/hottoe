@@ -85,14 +85,13 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
 
         add_events (Gdk.EventMask.SCROLL_MASK);
         image_box.add_events (Gdk.EventMask.SCROLL_MASK);
-        volume_progressbar.add_events (Gdk.EventMask.SCROLL_MASK);
         switch_widget.add_events (Gdk.EventMask.SCROLL_MASK);
 
         // delegate all scroll events to the scale
         scroll_event.connect (on_scroll);
         image_box.scroll_event.connect (on_scroll);
-        volume_progressbar.scroll_event.connect (on_scroll);
         switch_widget.scroll_event.connect (on_scroll);
+
         switch_widget.bind_property ("active", m_Volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", m_Balance, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", image, "sensitive", GLib.BindingFlags.SYNC_CREATE);
