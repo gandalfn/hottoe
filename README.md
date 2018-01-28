@@ -1,6 +1,8 @@
 # Pantheon Sound Control
 
-![Screenshot](data/screenshot.png?raw=true)
+![Screenshot](data/indicator.png?raw=true)
+
+![Screenshot](data/switchboard.png?raw=true)
 
 ## Building and Installation
 
