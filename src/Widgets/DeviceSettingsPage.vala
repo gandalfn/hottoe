@@ -78,7 +78,10 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         contentArea.vexpand = true;
 
         var outputGrid = new Gtk.Grid ();
+        outputGrid.orientation = Gtk.Orientation.VERTICAL;
+        outputGrid.row_spacing = 24;
         outputGrid.margin_start = 12;
+
         var outputChannels = new DeviceChannelList (device, Direction.OUTPUT);
         outputChannels.show_labels = true;
         outputChannels.show_balance = true;
@@ -87,7 +90,12 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         outputChannels.monitor_nb_bars = 20.0;
         outputGrid.add (outputChannels);
 
+        var outputPlugs = new PlugSettingsList (device, Direction.OUTPUT);
+        outputGrid.add (outputPlugs);
+
         var inputGrid = new Gtk.Grid ();
+        inputGrid.orientation = Gtk.Orientation.VERTICAL;
+        inputGrid.row_spacing = 24;
         inputGrid.margin_start = 12;
         var inputChannels = new DeviceChannelList (device, Direction.INPUT);
         inputChannels.show_labels = true;
@@ -96,6 +104,9 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         inputChannels.icon_pixel_size = 48;
         inputChannels.monitor_nb_bars = 20.0;
         inputGrid.add (inputChannels);
+
+        var inputPlugs = new PlugSettingsList (device, Direction.INPUT);
+        inputGrid.add (inputPlugs);
 
         var stack = new Gtk.Stack ();
         stack.expand = true;

@@ -52,7 +52,9 @@ shared_module(
         'Widgets/DeviceSettingsView.vala',
         'Widgets/DeviceSettingsPage.vala',
         'Widgets/DeviceSettingsListRow.vala',
-        'Widgets/DeviceSettingsList.vala'
+        'Widgets/DeviceSettingsList.vala',
+        'Widgets/PlugSettingsRow.vala',
+        'Widgets/PlugSettingsList.vala'
     ],
     dependencies: [
         pantheon_sound_control_dep,
