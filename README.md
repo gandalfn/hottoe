@@ -12,6 +12,7 @@ You'll need the following dependencies:
     libgranite-dev
     libgtk-3-dev
     libwingpanel-2.0-dev
+    libswitchboard-2.0-dev
     libwnck-3-dev
     libgee-0.8-dev
     libpulse-dev
