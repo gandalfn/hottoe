@@ -93,7 +93,6 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         switch_widget.scroll_event.connect (on_scroll);
 
         switch_widget.bind_property ("active", m_Volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);
-        switch_widget.bind_property ("active", m_Balance, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", image, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", volume_progressbar, "sensitive", GLib.BindingFlags.SYNC_CREATE);
 
@@ -113,6 +112,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         bind_property("monitor-nb-bars", volume_progressbar, "nb-bars", GLib.BindingFlags.SYNC_CREATE);
 
         if (channel.direction == Direction.OUTPUT) {
+            switch_widget.bind_property ("active", m_Balance, "sensitive", GLib.BindingFlags.SYNC_CREATE);
             bind_property("show-balance", m_Balance, "visible", GLib.BindingFlags.SYNC_CREATE);
             channel.bind_property ("balance", m_Balance.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE);
         }
