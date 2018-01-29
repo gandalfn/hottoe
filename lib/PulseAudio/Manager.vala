@@ -541,14 +541,17 @@ namespace PantheonSoundControl.PulseAudio {
                     return plugIndex == p.index;
                 }) as OutputPlug;
                 if (plug == null) {
-                    plug = new OutputPlug (this, inInfo);
-                    m_OutputPlugs.add (plug);
+                    var sinkIndex = inInfo.sink;
+                    if (m_OutputChannels.first_match ((c) => { return sinkIndex == c.index; }) != null) {
+                        plug = new OutputPlug (this, inInfo);
+                        m_OutputPlugs.add (plug);
 
-                    message (@"Add plug $(plug.name)");
+                        debug (@"Add plug $(plug.name)");
 
-                    plug_added (plug);
+                        plug_added (plug);
+                    }
                 } else {
-                    message (@"Update plug $(plug.name)");
+                    debug (@"Update plug $(plug.name)");
 
                     plug.update (inInfo);
                 }
@@ -564,12 +567,15 @@ namespace PantheonSoundControl.PulseAudio {
                     return plugIndex == p.index;
                 }) as InputPlug;
                 if (plug == null) {
-                    plug = new InputPlug (this, inInfo);
-                    m_InputPlugs.add (plug);
+                    var sourceIndex = inInfo.source;
+                    if (m_InputChannels.first_match ((c) => { return sourceIndex == c.index; }) != null) {
+                        plug = new InputPlug (this, inInfo);
+                        m_InputPlugs.add (plug);
 
-                    debug (@"Add plug $(plug.name)");
+                        debug (@"Add plug $(plug.name)");
 
-                    plug_added (plug);
+                        plug_added (plug);
+                    }
                 } else {
                     debug (@"Update plug $(plug.name)");
 
