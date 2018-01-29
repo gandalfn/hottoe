@@ -158,8 +158,12 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         device.bind_property ("icon-name", headerIcon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
 
         device.changed.connect (on_device_changed);
+
+        // TODO: fix channel added /removed for a device
         device.channel_added.connect (on_device_channels_changed);
+        device.manager.channel_added.connect (on_device_channels_changed);
         device.channel_removed.connect (on_device_channels_changed);
+        device.manager.channel_removed.connect (on_device_channels_changed);
         on_device_changed ();
     }
 
@@ -194,7 +198,6 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         bool haveOutput = device.get_output_channels ().length > 0;
         bool haveInput = device.get_input_channels ().length > 0;
 
-        message(@"device channels changes $(haveOutput) $(haveInput)");
         m_OutputGrid.visible = haveOutput;
         m_InputGrid.visible = haveInput;
 
