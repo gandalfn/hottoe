@@ -112,6 +112,7 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
                     notify_property ("client");
                     foundClient = true;
                     updated = true;
+                    break;
                 }
             }
 
