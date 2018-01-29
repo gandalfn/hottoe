@@ -23,6 +23,7 @@ public abstract class PantheonSoundControl.Client : GLib.Object {
     public unowned Manager manager { get; construct; }
     public string name { get; set; }
     public int pid { get; set; }
+    public abstract bool is_mine { get; }
 
     public signal void changed ();
     public virtual signal void plug_added (Plug inPlug) {

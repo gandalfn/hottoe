@@ -19,6 +19,7 @@ shared_module(
         pantheon_sound_control_dep,
         dependency('gio-2.0'),
         dependency('gee-0.8'),
+        meson.get_compiler('vala').find_library('posix'),
         dependency('libpulse'),
         dependency('libpulse-mainloop-glib')
     ],

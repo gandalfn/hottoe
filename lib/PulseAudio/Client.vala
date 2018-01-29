@@ -23,6 +23,13 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
     private Gee.TreeSet<unowned Plug> m_Plugs;
 
     public uint32 index { get; construct; }
+    public string id { get; construct set; }
+
+    public override bool is_mine {
+        get {
+            return pid == Posix.getpid () || id == "com.github.gandalfn.pantheon-sound-control";
+        }
+    }
 
     construct {
         m_Plugs = new Gee.TreeSet<unowned Plug> ();
@@ -38,6 +45,7 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
         GLib.Object (
             manager: inManager,
             index: inInfo.index,
+            id: inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
             name: inInfo.name,
             pid: pid
         );
@@ -60,11 +68,23 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
     }
 
     public void update (global::PulseAudio.ClientInfo inInfo) {
+        bool updated = false;
         name = inInfo.name;
 
         string pidStr = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_PROCESS_ID);
-        if (pidStr != null) {
+        if (pidStr != null && pid != int.parse (pidStr)) {
             pid = int.parse (pidStr);
+            updated = true;
+        }
+
+        string idStr = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID);
+        if (idStr != id) {
+            id = idStr;
+            updated = true;
+        }
+
+        if (updated) {
+            notify_property("is-mine");
         }
     }
 
