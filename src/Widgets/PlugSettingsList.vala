@@ -72,7 +72,7 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
     }
 
     private void add_plug (Plug inPlug) {
-        if (inPlug.channel != null && inPlug.channel in device && inPlug.direction in direction) {
+        if (!inPlug.client.is_mine && inPlug.channel != null && inPlug.channel in device && inPlug.direction in direction) {
             bool found = false;
             foreach (var child in m_Plugs.get_children ()) {
                 unowned PlugSettingsRow? row = ((Gtk.ListBoxRow) child).get_child () as PlugSettingsRow;
@@ -115,7 +115,7 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
     private void on_plug_channel_changed (GLib.Object inObject, GLib.ParamSpec? inSpec) {
         unowned Plug plug = (Plug)inObject;
 
-        if (plug.channel != null && plug.channel in device && plug.direction in direction) {
+        if (!plug.client.is_mine && plug.channel != null && plug.channel in device && plug.direction in direction) {
             add_plug (plug);
         } else {
             remove_plug (plug);

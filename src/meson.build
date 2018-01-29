@@ -32,7 +32,6 @@ shared_module(
     dependencies: [
         pantheon_sound_control_dep,
         wingpanel_dep,
-        meson.get_compiler('vala').find_library('posix'),
         dependency('libwnck-3.0')
     ],
     link_with: [

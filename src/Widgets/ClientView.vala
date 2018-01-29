@@ -74,8 +74,8 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         client.plug_added.connect_after (on_client_plug_added);
         client.plug_removed.connect_after (on_client_plug_removed);
 
-        client.notify["pid"].connect (on_pid_changed);
-        on_pid_changed ();
+        client.notify["is-mine"].connect (on_is_mine_changed);
+        on_is_mine_changed ();
     }
 
     public ClientView (Client inClient) {
@@ -84,7 +84,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         );
     }
 
-    private void on_pid_changed () {
+    private void on_is_mine_changed () {
         if (m_Window != null) {
             m_Window.name_changed.disconnect (on_name_changed);
             m_Window.icon_changed.disconnect (on_icon_changed);
@@ -104,7 +104,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         on_name_changed ();
         on_icon_changed ();
 
-        m_Content.reveal_child = client.pid != Posix.getpid () && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
     }
 
     private void on_name_changed () {
@@ -130,13 +130,13 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_client_plug_added (Plug inPlug) {
-        message (@"client $(client.name) plug added $(client.pid != Posix.getpid ())");
+        message (@"client $(client.name) plug added $(!client.is_mine)");
 
         var plug = new PlugChannelList (inPlug);
         plug.show_all ();
         m_Plugs.add (plug);
 
-        m_Content.reveal_child = client.pid != Posix.getpid () && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
     }
 
     private void on_client_plug_removed (Plug inPlug) {
@@ -149,6 +149,6 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
             }
         });
 
-        m_Content.reveal_child = client.pid != Posix.getpid () && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
     }
 }
