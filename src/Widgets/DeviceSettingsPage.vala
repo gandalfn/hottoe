@@ -158,10 +158,9 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         device.bind_property ("icon-name", headerIcon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
 
         device.changed.connect (on_device_changed);
-        device.manager.channel_added.connect (on_device_channels_changed);
-        device.manager.channel_removed.connect (on_device_channels_changed);
+        device.channel_added.connect (on_device_channels_changed);
+        device.channel_removed.connect (on_device_channels_changed);
         on_device_changed ();
-        on_device_channels_changed  ();
     }
 
     public DeviceSettingsPage (Device inDevice) {
@@ -187,12 +186,15 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
             cpt++;
         }
         m_ProfileSettings.set_active (activeRow);
+
+        on_device_channels_changed  ();
     }
 
     private void on_device_channels_changed () {
         bool haveOutput = device.get_output_channels ().length > 0;
         bool haveInput = device.get_input_channels ().length > 0;
 
+        message(@"device channels changes $(haveOutput) $(haveInput)");
         m_OutputGrid.visible = haveOutput;
         m_InputGrid.visible = haveInput;
 
