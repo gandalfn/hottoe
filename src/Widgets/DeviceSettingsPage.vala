@@ -20,6 +20,11 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.SettingsPage {
+    private Gtk.Grid m_OutputGrid;
+    private Gtk.Grid m_InputGrid;
+    private Gtk.StackSwitcher m_OutputInputSwitcher;
+    private Gtk.Stack m_OutputInputStack;
+
     private Gtk.ComboBox m_ProfileSettings;
 
     public unowned Device device { get; construct; }
@@ -76,14 +81,12 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
 
         var contentArea = new Gtk.Grid ();
         contentArea.orientation = Gtk.Orientation.VERTICAL;
-        contentArea.column_spacing = 12;
-        contentArea.row_spacing = 12;
         contentArea.vexpand = true;
 
-        var outputGrid = new Gtk.Grid ();
-        outputGrid.orientation = Gtk.Orientation.VERTICAL;
-        outputGrid.row_spacing = 24;
-        outputGrid.margin_start = 12;
+        m_OutputGrid = new Gtk.Grid ();
+        m_OutputGrid.orientation = Gtk.Orientation.VERTICAL;
+        m_OutputGrid.row_spacing = 24;
+        m_OutputGrid.margin_start = 12;
 
         var outputChannels = new DeviceChannelList (device, Direction.OUTPUT);
         outputChannels.show_labels = true;
@@ -91,39 +94,41 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         outputChannels.icon_size = Gtk.IconSize.DIALOG;
         outputChannels.icon_pixel_size = 48;
         outputChannels.monitor_nb_bars = 20.0;
-        outputGrid.add (outputChannels);
+        m_OutputGrid.add (outputChannels);
 
         var outputPlugs = new PlugSettingsList (device, Direction.OUTPUT);
-        outputGrid.add (outputPlugs);
+        m_OutputGrid.add (outputPlugs);
 
-        var inputGrid = new Gtk.Grid ();
-        inputGrid.orientation = Gtk.Orientation.VERTICAL;
-        inputGrid.row_spacing = 24;
-        inputGrid.margin_start = 12;
+        m_InputGrid = new Gtk.Grid ();
+        m_InputGrid.orientation = Gtk.Orientation.VERTICAL;
+        m_InputGrid.row_spacing = 24;
+        m_InputGrid.margin_start = 12;
+
         var inputChannels = new DeviceChannelList (device, Direction.INPUT);
         inputChannels.show_labels = true;
         inputChannels.show_balance = true;
         inputChannels.icon_size = Gtk.IconSize.DIALOG;
         inputChannels.icon_pixel_size = 48;
         inputChannels.monitor_nb_bars = 20.0;
-        inputGrid.add (inputChannels);
+        m_InputGrid.add (inputChannels);
 
         var inputPlugs = new PlugSettingsList (device, Direction.INPUT);
-        inputGrid.add (inputPlugs);
+        m_InputGrid.add (inputPlugs);
 
-        var stack = new Gtk.Stack ();
-        stack.expand = true;
+        m_OutputInputStack = new Gtk.Stack ();
+        m_OutputInputStack.margin_top = 24;
+        m_OutputInputStack.expand = true;
 
-        var stack_switcher = new Gtk.StackSwitcher ();
-        stack_switcher.halign = Gtk.Align.CENTER;
-        stack_switcher.homogeneous = true;
-        stack_switcher.margin = 12;
-        stack_switcher.stack = stack;
+        m_OutputInputSwitcher = new Gtk.StackSwitcher ();
+        m_OutputInputSwitcher.halign = Gtk.Align.CENTER;
+        m_OutputInputSwitcher.homogeneous = true;
+        m_OutputInputSwitcher.margin_top = 12;
+        m_OutputInputSwitcher.stack = m_OutputInputStack;
 
-        stack.add_titled (outputGrid, "output", _("Output"));
-        stack.add_titled (inputGrid, "input", _("Input"));
-        contentArea.add (stack_switcher);
-        contentArea.add (stack);
+        m_OutputInputStack.add_titled (m_OutputGrid, "output", _("Output"));
+        m_OutputInputStack.add_titled (m_InputGrid, "input", _("Input"));
+        contentArea.add (m_OutputInputSwitcher);
+        contentArea.add (m_OutputInputStack);
 
         var grid = new Gtk.Grid ();
         grid.margin = 12;
@@ -153,7 +158,10 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         device.bind_property ("icon-name", headerIcon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
 
         device.changed.connect (on_device_changed);
+        device.manager.channel_added.connect (on_device_channels_changed);
+        device.manager.channel_removed.connect (on_device_channels_changed);
         on_device_changed ();
+        on_device_channels_changed  ();
     }
 
     public DeviceSettingsPage (Device inDevice) {
@@ -179,5 +187,15 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
             cpt++;
         }
         m_ProfileSettings.set_active (activeRow);
+    }
+
+    private void on_device_channels_changed () {
+        bool haveOutput = device.get_output_channels ().length > 0;
+        bool haveInput = device.get_input_channels ().length > 0;
+
+        m_OutputGrid.visible = haveOutput;
+        m_InputGrid.visible = haveInput;
+
+        m_OutputInputSwitcher.visible = haveOutput && haveInput;
     }
 }
