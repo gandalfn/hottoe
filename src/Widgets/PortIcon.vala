@@ -59,6 +59,11 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         string portIconName = (string)inFrom;
 
         switch (portIconName) {
+            case "headset-output":
+            case "headset-input":
+                inoutTo.set_string ("audio-headset");
+                break;
+
             case "phone-output":
             case "phone-input":
                 inoutTo.set_string ("phone");
