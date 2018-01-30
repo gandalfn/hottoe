@@ -130,7 +130,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_client_plug_added (Plug inPlug) {
-        message (@"client $(client.name) plug added $(!client.is_mine)");
+        debug (@"client $(client.name) plug added $(!client.is_mine)");
 
         var plug = new PlugChannelList (inPlug);
         plug.show_all ();
@@ -140,7 +140,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_client_plug_removed (Plug inPlug) {
-        message (@"client $(client.name) plug removed");
+        debug (@"client $(client.name) plug removed");
 
         m_Plugs.get_children ().foreach ((child) => {
             unowned PlugChannelList? list = child as PlugChannelList;

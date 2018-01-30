@@ -298,7 +298,7 @@ namespace PantheonSoundControl.PulseAudio {
                                 return d.index == inIndex;
                             });
                             if (channel != null) {
-                                message (@"Remove channel $(channel.name)");
+                                debug (@"Remove channel $(channel.name)");
                                 m_OutputChannels.remove (channel);
                                 channel_removed (channel);
                             }
@@ -321,7 +321,7 @@ namespace PantheonSoundControl.PulseAudio {
                                 return d.index == inIndex;
                             });
                             if (channel != null) {
-                                message (@"Remove channel $(channel.name)");
+                                debug (@"Remove channel $(channel.name)");
                                 m_InputChannels.remove (channel);
                                 channel_removed (channel);
                             }
@@ -366,7 +366,7 @@ namespace PantheonSoundControl.PulseAudio {
                                 return p.index == inIndex;
                             });
                             if (plug != null) {
-                                message (@"Remove sink input $(plug.name)");
+                                debug (@"Remove sink input $(plug.name)");
                                 if (plug.client != null) {
                                     plug.client.plug_removed (plug);
                                 }
@@ -392,7 +392,7 @@ namespace PantheonSoundControl.PulseAudio {
                                 return p.index == inIndex;
                             });
                             if (plug != null) {
-                                message (@"Remove source output $(plug.name)");
+                                debug (@"Remove source output $(plug.name)");
                                 if (plug.client != null) {
                                     plug.client.plug_removed (plug);
                                 }
