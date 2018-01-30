@@ -90,14 +90,20 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
     }
 
     private void on_device_removed (Device inDevice) {
+        unowned DeviceSettingsListRow? selectedRow = m_ListBox.get_selected_row () as DeviceSettingsListRow;
+        bool selectedRemoved = selectedRow != null && selectedRow.page.device == inDevice;
+
         inDevice.notify["active"].disconnect (on_device_active_changed);
 
         foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
             unowned DeviceSettingsListRow? row = child as DeviceSettingsListRow;
-            if (row != null && row.page.device == inDevice) {
-                row.page.destroy ();
-                row.destroy ();
-                break;
+            if (row != null) {
+                if (row.page.device == inDevice) {
+                    row.page.destroy ();
+                    row.destroy ();
+                } else if (selectedRemoved && row.page.device.active) {
+                    visible_device = row.page.device.name;
+                }
             }
         }
     }
