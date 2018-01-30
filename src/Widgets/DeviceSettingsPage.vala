@@ -152,7 +152,6 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         });
 
         device.bind_property ("display-name", titleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
-        device.bind_property ("icon-name", headerIcon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
 
         device.changed.connect (on_device_changed);
 

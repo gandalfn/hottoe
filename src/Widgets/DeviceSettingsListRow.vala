@@ -68,7 +68,6 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
 
         add (m_Content);
 
-        page.device.bind_property ("icon-name", icon, "icon-name", GLib.BindingFlags.SYNC_CREATE);
         page.device.bind_property ("display-name", m_TitleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
         page.device.bind_property ("active", m_Content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
         page.device.manager.bind_property ("default-output-device", m_StatusIcon, "icon-name",
