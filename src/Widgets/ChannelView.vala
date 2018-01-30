@@ -23,8 +23,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
     private Gtk.Scale m_Balance;
 
     public unowned Channel channel { get; construct; }
-    public Gtk.IconSize icon_size { get; set; default = Gtk.IconSize.DND; }
-    public int icon_pixel_size { get; set; default = 32; }
+    public Icon.Size icon_size { get; set; default = Icon.Size.LARGE; }
     public bool show_labels { get; set; default = false; }
     public bool show_balance { get; set; default = false; }
     public double monitor_nb_bars { get; set; default = 8.0; }
@@ -34,8 +33,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         row_spacing = 6;
 
         var image_box = new Gtk.EventBox ();
-        var image = new Gtk.Image.from_icon_name (channel.port != null ? channel.port.icon_name : "audio-port", Gtk.IconSize.DND);
-        image.pixel_size = 32;
+        var image = new PortIcon (channel.port, Icon.Size.LARGE);
         image_box.halign = Gtk.Align.START;
         image_box.valign = Gtk.Align.START;
         image_box.add (image);
@@ -96,19 +94,12 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         switch_widget.bind_property ("active", image, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", volume_progressbar, "sensitive", GLib.BindingFlags.SYNC_CREATE);
 
-        channel.bind_property ("port", image, "icon-name", GLib.BindingFlags.DEFAULT, (b, f, ref t) => {
-            unowned Port? port = (Port)f;
-            if (port != null) {
-                t.set_string (port.icon_name);
-            }
-            return true;
-        });
+        channel.bind_property ("port", image, "port");
 
         channel.bind_property ("volume", m_Volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE);
         channel.bind_property ("is_muted", switch_widget, "active", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.INVERT_BOOLEAN);
 
-        bind_property("icon-size", image, "icon-size", GLib.BindingFlags.SYNC_CREATE);
-        bind_property("icon-pixel-size", image, "pixel-size", GLib.BindingFlags.SYNC_CREATE);
+        bind_property("icon-size", image, "size", GLib.BindingFlags.SYNC_CREATE);
         bind_property("monitor-nb-bars", volume_progressbar, "nb-bars", GLib.BindingFlags.SYNC_CREATE);
 
         if (channel.direction == Direction.OUTPUT) {

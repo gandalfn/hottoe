@@ -75,14 +75,13 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
         if (display_name == null) {
             display_name = description;
         }
-        var icon_name = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME);
         Object (
             manager: inManager,
             index: inInfo.index,
             name: inInfo.name,
             display_name: display_name,
             description: description,
-            icon_name: icon_name == "audio-card-pci" ? "audio-card" : icon_name
+            icon_name: inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME)
         );
 
         debug (@"Create device $(name) index: $(index)");

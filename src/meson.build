@@ -4,6 +4,9 @@ libpantheon_sound_control_widgets = static_library (
     meson.project_name() + '-widgets',
     [
         'Widgets/MaxWidthLabel.vala',
+        'Widgets/Icon.vala',
+        'Widgets/PortIcon.vala',
+        'Widgets/DeviceIcon.vala',
         'Widgets/VolumeMeter.vala',
         'Widgets/ChannelView.vala',
         'Widgets/DeviceChannelList.vala'

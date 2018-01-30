@@ -47,9 +47,7 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
         m_StatusLabel.ellipsize = Pango.EllipsizeMode.END;
         m_StatusLabel.xalign = 0;
 
-        var icon = new Gtk.Image ();
-        icon.icon_name = page.device.icon_name;
-        icon.pixel_size =  32;
+        var icon = new DeviceIcon (page.device, Icon.Size.LARGE);
 
         var overlay = new Gtk.Overlay ();
         overlay.width_request = 38;

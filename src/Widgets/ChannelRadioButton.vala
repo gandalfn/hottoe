@@ -62,8 +62,7 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
             }
         }
 
-        var icon = new Gtk.Image.from_icon_name (channel.port != null ? channel.port.icon_name : "audio-port", Gtk.IconSize.LARGE_TOOLBAR);
-        icon.pixel_size = 24;
+        var icon = new PortIcon (channel.port, Icon.Size.MEDIUM);
 
         m_CheckIcon = new Gtk.Image ();
         m_CheckIcon.icon_name = "account-logged-in";
@@ -80,13 +79,7 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
         content_widget.hexpand = false;
         content_widget.add (overlay);
 
-        channel.bind_property ("port", icon, "icon-name", GLib.BindingFlags.DEFAULT, (b, f, ref t) => {
-            unowned Port? port = (Port)f;
-            if (port != null) {
-                t.set_string (port.icon_name);
-            }
-            return true;
-        });
+        channel.bind_property ("port", icon, "port");
 
         clicked.connect (() => {
             if (!m_Active) {

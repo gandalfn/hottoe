@@ -30,8 +30,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
     public unowned Device device { get; construct; }
 
     construct {
-        var headerIcon = new Gtk.Image.from_icon_name ("audio-card", Gtk.IconSize.DIALOG);
-        headerIcon.pixel_size = 64;
+        var headerIcon = new DeviceIcon (device, Icon.Size.FULL);
         headerIcon.valign = Gtk.Align.START;
 
         var titleLabel = new Gtk.Label ("");
@@ -91,8 +90,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         var outputChannels = new DeviceChannelList (device, Direction.OUTPUT);
         outputChannels.show_labels = true;
         outputChannels.show_balance = true;
-        outputChannels.icon_size = Gtk.IconSize.DIALOG;
-        outputChannels.icon_pixel_size = 48;
+        outputChannels.icon_size = Icon.Size.EXTRA_LARGE;
         outputChannels.monitor_nb_bars = 20.0;
         m_OutputGrid.add (outputChannels);
 
@@ -107,8 +105,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         var inputChannels = new DeviceChannelList (device, Direction.INPUT);
         inputChannels.show_labels = true;
         inputChannels.show_balance = true;
-        inputChannels.icon_size = Gtk.IconSize.DIALOG;
-        inputChannels.icon_pixel_size = 48;
+        inputChannels.icon_size = Icon.Size.EXTRA_LARGE;
         inputChannels.monitor_nb_bars = 20.0;
         m_InputGrid.add (inputChannels);
 
