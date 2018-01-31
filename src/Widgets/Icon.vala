@@ -53,6 +53,7 @@ public abstract class PantheonSoundControl.Widgets.Icon : Gtk.Grid {
     protected Gtk.Overlay m_Overlay;
 
     public Size size { get; construct set; default = Size.LARGE; }
+    public bool use_symbolic { get; construct; default = false; }
 
     construct {
         m_Icon = new Gtk.Image ();

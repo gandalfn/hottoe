@@ -33,10 +33,11 @@ public class PantheonSoundControl.Widgets.DeviceIcon : PantheonSoundControl.Widg
         }
     }
 
-    public DeviceIcon (Device inDevice, Icon.Size inSize = Icon.Size.LARGE) {
+    public DeviceIcon (Device inDevice, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
         GLib.Object (
-            device: inDevice,
-            size: inSize
+            size: inSize,
+            use_symbolic: inUseSymbolic,
+            device: inDevice
         );
     }
 }

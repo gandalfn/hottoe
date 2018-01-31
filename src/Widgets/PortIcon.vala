@@ -40,7 +40,11 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
                     m_PortSymbolBind = m_Port.bind_property ("icon-name", m_Symbol, "icon-name", GLib.BindingFlags.SYNC_CREATE,
                                                              on_port_symbol_changed);
                 } else {
-                    m_Icon.icon_name = "audio-port";
+                    if (use_symbolic) {
+                        m_Icon.icon_name = "audio-port";
+                    } else {
+                        m_Icon.icon_name = "audio-port-symbolic";
+                    }
                     m_Symbol.icon_name = "";
                     m_Symbol.hide ();
                 }
@@ -48,51 +52,59 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         }
     }
 
-    public PortIcon (Port inPort, Icon.Size inSize = Icon.Size.LARGE) {
+    public PortIcon (Port? inPort = null, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
         GLib.Object (
-            port: inPort,
-            size: inSize
+            size: inSize,
+            use_symbolic: inUseSymbolic,
+            port: inPort
         );
     }
 
     private bool on_port_icon_changed (GLib.Binding inBind, GLib.Value inFrom, ref GLib.Value inoutTo) {
         string portIconName = (string)inFrom;
+        string iconName = portIconName;
 
         switch (portIconName) {
             case "headset-output":
             case "headset-input":
-                inoutTo.set_string ("audio-headset");
+                iconName = "audio-headset";
                 break;
 
             case "phone-output":
             case "phone-input":
-                inoutTo.set_string ("phone");
+                iconName = "phone";
                 break;
 
             default:
-                inoutTo.set_string (portIconName);
                 break;
         }
+
+        if (use_symbolic) {
+            iconName += "-symbolic";
+        }
+
+        inoutTo.set_string (iconName);
 
         return true;
     }
 
     private bool on_port_symbol_changed (GLib.Binding inBind, GLib.Value inFrom, ref GLib.Value inoutTo) {
         string portIconName = (string)inFrom;
+        string iconName = "";
 
         switch (portIconName) {
             case "headset-input":
             case "phone-input":
-                inoutTo.set_string ("audio-input-microphone");
+                iconName = "audio-input-microphone";
                 m_Symbol.show ();
                 break;
 
             case "video-display":
                 if (m_Port.direction == Direction.OUTPUT) {
-                    inoutTo.set_string ("audio-speakers");
+                    iconName = "audio-speakers";
                     m_Symbol.show ();
                 } else if (m_Port.direction == Direction.INPUT) {
-                    inoutTo.set_string ("audio-input-microphone");
+                    iconName = "audio-input-microphone";
                     m_Symbol.show ();
                 } else {
                     m_Symbol.hide ();
@@ -100,10 +112,15 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
                 break;
 
             default:
-                inoutTo.set_string ("");
                 m_Symbol.hide ();
                 break;
         }
+
+        if (use_symbolic) {
+            iconName += "-symbolic";
+        }
+
+        inoutTo.set_string (iconName);
 
         return true;
     }
