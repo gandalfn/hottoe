@@ -41,9 +41,9 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
                                                              on_port_symbol_changed);
                 } else {
                     if (use_symbolic) {
-                        m_Icon.icon_name = "audio-port";
+                        m_Icon.icon_name = "audio-card-symbolic";
                     } else {
-                        m_Icon.icon_name = "audio-port-symbolic";
+                        m_Icon.icon_name = "audio-card";
                     }
                     m_Symbol.icon_name = "";
                     m_Symbol.hide ();
