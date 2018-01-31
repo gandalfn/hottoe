@@ -20,15 +20,13 @@
  */
 
 public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
-    private Gtk.Image m_IconDevice;
+    private PortIcon m_Icon;
     private unowned GLib.Binding m_ChannelBind;
 
     public unowned Manager manager { get; construct; }
 
     construct {
-        m_IconDevice = new Gtk.Image ();
-        m_IconDevice.icon_name = "audio-card-symbolic";
-        m_IconDevice.icon_size = Gtk.IconSize.SMALL_TOOLBAR;
+        m_Icon = new PortIcon (null, Icon.Size.SMALL, true);
 
         manager.channel_added.connect (on_default_channel_changed);
         manager.channel_removed.connect (on_default_channel_changed);
@@ -38,7 +36,7 @@ public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
 
         valign = Gtk.Align.CENTER;
 
-        add (m_IconDevice);
+        add (m_Icon);
     }
 
     public IndicatorIcon (Manager inManager) {
@@ -56,19 +54,7 @@ public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
         var defaultChannel = manager.default_output_channel;
 
         if (defaultChannel != null) {
-            m_ChannelBind = defaultChannel.bind_property ("port", m_IconDevice, "icon-name", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
-                unowned Port? port = (Port)f;
-                if (port != null) {
-                    string i = port.icon_name;
-                    if (i == "audio-speakers") {
-                        i = "audio-card-symbolic";
-                    } else {
-                        i += "-symbolic";
-                    }
-                    t.set_string (i);
-                }
-                return true;
-            });
+            m_ChannelBind = defaultChannel.bind_property ("port", m_Icon, "port", GLib.BindingFlags.SYNC_CREATE);
         }
     }
 }
