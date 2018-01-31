@@ -55,6 +55,8 @@ public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
 
         if (defaultChannel != null) {
             m_ChannelBind = defaultChannel.bind_property ("port", m_Icon, "port", GLib.BindingFlags.SYNC_CREATE);
+        } else {
+            m_Icon.port = null;
         }
     }
 }
