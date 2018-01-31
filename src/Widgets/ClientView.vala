@@ -104,7 +104,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         on_name_changed ();
         on_icon_changed ();
 
-        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 
     private void on_name_changed () {
@@ -136,7 +136,7 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         plug.show_all ();
         m_Plugs.add (plug);
 
-        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 
     private void on_client_plug_removed (Plug inPlug) {
@@ -149,6 +149,6 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
             }
         });
 
-        m_Content.reveal_child = !client.is_mine && m_Window != null && (client.get_plugs ().length > 0);
+        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 }
