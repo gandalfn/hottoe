@@ -67,7 +67,6 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
         });
 
         stack = new Gtk.Stack ();
-        stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
         manager.device_added.connect (on_device_added);
         manager.device_removed.connect (on_device_removed);
