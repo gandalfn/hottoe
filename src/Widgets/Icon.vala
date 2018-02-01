@@ -73,6 +73,14 @@ public abstract class PantheonSoundControl.Widgets.Icon : Gtk.Grid {
 
         add (m_Overlay);
 
+        bind_property ("size", m_Overlay, "height-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+            t.set_int (((Size)f).to_pixel_size ());
+            return true;
+        });
+        bind_property ("size", m_Overlay, "width-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+            t.set_int (((Size)f).to_pixel_size ());
+            return true;
+        });
         bind_property ("size", m_Icon, "pixel-size", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             t.set_int (((Size)f).to_pixel_size ());
             return true;
