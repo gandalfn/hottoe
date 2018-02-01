@@ -62,7 +62,7 @@ public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets
             }
         }
 
-        var icon = new PortIcon (channel.port, Icon.Size.MEDIUM);
+        var icon = new PortIcon (channel.port, Icon.Size.LARGE);
 
         m_CheckIcon = new Gtk.Image ();
         m_CheckIcon.icon_name = "account-logged-in";

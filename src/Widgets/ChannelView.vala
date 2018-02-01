@@ -33,7 +33,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         row_spacing = 6;
 
         var image_box = new Gtk.EventBox ();
-        var image = new PortIcon (channel.port, Icon.Size.LARGE);
+        var image = new PortIcon (channel.port, Icon.Size.EXTRA_LARGE);
         image_box.halign = Gtk.Align.START;
         image_box.valign = Gtk.Align.START;
         image_box.add (image);
