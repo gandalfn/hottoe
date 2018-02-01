@@ -19,16 +19,9 @@
  */
 
 public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
-    private Gtk.Image m_Icon;
-    private Gtk.Label m_Title;
     private Gtk.Scale m_Volume;
-    private Wnck.Window m_Window;
 
     public unowned Plug plug { get; construct; }
-
-    static construct {
-        Wnck.set_default_mini_icon_size (48);
-    }
 
     construct {
         hexpand = true;
@@ -36,19 +29,18 @@ public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
         column_spacing = 6;
 
         var iconBox = new Gtk.EventBox ();
-        m_Icon = new Gtk.Image ();
-        m_Icon.margin_start = 6;
-        m_Icon.pixel_size = 48;
-        iconBox.add (m_Icon);
+        var icon = new ClientIcon (plug.client, Icon.Size.EXTRA_LARGE);
+        icon.margin_start = 6;
+        iconBox.add (icon);
         attach (iconBox, 0, 0, 1, 3);
 
         var titleBox = new Gtk.EventBox ();
-        m_Title = new Gtk.Label ("");
-        m_Title.use_markup = true;
-        m_Title.hexpand = true;
-        m_Title.xalign = 0.0f;
-        m_Title.yalign = 1.0f;
-        titleBox.add (m_Title);
+        var title = new Gtk.Label ("");
+        title.use_markup = true;
+        title.hexpand = true;
+        title.xalign = 0.0f;
+        title.yalign = 1.0f;
+        titleBox.add (title);
         attach (titleBox, 1, 0, 1, 1);
 
         m_Volume = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, plug.volume_muted, plug.volume_max, (plug.volume_max - plug.volume_muted) / 20.0);
@@ -76,8 +68,8 @@ public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
         attach (vumeter, 1, 2, 2, 1);
 
         switchWidget.bind_property ("active", m_Volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);
-        switchWidget.bind_property ("active", m_Title, "sensitive", GLib.BindingFlags.SYNC_CREATE);
-        switchWidget.bind_property ("active", m_Icon, "sensitive", GLib.BindingFlags.SYNC_CREATE);
+        switchWidget.bind_property ("active", title, "sensitive", GLib.BindingFlags.SYNC_CREATE);
+        switchWidget.bind_property ("active", icon, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switchWidget.bind_property ("active", vumeter, "sensitive", GLib.BindingFlags.SYNC_CREATE);
 
         plug.bind_property ("volume", m_Volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL |
@@ -86,8 +78,10 @@ public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
                                                                 GLib.BindingFlags.SYNC_CREATE   |
                                                                 GLib.BindingFlags.INVERT_BOOLEAN);
 
-        plug.client.notify["pid"].connect (on_pid_changed);
-        on_pid_changed ();
+        plug.client.bind_property ("name", title, "label", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+            t.set_string("<b>%s</b>".printf ((string)f));
+            return true;
+        });
 
         add_events (Gdk.EventMask.SCROLL_MASK);
         iconBox.add_events (Gdk.EventMask.SCROLL_MASK);
@@ -111,48 +105,5 @@ public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
         m_Volume.scroll_event (event);
 
         return Gdk.EVENT_STOP;
-    }
-
-    private void on_pid_changed () {
-        if (m_Window != null) {
-            m_Window.name_changed.disconnect (on_name_changed);
-            m_Window.icon_changed.disconnect (on_icon_changed);
-            m_Window = null;
-        }
-
-        unowned Wnck.Screen screen = Wnck.Screen.get_default();
-        foreach (unowned Wnck.Window win in screen.get_windows()) {
-            if (win.get_pid () == plug.client.pid) {
-                m_Window = win;
-                m_Window.name_changed.connect (on_name_changed);
-                m_Window.icon_changed.connect (on_icon_changed);
-                break;
-            }
-        }
-
-        on_name_changed ();
-        on_icon_changed ();
-    }
-
-    private void on_name_changed () {
-        if (m_Window != null) {
-            if (m_Window.has_name ()) {
-                if ("\n" in m_Window.get_name ()) {
-                    m_Title.label = "<b>%s</b>".printf (plug.client.name);
-                } else {
-                    m_Title.label = "<b>%s</b>".printf (m_Window.get_name ());
-                }
-            }
-        } else {
-            m_Title.label = plug.client.name;
-        }
-    }
-
-    private void on_icon_changed () {
-        if (m_Window != null) {
-            m_Icon.pixbuf = m_Window.get_mini_icon ();
-        } else {
-            m_Icon.icon_name = "application-default-icon";
-        }
     }
 }

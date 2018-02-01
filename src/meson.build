@@ -7,6 +7,7 @@ libpantheon_sound_control_widgets = static_library (
         'Widgets/Icon.vala',
         'Widgets/PortIcon.vala',
         'Widgets/DeviceIcon.vala',
+        'Widgets/ClientIcon.vala',
         'Widgets/VolumeMeter.vala',
         'Widgets/ChannelView.vala',
         'Widgets/DeviceChannelList.vala',
@@ -19,8 +20,10 @@ libpantheon_sound_control_widgets = static_library (
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('libcanberra'),
-        dependency('libcanberra-gtk')
+        dependency('libcanberra-gtk'),
+        dependency('libwnck-3.0')
     ],
+    c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: false
 )
 

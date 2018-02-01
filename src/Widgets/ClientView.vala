@@ -19,18 +19,11 @@
  */
 
 public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
-    private Gtk.Image m_ClientIcon;
-    private Gtk.Label m_ClientLabel;
     private Gtk.Revealer m_Content;
     private Gtk.Grid m_Plugs;
-    private Wnck.Window m_Window;
 
     public unowned Client client { get; construct; }
     public bool active { get; set; default = false; }
-
-    static construct {
-        Wnck.set_default_mini_icon_size (48);
-    }
 
     construct {
         hexpand = true;
@@ -39,20 +32,19 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         grid.column_spacing = 12;
         grid.margin_bottom = 6;
 
-        m_ClientIcon = new Gtk.Image ();
-        m_ClientIcon.margin_start = 6;
-        m_ClientIcon.pixel_size = 32;
-        m_ClientIcon.halign = Gtk.Align.START;
+        var clientIcon = new ClientIcon (client, Icon.Size.EXTRA_LARGE);
+        clientIcon.margin_start = 6;
+        clientIcon.halign = Gtk.Align.START;
 
-        grid.attach (m_ClientIcon, 0, 0, 1, 1);
+        grid.attach (clientIcon, 0, 0, 1, 1);
 
-        m_ClientLabel = new MaxWidthLabel (180);
-        m_ClientLabel.xalign = 0;
-        m_ClientLabel.hexpand = true;
-        m_ClientLabel.ellipsize = Pango.EllipsizeMode.END;
-        m_ClientLabel.get_style_context ().add_class ("h3");
+        var clientLabel = new MaxWidthLabel (180);
+        clientLabel.xalign = 0;
+        clientLabel.hexpand = true;
+        clientLabel.ellipsize = Pango.EllipsizeMode.END;
+        clientLabel.get_style_context ().add_class ("h3");
 
-        grid.attach (m_ClientLabel, 1, 0, 1, 1);
+        grid.attach (clientLabel, 1, 0, 1, 1);
 
         m_Plugs = new Gtk.Grid ();
         m_Plugs.vexpand = true;
@@ -69,7 +61,8 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
 
         add (m_Content);
 
-        m_Content.bind_property ("reveal-child", this, "active");
+        m_Content.bind_property ("reveal-child", this, "active", GLib.BindingFlags.SYNC_CREATE);
+        client.bind_property ("name", clientLabel, "label", GLib.BindingFlags.SYNC_CREATE);
 
         client.plug_added.connect_after (on_client_plug_added);
         client.plug_removed.connect_after (on_client_plug_removed);
@@ -85,53 +78,10 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_is_mine_changed () {
-        if (m_Window != null) {
-            m_Window.name_changed.disconnect (on_name_changed);
-            m_Window.icon_changed.disconnect (on_icon_changed);
-            m_Window = null;
-        }
-
-        unowned Wnck.Screen screen = Wnck.Screen.get_default();
-        foreach (unowned Wnck.Window win in screen.get_windows()) {
-            if (win.get_pid () == client.pid) {
-                m_Window = win;
-                m_Window.name_changed.connect (on_name_changed);
-                m_Window.icon_changed.connect (on_icon_changed);
-                break;
-            }
-        }
-
-        on_name_changed ();
-        on_icon_changed ();
-
         m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 
-    private void on_name_changed () {
-        if (m_Window != null) {
-            if (m_Window.has_name ()) {
-                if ("\n" in m_Window.get_name ()) {
-                    m_ClientLabel.label = client.name;
-                } else {
-                    m_ClientLabel.label = m_Window.get_name ();
-                }
-            }
-        } else {
-            m_ClientLabel.label = client.name;
-        }
-    }
-
-    private void on_icon_changed () {
-        if (m_Window != null) {
-            m_ClientIcon.pixbuf = m_Window.get_mini_icon ();
-        } else {
-            m_ClientIcon.icon_name = "application-default-icon";
-        }
-    }
-
     private void on_client_plug_added (Plug inPlug) {
-        debug (@"client $(client.name) plug added $(!client.is_mine)");
-
         var plug = new PlugChannelList (inPlug);
         plug.show_all ();
         m_Plugs.add (plug);
@@ -140,8 +90,6 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_client_plug_removed (Plug inPlug) {
-        debug (@"client $(client.name) plug removed");
-
         m_Plugs.get_children ().foreach ((child) => {
             unowned PlugChannelList? list = child as PlugChannelList;
             if (list != null && list.plug == inPlug) {
