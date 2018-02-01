@@ -60,5 +60,8 @@ public class PantheonSoundControl.Widgets.DeviceList : Gtk.ScrolledWindow {
                 child.destroy ();
             }
         });
+
+        var notification = new Services.DesktopNotification.device_not_available (inDevice);
+        notification.send ();
     }
 }

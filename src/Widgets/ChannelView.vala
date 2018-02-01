@@ -111,6 +111,11 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         notify["show-labels"].connect (on_base_volume_changed);
         channel.notify["volume-base"].connect (on_base_volume_changed);
         on_base_volume_changed ();
+
+        channel.notify["volume"].connect (() => {
+            var notification = new Services.SoundNotification.volume_change (channel);
+            notification.send ();
+        });
     }
 
     public ChannelView (Channel inChannel) {

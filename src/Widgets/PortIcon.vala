@@ -52,6 +52,34 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         }
     }
 
+    public override GLib.Icon gicon {
+       owned get {
+            string portIconName = port.icon_name;
+            string iconName = portIconName;
+
+            switch (portIconName) {
+                case "headset-output":
+                case "headset-input":
+                    iconName = "audio-headset";
+                    break;
+
+                case "phone-output":
+                case "phone-input":
+                    iconName = "phone";
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (use_symbolic) {
+                iconName += "-symbolic";
+            }
+
+            return new GLib.ThemedIcon.with_default_fallbacks (iconName);
+        }
+    }
+
     public PortIcon (Port? inPort = null, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
         GLib.Object (
             size: inSize,

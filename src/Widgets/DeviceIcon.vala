@@ -21,16 +21,44 @@
 public class PantheonSoundControl.Widgets.DeviceIcon : PantheonSoundControl.Widgets.Icon {
     public unowned Device device { get; construct; }
 
+    public override GLib.Icon gicon {
+       owned get {
+            string devIconName = device.icon_name;
+            string iconName = devIconName;
+
+            switch (devIconName) {
+                case "audio-card-pci":
+                    iconName = "audio-card";
+                    break;
+
+                case "audio-card-bluetooth":
+                    iconName = "bluetooth";
+                    break;
+            }
+
+            if ("HDMI" in device.display_name) {
+                iconName = "video-display";
+            }
+
+            return new GLib.ThemedIcon.with_default_fallbacks (iconName);
+        }
+    }
+
     construct {
         string devIconName = device.icon_name;
+        string iconName = devIconName;
+
         switch (devIconName) {
             case "audio-card-bluetooth":
-                m_Icon.icon_name = "bluetooth";
+                iconName = "bluetooth";
                 break;
-
-            default:
-                m_Icon.icon_name = devIconName;
         }
+
+        if ("HDMI" in device.display_name) {
+            iconName = "video-display";
+        }
+
+        m_Icon.icon_name = iconName;
     }
 
     public DeviceIcon (Device inDevice, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {

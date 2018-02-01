@@ -42,6 +42,8 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
             m_IndicatorIcon = new Widgets.IndicatorIcon (m_Manager);
 
             m_Manager.start ();
+
+            Services.DesktopNotification.enabled = true;
         }
 
         return m_IndicatorIcon;
@@ -66,6 +68,9 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
             }
             m_Manager.enable_monitoring = true;
         }
+
+        Services.DesktopNotification.enabled = false;
+        Services.SoundNotification.enabled = true;
     }
 
     public override void closed () {
@@ -81,6 +86,9 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
                 return true;
             });
         }
+
+        Services.DesktopNotification.enabled = true;
+        Services.SoundNotification.enabled = false;
     }
 
     private void show_settings () {

@@ -116,6 +116,7 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
         });
 
         device.changed.connect (on_device_changed);
+
         on_device_changed ();
     }
 
@@ -132,6 +133,14 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
                 }
             }
             m_NbPorts = nbPorts;
+
+            if (m_NbPorts > 0) {
+                var notification = new Services.DesktopNotification.device_available (device);
+                notification.send ();
+            } else {
+                var notification = new Services.DesktopNotification.device_not_available (device);
+                notification.send ();
+            }
         }
     }
 }

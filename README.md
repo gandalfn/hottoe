@@ -16,6 +16,7 @@ You'll need the following dependencies:
     libwnck-3-dev
     libgee-0.8-dev
     libpulse-dev
+    libcanberra-gtk-dev
     meson
     valac
 
