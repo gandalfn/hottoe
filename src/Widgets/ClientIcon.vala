@@ -55,8 +55,6 @@ public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widg
     }
 
     private void on_client_pid_changed () {
-        message (@"$(client.name) pid changed $(client.pid)");
-
         if (m_Window != null) {
             m_Window.icon_changed.disconnect (on_icon_changed);
             m_Window = null;
@@ -65,7 +63,6 @@ public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widg
         unowned Wnck.Screen screen = Wnck.Screen.get_default();
         screen.force_update ();
         foreach (unowned Wnck.Window win in screen.get_windows()) {
-            message(@"window pid $(win.get_pid ())");
             if (win.get_pid () == client.pid) {
                 m_Window = win;
                 m_Window.icon_changed.connect (on_icon_changed);
