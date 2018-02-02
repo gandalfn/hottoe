@@ -43,7 +43,9 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
 
             m_Manager.start ();
 
-            Services.DesktopNotification.enabled = true;
+            // TODO: Disable desktop notification since we have a problem when wingpanel has
+            // emitter and receiver of notification
+            Services.DesktopNotification.enabled = false;
         }
 
         return m_IndicatorIcon;
