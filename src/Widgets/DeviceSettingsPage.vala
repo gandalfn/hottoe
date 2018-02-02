@@ -194,9 +194,18 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         bool haveOutput = device.get_output_channels ().length > 0;
         bool haveInput = device.get_input_channels ().length > 0;
 
+        message(@"device $(device.name) changed output: $(haveOutput) input: $(haveInput)");
+
+        bool switchOnOutput = haveOutput && m_OutputGrid.visible != haveOutput;
+
         m_OutputGrid.visible = haveOutput;
         m_InputGrid.visible = haveInput;
 
         m_OutputInputSwitcher.visible = haveOutput && haveInput;
+
+        // If output become visible switch on it
+        if (switchOnOutput) {
+            m_OutputInputStack.set_visible_child (m_OutputGrid);
+        }
     }
 }
