@@ -21,6 +21,7 @@
 public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
     private Gtk.Scale m_Volume;
     private Gtk.Scale m_Balance;
+    private bool m_Init;
 
     public unowned Channel channel { get; construct; }
     public Icon.Size icon_size { get; set; default = Icon.Size.LARGE; }
@@ -29,6 +30,8 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
     public double monitor_nb_bars { get; set; default = 8.0; }
 
     construct {
+        m_Init = true;
+
         hexpand = true;
         row_spacing = 6;
 
@@ -42,6 +45,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
 
         m_Volume = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, channel.volume_muted, channel.volume_max, (channel.volume_max - channel.volume_muted) / 20.0);
         m_Volume.adjustment.page_increment = 5;
+        m_Volume.adjustment.value = channel.volume;
         m_Volume.margin_start = 6;
         m_Volume.set_size_request (200, -1);
         m_Volume.draw_value = false;
@@ -96,7 +100,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
 
         channel.bind_property ("port", image, "port");
 
-        channel.bind_property ("volume", m_Volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE);
+        channel.bind_property ("volume", m_Volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL);
         channel.bind_property ("is_muted", switch_widget, "active", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.INVERT_BOOLEAN);
 
         bind_property("icon-size", image, "size", GLib.BindingFlags.SYNC_CREATE);
@@ -112,9 +116,13 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         channel.notify["volume-base"].connect (on_base_volume_changed);
         on_base_volume_changed ();
 
-        channel.notify["volume"].connect (() => {
-            var notification = new Services.SoundNotification.volume_change (channel);
-            notification.send ();
+        m_Volume.adjustment.value_changed.connect (() => {
+            message(@"volume play");
+            if (!m_Init) {
+                var notification = new Services.SoundNotification.volume_change (channel);
+                notification.send ();
+            }
+            m_Init = false;
         });
     }
 
