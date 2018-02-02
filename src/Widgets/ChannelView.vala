@@ -64,9 +64,9 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
             m_Balance.has_origin = false;
             m_Balance.hexpand = true;
 
-            m_Balance.add_mark (-1, Gtk.PositionType.BOTTOM, _("Left"));
-            m_Balance.add_mark (0, Gtk.PositionType.BOTTOM, _("Center"));
-            m_Balance.add_mark (1, Gtk.PositionType.BOTTOM, _("Right"));
+            m_Balance.add_mark (-1, Gtk.PositionType.BOTTOM, _("<small>Left</small>"));
+            m_Balance.add_mark (0, Gtk.PositionType.BOTTOM, _("<small>Center</small>"));
+            m_Balance.add_mark (1, Gtk.PositionType.BOTTOM, _("<small>Right</small>"));
 
             attach (m_Balance, 1, 1, 2, 1);
         }
@@ -117,7 +117,6 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         on_base_volume_changed ();
 
         m_Volume.adjustment.value_changed.connect (() => {
-            message(@"volume play");
             if (!m_Init) {
                 var notification = new Services.SoundNotification.volume_change (channel);
                 notification.send ();
@@ -140,11 +139,11 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
 
     private void on_base_volume_changed () {
         m_Volume.clear_marks ();
-        m_Volume.add_mark (channel.volume_muted, Gtk.PositionType.BOTTOM, show_labels ? _("0 %") : null);
-        m_Volume.add_mark (channel.volume_norm, Gtk.PositionType.BOTTOM, show_labels ? _("100 %") : null);
+        m_Volume.add_mark (channel.volume_muted, Gtk.PositionType.BOTTOM, show_labels ? _("<small>Min</small>") : null);
+        m_Volume.add_mark (channel.volume_norm, Gtk.PositionType.BOTTOM, show_labels ? _("<small>100% (0dB)</small>") : null);
 
         if (channel.volume_base > channel.volume_muted && channel.volume_base < channel.volume_norm) {
-            m_Volume.add_mark (channel.volume_base, Gtk.PositionType.BOTTOM, show_labels ? _("Unamplified") : null);
+            m_Volume.add_mark (channel.volume_base, Gtk.PositionType.BOTTOM, show_labels ? _("<small>Unamplified</small>") : null);
         }
     }
 }

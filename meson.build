@@ -1,6 +1,7 @@
 project('pantheon-sound-control', [ 'c', 'vala' ], version: '0.1.0')
 
-gettext_name = meson.project_name() + '-indicator'
+gettext_name = meson.project_name()
+
 gnome = import('gnome')
 i18n = import('i18n')
 
@@ -13,3 +14,4 @@ add_project_arguments(['--vapidir', join_paths(meson.current_source_dir(), 'vapi
 subdir('lib')
 subdir('src')
 subdir('test')
+subdir('po')

@@ -26,20 +26,24 @@ public class PantheonSoundControl.Services.DesktopNotification : Services.Notifi
 
     public DesktopNotification.device_available (Device inDevice) {
         m_Id = "sound-device-available";
-        m_Notification = new GLib.Notification (_("Sound device %s available").printf (inDevice.display_name));
+        m_Notification = new GLib.Notification (_("Sound device available"));
+        string body = inDevice.display_name;
         if (inDevice.active_profile != null) {
-            m_Notification.set_body (inDevice.active_profile.description);
+            body += @"\n$(inDevice.active_profile.description)";
         }
+        m_Notification.set_body (body);
         var deviceIcon = new Widgets.DeviceIcon (inDevice);
         m_Notification.set_icon (deviceIcon.gicon);
     }
 
     public DesktopNotification.device_not_available (Device inDevice) {
         m_Id = "sound-device-not-available";
-        m_Notification = new GLib.Notification (_("Sound device %s disconnected").printf (inDevice.display_name));
+        m_Notification = new GLib.Notification (_("Sound device disconnected"));
+        string body = inDevice.display_name;
         if (inDevice.active_profile != null) {
-            m_Notification.set_body (inDevice.active_profile.description);
+            body += @"\n$(inDevice.active_profile.description)";
         }
+        m_Notification.set_body (body);
         var deviceIcon = new Widgets.DeviceIcon (inDevice);
         m_Notification.set_icon (deviceIcon.gicon);
     }

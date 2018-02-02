@@ -1,0 +1,90 @@
+# French translation for pantheon-sound-control.
+# Copyright (C) 2018 Pantheon Sound Control 2018
+# This file is distributed under the same license as the pantheon-sound-control package.
+# Nicolas Bruguier <gandalfn@club-internet.fr>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: pantheon-sound-control\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-02 18:56+0100\n"
+"PO-Revision-Date: 2018-02-02 18:48+0100\n"
+"Last-Translator: Nicolas Bruguier <gandalfn@club-internet.fr>,\n"
+"Language-Team: French <fr@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/PulseAudio/Monitor.vala:30
+msgid "Peak detect"
+msgstr ""
+
+#: src/Services/DesktopNotification.vala:29
+msgid "Sound device available"
+msgstr "Périphérique audio disponible"
+
+#: src/Services/DesktopNotification.vala:41
+msgid "Sound device disconnected"
+msgstr "Périphérique audio déconnecté"
+
+#: src/SwitchboardPlug.vala:36 src/Indicator.vala:36
+msgid "Sound Devices"
+msgstr "Périphériques Audio"
+
+#: src/SwitchboardPlug.vala:37
+msgid "Configure sound devices"
+msgstr "Configuration des périphériques audio"
+
+#: src/Indicator.vala:37
+msgid "The Sound Devices indicator"
+msgstr "L'indicateur des périphériques audio"
+
+#: src/Widgets/PlugSettingsList.vala:34
+msgid "Clients:"
+msgstr "Clients:"
+
+#: src/Widgets/PlugSettingsList.vala:45
+msgid "Add Client…"
+msgstr "Ajouter un client"
+
+#: src/Widgets/DeviceSettingsPage.vala:125
+msgid "Output"
+msgstr "Sortie"
+
+#: src/Widgets/DeviceSettingsPage.vala:126
+msgid "Input"
+msgstr "Entrée"
+
+#: src/Widgets/ChannelView.vala:67
+msgid "<small>Left</small>"
+msgstr "<small>Gauche</small>"
+
+#: src/Widgets/ChannelView.vala:68
+msgid "<small>Center</small>"
+msgstr "<small>Centre</small>"
+
+#: src/Widgets/ChannelView.vala:69
+msgid "<small>Right</small>"
+msgstr "<small>Droit</small>"
+
+#: src/Widgets/ChannelView.vala:142
+msgid "<small>Min</small>"
+msgstr "<small>Min</small>"
+
+#: src/Widgets/ChannelView.vala:143
+msgid "<small>100% (0dB)</small>"
+msgstr "<small>100% (0dB)</small>"
+
+#: src/Widgets/ChannelView.vala:146
+msgid "<small>Unamplified</small>"
+msgstr "<small>Non amplifié</small>"
+
+#: src/Widgets/IndicatorView.vala:41
+msgid "Scan Sound Devices…"
+msgstr "Recherche des périphériques audio…"
+
+#: src/Widgets/IndicatorView.vala:52
+msgid "Sound Devices Settings…"
+msgstr "Paramètres des périphériques audio"
