@@ -71,15 +71,23 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
         }
         set {
             if (m_Channel != value) {
+                if (m_Channel != null) {
+                    m_Channel.weak_unref (on_channel_destroyed);
+                    m_Channel = null;
+                }
                 if (m_Channel != null && value != null) {
                     ((Manager) manager).operations.move_sink_input_by_index (index, ((Channel) value).index, (s) => {
                         if (s) {
                             m_Channel = (Channel)value;
+                            m_Channel.weak_ref (on_channel_destroyed);
                             notify_property("channel");
                         }
                     });
                 } else {
                     m_Channel = (Channel)value;
+                    if (m_Channel != null) {
+                        m_Channel.weak_ref (on_channel_destroyed);
+                    }
                     notify_property("channel");
                 }
             }
@@ -95,6 +103,13 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
         );
 
         update (inInfo);
+    }
+
+    ~OutputPlug () {
+        if (m_Channel != null) {
+            m_Channel.weak_unref (on_channel_destroyed);
+            m_Channel = null;
+        }
     }
 
     public bool update (global::PulseAudio.SinkInputInfo inInfo) {
@@ -159,5 +174,10 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
         }
 
         return updated;
+    }
+
+    private void on_channel_destroyed () {
+        m_Channel = null;
+        notify_property ("channel");
     }
 }
