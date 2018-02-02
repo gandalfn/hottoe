@@ -104,12 +104,6 @@ internal abstract class PantheonSoundControl.PulseAudio.Channel : PantheonSoundC
         return new Monitor (this);
     }
 
-    ~Channel () {
-        if (m_Device != null) {
-            m_Device.channel_removed (this);
-        }
-    }
-
     public override string to_string () {
         string ret = @"channel: $(index), name: $(name), description: $(description)\n";
         if (m_ActivePort != null) {
