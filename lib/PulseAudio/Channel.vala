@@ -75,6 +75,10 @@ internal abstract class PantheonSoundControl.PulseAudio.Channel : PantheonSoundC
                 if (m_Device != null) {
                     m_Device.channel_added (this);
                 }
+            } else {
+                // send devicce changed in case of the channel port change but
+                // for the same device
+                m_Device.changed ();
             }
         }
     }
@@ -98,6 +102,12 @@ internal abstract class PantheonSoundControl.PulseAudio.Channel : PantheonSoundC
 
     public override PantheonSoundControl.Channel.Monitor create_monitor () {
         return new Monitor (this);
+    }
+
+    ~Channel () {
+        if (m_Device != null) {
+            m_Device.channel_removed (this);
+        }
     }
 
     public override string to_string () {

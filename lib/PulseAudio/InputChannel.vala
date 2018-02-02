@@ -92,7 +92,7 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
                 } else if (m_ActivePort != null) {
                     m_ActivePort.weak_unref (on_active_port_destroyed);
                     m_ActivePort = null;
-                    device = (Device)m_ActivePort.device;
+                    device = null;
                     notify_property ("port");
                 }
             }

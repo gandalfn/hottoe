@@ -93,7 +93,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
                 } else if (m_ActivePort != null) {
                     m_ActivePort.weak_unref (on_active_port_destroyed);
                     m_ActivePort = null;
-                    device = (Device)m_ActivePort.device;
+                    device = null;
                     notify_property ("port");
                 }
             }
@@ -131,6 +131,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
                         if (m_ActivePort != null) {
                             m_ActivePort.weak_unref (on_active_port_destroyed);
                         }
+                        message(@"$(name) port changed");
                         m_ActivePort = (Port)port;
                         m_ActivePort.weak_ref (on_active_port_destroyed);
                         device = (Device)m_ActivePort.device;
