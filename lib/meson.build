@@ -23,7 +23,9 @@ libpantheon_sound_control = library(
     ],
     c_args: [ '-DBACKEND_PATH="' + backend_path + '"'],
     include_directories: libpantheon_sound_control_inc,
-    install: true
+    install: true,
+    install_dir : [true, true, true],
+    version: meson.project_version()
 )
 
 pantheon_sound_control_dep = declare_dependency(
