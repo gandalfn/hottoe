@@ -23,6 +23,7 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
     private GLib.Binding m_PortIconBind;
     private GLib.Binding m_PortSymbolBind;
 
+    [CCode (notify = false)]
     public unowned Port port {
         get {
             return m_Port;
@@ -30,11 +31,13 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         set {
             if (m_Port != value) {
                 if (m_Port != null) {
+                    m_Port.remove_toggle_ref (on_port_destroyed);
                     m_PortIconBind.unbind ();
                     m_PortSymbolBind.unbind ();
                 }
                 m_Port = value;
                 if (m_Port != null) {
+                    m_Port.add_toggle_ref (on_port_destroyed);
                     m_PortIconBind = m_Port.bind_property ("icon-name", m_Icon, "icon-name", GLib.BindingFlags.SYNC_CREATE,
                                                            on_port_icon_changed);
                     m_PortSymbolBind = m_Port.bind_property ("icon-name", m_Symbol, "icon-name", GLib.BindingFlags.SYNC_CREATE,
@@ -86,6 +89,12 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
             use_symbolic: inUseSymbolic,
             port: inPort
         );
+    }
+
+    ~PortIcon () {
+        if (m_Port != null) {
+            m_Port.remove_toggle_ref (on_port_destroyed);
+        }
     }
 
     private bool on_port_icon_changed (GLib.Binding inBind, GLib.Value inFrom, ref GLib.Value inoutTo) {
@@ -151,5 +160,11 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         inoutTo.set_string (iconName);
 
         return true;
+    }
+
+    private void on_port_destroyed (GLib.Object inObject, bool inIsLastRef) {
+        if (inIsLastRef) {
+            m_Port = null;
+        }
     }
 }
