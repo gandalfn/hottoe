@@ -19,7 +19,7 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindow {
-    private Gtk.ListBox m_ListBox;
+    private Gtk.ListBox m_list_box;
 
     public unowned Manager manager { get; construct; }
 
@@ -27,7 +27,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
 
     public string? visible_device {
         get {
-            var selected_row = m_ListBox.get_selected_row ();
+            var selected_row = m_list_box.get_selected_row ();
 
             if (selected_row == null) {
                 return null;
@@ -36,18 +36,18 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
             }
         }
         set {
-            foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
+            foreach (unowned Gtk.Widget child in m_list_box.get_children ()) {
                 if (((DeviceSettingsListRow) child).page.device.name == value) {
-                    m_ListBox.select_row ((Gtk.ListBoxRow) child);
+                    m_list_box.select_row ((Gtk.ListBoxRow) child);
                     break;
                 }
             }
         }
     }
 
-    public DeviceSettingsList (Manager inManager) {
+    public DeviceSettingsList (Manager in_manager) {
         Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 
@@ -56,13 +56,13 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
         vscrollbar_policy = Gtk.PolicyType.NEVER;
         width_request = 200;
 
-        m_ListBox = new Gtk.ListBox ();
-        m_ListBox.activate_on_single_click = true;
-        m_ListBox.selection_mode = Gtk.SelectionMode.SINGLE;
+        m_list_box = new Gtk.ListBox ();
+        m_list_box.activate_on_single_click = true;
+        m_list_box.selection_mode = Gtk.SelectionMode.SINGLE;
 
-        add (m_ListBox);
+        add (m_list_box);
 
-        m_ListBox.row_selected.connect ((row) => {
+        m_list_box.row_selected.connect ((row) => {
             stack.visible_child = ((DeviceSettingsListRow) row).page;
         });
 
@@ -72,35 +72,35 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
         manager.device_removed.connect (on_device_removed);
     }
 
-    private void on_device_added (Device inDevice) {
-        var page = new DeviceSettingsPage (inDevice);
+    private void on_device_added (Device in_device) {
+        var page = new DeviceSettingsPage (in_device);
         page.show_all ();
-        stack.add_named (page, inDevice.name);
+        stack.add_named (page, in_device.name);
 
         var row = new DeviceSettingsListRow (page);
         row.show_all ();
-        m_ListBox.add (row);
+        m_list_box.add (row);
 
-        if (inDevice.active && visible_device == null) {
-            visible_device = inDevice.name;
+        if (in_device.active && visible_device == null) {
+            visible_device = in_device.name;
         }
 
-        inDevice.notify["active"].connect (on_device_active_changed);
+        in_device.notify["active"].connect (on_device_active_changed);
     }
 
-    private void on_device_removed (Device inDevice) {
-        unowned DeviceSettingsListRow? selectedRow = m_ListBox.get_selected_row () as DeviceSettingsListRow;
-        bool selectedRemoved = selectedRow != null && selectedRow.page.device == inDevice;
+    private void on_device_removed (Device in_device) {
+        unowned DeviceSettingsListRow? selected_row = m_list_box.get_selected_row () as DeviceSettingsListRow;
+        bool selected_removed = selected_row != null && selected_row.page.device == in_device;
 
-        inDevice.notify["active"].disconnect (on_device_active_changed);
+        in_device.notify["active"].disconnect (on_device_active_changed);
 
-        foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
+        foreach (unowned Gtk.Widget child in m_list_box.get_children ()) {
             unowned DeviceSettingsListRow? row = child as DeviceSettingsListRow;
             if (row != null) {
-                if (row.page.device == inDevice) {
+                if (row.page.device == in_device) {
                     row.page.destroy ();
                     row.destroy ();
-                } else if (selectedRemoved && row.page.device.active) {
+                } else if (selected_removed && row.page.device.active) {
                     visible_device = row.page.device.name;
                 }
             }
@@ -108,20 +108,20 @@ public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindo
     }
 
     private void on_device_active_changed () {
-        bool needUpdate = false;
-        var listRow = m_ListBox.get_selected_row ();
-        if (listRow != null) {
-            unowned DeviceSettingsListRow? row = listRow as DeviceSettingsListRow;
-            needUpdate = row == null || !row.page.device.active;
+        bool need_update = false;
+        var list_row = m_list_box.get_selected_row ();
+        if (list_row != null) {
+            unowned DeviceSettingsListRow? row = list_row as DeviceSettingsListRow;
+            need_update = row == null || !row.page.device.active;
         } else {
-            needUpdate = true;
+            need_update = true;
         }
 
-        if (needUpdate) {
-            foreach (unowned Gtk.Widget child in m_ListBox.get_children ()) {
-                unowned DeviceSettingsListRow? rowChild = child as DeviceSettingsListRow;
-                if (rowChild != null && rowChild.page.device.active) {
-                    visible_device = rowChild.page.device.name;
+        if (need_update) {
+            foreach (unowned Gtk.Widget child in m_list_box.get_children ()) {
+                unowned DeviceSettingsListRow? row_child = child as DeviceSettingsListRow;
+                if (row_child != null && row_child.page.device.active) {
+                    visible_device = row_child.page.device.name;
                     break;
                 }
             }

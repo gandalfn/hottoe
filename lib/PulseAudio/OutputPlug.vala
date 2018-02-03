@@ -20,7 +20,7 @@
  */
 
 internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
-    private bool m_IsMuted;
+    private bool m_is_muted;
 
     public override double volume {
         get {
@@ -50,11 +50,11 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
 
     public override bool is_muted {
         get {
-            return m_IsMuted;
+            return m_is_muted;
         }
         set {
-            m_IsMuted = value;
-            ((Manager) manager).operations.set_sink_input_mute (index, m_IsMuted);
+            m_is_muted = value;
+            ((Manager) manager).operations.set_sink_input_mute (index, m_is_muted);
         }
     }
 
@@ -67,63 +67,63 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
     [CCode (notify = false)]
     public override unowned PantheonSoundControl.Channel? channel {
         get {
-            return m_Channel;
+            return m_channel;
         }
         set {
-            if (m_Channel != value) {
-                if (m_Channel != null) {
-                    m_Channel.weak_unref (on_channel_destroyed);
-                    m_Channel = null;
+            if (m_channel != value) {
+                if (m_channel != null) {
+                    m_channel.weak_unref (on_channel_destroyed);
+                    m_channel = null;
                 }
-                if (m_Channel != null && value != null) {
+                if (m_channel != null && value != null) {
                     ((Manager) manager).operations.move_sink_input_by_index (index, ((Channel) value).index, (s) => {
                         if (s) {
-                            m_Channel = (Channel)value;
-                            m_Channel.weak_ref (on_channel_destroyed);
-                            notify_property("channel");
+                            m_channel = (Channel)value;
+                            m_channel.weak_ref (on_channel_destroyed);
+                            notify_property ("channel");
                         }
                     });
                 } else {
-                    m_Channel = (Channel)value;
-                    if (m_Channel != null) {
-                        m_Channel.weak_ref (on_channel_destroyed);
+                    m_channel = (Channel)value;
+                    if (m_channel != null) {
+                        m_channel.weak_ref (on_channel_destroyed);
                     }
-                    notify_property("channel");
+                    notify_property ("channel");
                 }
             }
         }
     }
 
-    public OutputPlug (Manager inManager, global::PulseAudio.SinkInputInfo inInfo) {
+    public OutputPlug (Manager in_manager, global::PulseAudio.SinkInputInfo in_info) {
         GLib.Object (
-            manager: inManager,
+            manager: in_manager,
             direction: PantheonSoundControl.Direction.OUTPUT,
-            index: inInfo.index,
-            name: inInfo.name
+            index: in_info.index,
+            name: in_info.name
         );
 
-        update (inInfo);
+        update (in_info);
     }
 
     ~OutputPlug () {
-        if (m_Channel != null) {
-            m_Channel.weak_unref (on_channel_destroyed);
-            m_Channel = null;
+        if (m_channel != null) {
+            m_channel.weak_unref (on_channel_destroyed);
+            m_channel = null;
         }
     }
 
-    public bool update (global::PulseAudio.SinkInputInfo inInfo) {
+    public bool update (global::PulseAudio.SinkInputInfo in_info) {
         bool updated = false;
 
-        if (m_Client == null || m_Client.index != inInfo.client) {
+        if (m_client == null || m_client.index != in_info.client) {
             bool foundClient = false;
             foreach (var c in manager.get_clients ()) {
-                if (((Client) c).index == inInfo.client) {
-                    if (m_Client != null) {
-                        m_Client.plug_removed (this);
+                if (((Client) c).index == in_info.client) {
+                    if (m_client != null) {
+                        m_client.plug_removed (this);
                     }
-                    m_Client = (Client)c;
-                    m_Client.plug_added (this);
+                    m_client = (Client)c;
+                    m_client.plug_added (this);
                     notify_property ("client");
                     foundClient = true;
                     updated = true;
@@ -131,16 +131,16 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
                 }
             }
 
-            if (!foundClient && m_Client != null) {
-                m_Client.plug_removed (this);
-                m_Client = null;
+            if (!foundClient && m_client != null) {
+                m_client.plug_removed (this);
+                m_client = null;
                 notify_property ("client");
             }
         }
 
-        if (m_Channel == null || m_Channel.index != inInfo.sink) {
+        if (m_channel == null || m_channel.index != in_info.sink) {
             foreach (var c in manager.get_output_channels ()) {
-                if (((Channel) c).index == inInfo.sink) {
+                if (((Channel) c).index == in_info.sink) {
                     channel = c;
                     notify_property ("channel");
                     updated = true;
@@ -149,22 +149,25 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
             }
         }
 
-        bool sendVolumeUpdate = (cvolume == null || volume != Plug.volume_to_double (inInfo.volume.max ()));
-        cvolume = inInfo.volume;
-        if (sendVolumeUpdate) {
+        bool send_volume_update = (cvolume == null ||
+                                   volume != Plug.volume_to_double (in_info.volume.max ()));
+        cvolume = in_info.volume;
+        if (send_volume_update) {
             notify_property ("volume");
             updated = true;
         }
 
-        bool sendBalanceUpdate = (cvolume == null || channel_map == null || balance != inInfo.volume.get_balance (inInfo.channel_map));
-        channel_map = inInfo.channel_map;
-        if (sendBalanceUpdate) {
+        bool send_balance_update = (cvolume == null ||
+                                    channel_map == null ||
+                                    balance != in_info.volume.get_balance (in_info.channel_map));
+        channel_map = in_info.channel_map;
+        if (send_balance_update) {
             notify_property ("balance");
             updated = true;
         }
 
-        if (inInfo.mute != m_IsMuted) {
-            m_IsMuted = inInfo.mute;
+        if (in_info.mute != m_is_muted) {
+            m_is_muted = in_info.mute;
             notify_property ("is-muted");
             updated = true;
         }
@@ -177,7 +180,7 @@ internal class PantheonSoundControl.PulseAudio.OutputPlug : Plug {
     }
 
     private void on_channel_destroyed () {
-        m_Channel = null;
+        m_channel = null;
         notify_property ("channel");
     }
 }

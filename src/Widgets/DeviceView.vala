@@ -19,16 +19,16 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
-    private int m_NbPorts;
-    private Gtk.Label m_TitleLabel;
-    private Gtk.Revealer m_Content;
-    private Gtk.RadioButton m_DefaultCheck;
+    private int m_nb_ports;
+    private Gtk.Label m_title_label;
+    private Gtk.Revealer m_content;
+    private Gtk.RadioButton m_default_check;
 
     public unowned Device device { get; construct; }
 
     public string title_label {
         set {
-            m_TitleLabel.set_markup ("<b>%s</b>".printf (value));
+            m_title_label.set_markup ("<b>%s</b>".printf (value));
         }
     }
 
@@ -36,29 +36,29 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
 
     public Gtk.RadioButton group {
         set {
-            m_DefaultCheck.join_group (value);
+            m_default_check.join_group (value);
         }
     }
 
-    public DeviceView (Device inDevice) {
+    public DeviceView (Device in_device) {
         Object (
-            device: inDevice
+            device: in_device
         );
     }
 
     construct {
-        m_DefaultCheck = new Gtk.RadioButton (null);
-        m_DefaultCheck.margin_top = 6;
-        m_DefaultCheck.margin_start = 6;
-        m_DefaultCheck.halign = Gtk.Align.START;
-        m_DefaultCheck.valign = Gtk.Align.CENTER;
+        m_default_check = new Gtk.RadioButton (null);
+        m_default_check.margin_top = 6;
+        m_default_check.margin_start = 6;
+        m_default_check.halign = Gtk.Align.START;
+        m_default_check.valign = Gtk.Align.CENTER;
 
-        m_TitleLabel = new Gtk.Label ("");
-        m_TitleLabel.xalign = 0;
-        m_TitleLabel.get_style_context ().add_class ("h3");
+        m_title_label = new Gtk.Label ("");
+        m_title_label.xalign = 0;
+        m_title_label.get_style_context ().add_class ("h3");
 
         var check_area = new Gtk.Grid ();
-        check_area.attach (m_TitleLabel, 0, 0, 1, 1);
+        check_area.attach (m_title_label, 0, 0, 1, 1);
 
         var description_label = new Gtk.Label ("");
         description_label.xalign = 0;
@@ -66,7 +66,7 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
 
         check_area.attach (description_label, 0, 1, 1, 1);
 
-        m_DefaultCheck.add (check_area);
+        m_default_check.add (check_area);
 
         content_area = new Gtk.Grid ();
         content_area.column_spacing = 12;
@@ -80,19 +80,20 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
         var grid = new Gtk.Grid ();
         grid.orientation = Gtk.Orientation.VERTICAL;
         grid.row_spacing = 12;
-        grid.add (m_DefaultCheck);
+        grid.add (m_default_check);
         grid.add (content_area);
         grid.add (new Wingpanel.Widgets.Separator ());
 
-        m_Content = new Gtk.Revealer ();
-        m_Content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+        m_content = new Gtk.Revealer ();
+        m_content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
 
-        m_Content.add (grid);
+        m_content.add (grid);
 
-        add (m_Content);
+        add (m_content);
 
         device.bind_property ("display-name", this, "title-label", GLib.BindingFlags.SYNC_CREATE);
-        device.bind_property ("active-profile", description_label, "label", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+        device.bind_property ("active-profile", description_label, "label", GLib.BindingFlags.SYNC_CREATE,
+                              (b, f, ref t) => {
             unowned Profile profile = (Profile)f;
 
             if (profile != null) {
@@ -102,14 +103,15 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
             }
             return true;
         });
-        device.bind_property ("active", m_Content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
-        device.manager.bind_property ("default-output-device", m_DefaultCheck, "active", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
-            unowned Device? defaultDevice = (Device)f;
-            t.set_boolean (defaultDevice == device);
+        device.bind_property ("active", m_content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
+        device.manager.bind_property ("default-output-device", m_default_check, "active", GLib.BindingFlags.SYNC_CREATE,
+                                      (b, f, ref t) => {
+            unowned Device? default_device = (Device)f;
+            t.set_boolean (default_device == device);
             return true;
         });
-        m_DefaultCheck.toggled.connect (() => {
-            if (m_DefaultCheck.active) {
+        m_default_check.toggled.connect (() => {
+            if (m_default_check.active) {
                 device.manager.default_output_device = device;
                 device.manager.default_input_device = device;
             }
@@ -121,10 +123,10 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
     }
 
     private void on_device_changed () {
-        int nbPorts = device.get_output_ports().length + device.get_input_ports().length;
+        int nb_ports = device.get_output_ports ().length + device.get_input_ports ().length;
 
         // device ports has changed check default profile
-        if (nbPorts != m_NbPorts) {
+        if (nb_ports != m_nb_ports) {
             // If device profile is set to "off" on nb ports change set top most priority profile
             if (device.active_profile != null && device.active_profile.name == "off") {
                 var profile = device.get_profiles ()[0];
@@ -132,9 +134,9 @@ public class PantheonSoundControl.Widgets.DeviceView : Gtk.Grid {
                     device.active_profile = profile;
                 }
             }
-            m_NbPorts = nbPorts;
+            m_nb_ports = nb_ports;
 
-            if (m_NbPorts > 0) {
+            if (m_nb_ports > 0) {
                 var notification = new Services.DesktopNotification.device_available (device);
                 notification.send ();
             } else {

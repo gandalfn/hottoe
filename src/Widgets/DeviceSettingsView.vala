@@ -19,7 +19,7 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceSettingsView : Gtk.Grid {
-    private DeviceSettingsList m_DevicesList;
+    private DeviceSettingsList m_devices_list;
 
     public unowned Manager manager { get; construct; }
 
@@ -28,15 +28,15 @@ public class PantheonSoundControl.Widgets.DeviceSettingsView : Gtk.Grid {
 
         orientation = Gtk.Orientation.HORIZONTAL;
 
-        m_DevicesList = new DeviceSettingsList (manager);
+        m_devices_list = new DeviceSettingsList (manager);
 
-        add (m_DevicesList);
-        add (m_DevicesList.stack);
+        add (m_devices_list);
+        add (m_devices_list.stack);
     }
 
-    public DeviceSettingsView (Manager inManager) {
+    public DeviceSettingsView (Manager in_manager) {
         GLib.Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 }

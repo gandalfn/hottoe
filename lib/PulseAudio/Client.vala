@@ -20,7 +20,7 @@
  */
 
 internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Client {
-    private Gee.TreeSet<unowned Plug> m_Plugs;
+    private Gee.TreeSet<unowned Plug> m_plugs;
 
     public uint32 index { get; construct; }
     public string id { get; construct set; }
@@ -32,63 +32,63 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
     }
 
     construct {
-        m_Plugs = new Gee.TreeSet<unowned Plug> ();
+        m_plugs = new Gee.TreeSet<unowned Plug> ();
     }
 
-    public Client (Manager inManager, global::PulseAudio.ClientInfo inInfo) {
-        string pidStr = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_PROCESS_ID);
+    public Client (Manager in_manager, global::PulseAudio.ClientInfo in_info) {
+        string pid_str = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_PROCESS_ID);
         int pid = 0;
-        if (pidStr != null) {
-            pid = int.parse (pidStr);
+        if (pid_str != null) {
+            pid = int.parse (pid_str);
         }
 
         GLib.Object (
-            manager: inManager,
-            index: inInfo.index,
-            id: inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
-            name: inInfo.name,
+            manager: in_manager,
+            index: in_info.index,
+            id: in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
+            name: in_info.name,
             pid: pid
         );
     }
 
-    public override void plug_added (PantheonSoundControl.Plug inPlug) {
-        m_Plugs.add ((Plug) inPlug);
+    public override void plug_added (PantheonSoundControl.Plug in_plug) {
+        m_plugs.add ((Plug) in_plug);
     }
 
-    public override void plug_removed (PantheonSoundControl.Plug inPlug) {
-        m_Plugs.remove ((Plug) inPlug);
+    public override void plug_removed (PantheonSoundControl.Plug in_plug) {
+        m_plugs.remove ((Plug) in_plug);
     }
 
     public override Plug[] get_plugs () {
-        return m_Plugs.to_array ();
+        return m_plugs.to_array ();
     }
 
     public override string to_string () {
         return @"client: $(index), name: $(name), pid $(pid)";
     }
 
-    public void update (global::PulseAudio.ClientInfo inInfo) {
+    public void update (global::PulseAudio.ClientInfo in_info) {
         bool updated = false;
-        name = inInfo.name;
+        name = in_info.name;
 
-        string pidStr = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_PROCESS_ID);
-        if (pidStr != null && pid != int.parse (pidStr)) {
-            pid = int.parse (pidStr);
+        string pid_str = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_PROCESS_ID);
+        if (pid_str != null && pid != int.parse (pid_str)) {
+            pid = int.parse (pid_str);
             updated = true;
         }
 
-        string idStr = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID);
+        string idStr = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID);
         if (idStr != id) {
             id = idStr;
             updated = true;
         }
 
         if (updated) {
-            notify_property("is-mine");
+            notify_property ("is-mine");
         }
     }
 
-    public static int compare (Client inA, Client inB) {
-        return (int)inA.index - (int)inB.index;
+    public static int compare (Client in_a, Client in_b) {
+        return (int)in_a.index - (int)in_b.index;
     }
 }

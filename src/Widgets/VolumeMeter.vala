@@ -19,13 +19,13 @@
  */
 
 public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
-    private int m_Current;
-    private double m_Levels[5];
-    private Monitor m_Monitor;
+    private int m_current;
+    private double m_levels[5];
+    private Monitor m_monitor;
 
     public Monitor monitor {
         get {
-            return m_Monitor;
+            return m_monitor;
         }
     }
 
@@ -37,56 +37,56 @@ public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
         min_value = 0.0;
         max_value = nb_bars;
 
-        add_offset_value ("low",    nb_bars);
+        add_offset_value ("low", nb_bars);
         add_offset_value ("middle", nb_bars * 0.9875);
-        add_offset_value ("high",   nb_bars * 0.95);
+        add_offset_value ("high", nb_bars * 0.95);
     }
 
-    public VolumeMeter (Channel inChannel) {
-        m_Monitor = inChannel.create_monitor ();
-        m_Monitor.peak.connect (on_monitor_peak);
-        m_Monitor.paused.connect (on_monitor_paused);
+    public VolumeMeter (Channel in_channel) {
+        m_monitor = in_channel.create_monitor ();
+        m_monitor.peak.connect (on_monitor_peak);
+        m_monitor.paused.connect (on_monitor_paused);
 
-        inChannel.manager.bind_property ("enable-monitoring", m_Monitor, "active", GLib.BindingFlags.SYNC_CREATE);
-        m_Monitor.bind_property ("active", this, "sensitive");
-        inChannel.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
+        in_channel.manager.bind_property ("enable-monitoring", m_monitor, "active", GLib.BindingFlags.SYNC_CREATE);
+        m_monitor.bind_property ("active", this, "sensitive");
+        in_channel.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
 
         notify["nb-bars"].connect (() => {
             max_value = nb_bars;
 
-            add_offset_value ("low",    nb_bars);
+            add_offset_value ("low", nb_bars);
             add_offset_value ("middle", nb_bars * 0.9875);
-            add_offset_value ("high",   nb_bars * 0.95);
+            add_offset_value ("high", nb_bars * 0.95);
         });
     }
 
-    public VolumeMeter.plug (Plug inPlug) {
-        m_Monitor = inPlug.create_monitor ();
-        m_Monitor.peak.connect (on_monitor_peak);
-        m_Monitor.paused.connect (on_monitor_paused);
+    public VolumeMeter.plug (Plug in_plug) {
+        m_monitor = in_plug.create_monitor ();
+        m_monitor.peak.connect (on_monitor_peak);
+        m_monitor.paused.connect (on_monitor_paused);
 
-        inPlug.manager.bind_property ("enable-monitoring", m_Monitor, "active", GLib.BindingFlags.SYNC_CREATE);
-        m_Monitor.bind_property ("active", this, "sensitive");
-        inPlug.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
+        in_plug.manager.bind_property ("enable-monitoring", m_monitor, "active", GLib.BindingFlags.SYNC_CREATE);
+        m_monitor.bind_property ("active", this, "sensitive");
+        in_plug.bind_property ("volume", this, "volume-level", GLib.BindingFlags.SYNC_CREATE);
 
         notify["nb-bars"].connect (() => {
             max_value = nb_bars;
 
-            add_offset_value ("low",    nb_bars);
+            add_offset_value ("low", nb_bars);
             add_offset_value ("middle", nb_bars * 0.9875);
-            add_offset_value ("high",   nb_bars * 0.95);
+            add_offset_value ("high", nb_bars * 0.95);
         });
     }
 
-    private void on_monitor_peak (float inData) {
-        m_Levels[m_Current] = inData * (volume_level / 100.0);
+    private void on_monitor_peak (float in_data) {
+        m_levels[m_current] = in_data * (volume_level / 100.0);
         double sum = 0.0;
-        foreach (var level in m_Levels) {
+        foreach (var level in m_levels) {
             sum += level;
         }
-        value = ((sum / m_Levels.length) * nb_bars).clamp (0.0, nb_bars);
+        value = ((sum / m_levels.length) * nb_bars).clamp (0.0, nb_bars);
 
-        m_Current = (m_Current + 1) % m_Levels.length;
+        m_current = (m_current + 1) % m_levels.length;
     }
 
     private void on_monitor_paused () {

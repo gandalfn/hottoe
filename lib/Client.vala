@@ -26,9 +26,9 @@ public abstract class PantheonSoundControl.Client : GLib.Object {
     public abstract bool is_mine { get; }
 
     public signal void changed ();
-    public virtual signal void plug_added (Plug inPlug) {
+    public virtual signal void plug_added (Plug in_plug) {
     }
-    public virtual signal void plug_removed (Plug inPlug) {
+    public virtual signal void plug_removed (Plug in_plug) {
     }
 
     public abstract Plug[] get_plugs ();

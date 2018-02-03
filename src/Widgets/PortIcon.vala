@@ -19,37 +19,39 @@
  */
 
 public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widgets.Icon {
-    private unowned Port m_Port;
-    private GLib.Binding m_PortIconBind;
-    private GLib.Binding m_PortSymbolBind;
+    private unowned Port m_port;
+    private GLib.Binding m_port_icon_bind;
+    private GLib.Binding m_port_symbol_bind;
 
     [CCode (notify = false)]
     public unowned Port port {
         get {
-            return m_Port;
+            return m_port;
         }
         set {
-            if (m_Port != value) {
-                if (m_Port != null) {
-                    m_Port.remove_toggle_ref (on_port_destroyed);
-                    m_PortIconBind.unbind ();
-                    m_PortSymbolBind.unbind ();
+            if (m_port != value) {
+                if (m_port != null) {
+                    m_port.remove_toggle_ref (on_port_destroyed);
+                    m_port_icon_bind.unbind ();
+                    m_port_symbol_bind.unbind ();
                 }
-                m_Port = value;
-                if (m_Port != null) {
-                    m_Port.add_toggle_ref (on_port_destroyed);
-                    m_PortIconBind = m_Port.bind_property ("icon-name", m_Icon, "icon-name", GLib.BindingFlags.SYNC_CREATE,
-                                                           on_port_icon_changed);
-                    m_PortSymbolBind = m_Port.bind_property ("icon-name", m_Symbol, "icon-name", GLib.BindingFlags.SYNC_CREATE,
-                                                             on_port_symbol_changed);
+                m_port = value;
+                if (m_port != null) {
+                    m_port.add_toggle_ref (on_port_destroyed);
+                    m_port_icon_bind = m_port.bind_property ("icon-name", m_icon,
+                                                             "icon-name", GLib.BindingFlags.SYNC_CREATE,
+                                                             on_port_icon_changed);
+                    m_port_symbol_bind = m_port.bind_property ("icon-name", m_symbol,
+                                                               "icon-name", GLib.BindingFlags.SYNC_CREATE,
+                                                               on_port_symbol_changed);
                 } else {
                     if (use_symbolic) {
-                        m_Icon.icon_name = "audio-card-symbolic";
+                        m_icon.icon_name = "audio-card-symbolic";
                     } else {
-                        m_Icon.icon_name = "audio-card";
+                        m_icon.icon_name = "audio-card";
                     }
-                    m_Symbol.icon_name = "";
-                    m_Symbol.hide ();
+                    m_symbol.icon_name = "";
+                    m_symbol.hide ();
                 }
             }
         }
@@ -57,18 +59,18 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
 
     public override GLib.Icon gicon {
        owned get {
-            string portIconName = port.icon_name;
-            string iconName = portIconName;
+            string port_icon_name = port.icon_name;
+            string icon_name = port_icon_name;
 
-            switch (portIconName) {
+            switch (port_icon_name) {
                 case "headset-output":
                 case "headset-input":
-                    iconName = "audio-headset";
+                    icon_name = "audio-headset";
                     break;
 
                 case "phone-output":
                 case "phone-input":
-                    iconName = "phone";
+                    icon_name = "phone";
                     break;
 
                 default:
@@ -76,40 +78,40 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
             }
 
             if (use_symbolic) {
-                iconName += "-symbolic";
+                icon_name += "-symbolic";
             }
 
-            return new GLib.ThemedIcon.with_default_fallbacks (iconName);
+            return new GLib.ThemedIcon.with_default_fallbacks (icon_name);
         }
     }
 
-    public PortIcon (Port? inPort = null, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
+    public PortIcon (Port? in_port = null, Icon.Size in_size = Icon.Size.LARGE, bool in_use_symbolic = false) {
         GLib.Object (
-            size: inSize,
-            use_symbolic: inUseSymbolic,
-            port: inPort
+            size: in_size,
+            use_symbolic: in_use_symbolic,
+            port: in_port
         );
     }
 
     ~PortIcon () {
-        if (m_Port != null) {
-            m_Port.remove_toggle_ref (on_port_destroyed);
+        if (m_port != null) {
+            m_port.remove_toggle_ref (on_port_destroyed);
         }
     }
 
-    private bool on_port_icon_changed (GLib.Binding inBind, GLib.Value inFrom, ref GLib.Value inoutTo) {
-        string portIconName = (string)inFrom;
-        string iconName = portIconName;
+    private bool on_port_icon_changed (GLib.Binding in_bind, GLib.Value in_from, ref GLib.Value inout_to) {
+        string port_icon_name = (string)in_from;
+        string icon_name = port_icon_name;
 
-        switch (portIconName) {
+        switch (port_icon_name) {
             case "headset-output":
             case "headset-input":
-                iconName = "audio-headset";
+                icon_name = "audio-headset";
                 break;
 
             case "phone-output":
             case "phone-input":
-                iconName = "phone";
+                icon_name = "phone";
                 break;
 
             default:
@@ -117,54 +119,54 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         }
 
         if (use_symbolic) {
-            iconName += "-symbolic";
+            icon_name += "-symbolic";
         }
 
-        inoutTo.set_string (iconName);
+        inout_to.set_string (icon_name);
 
         return true;
     }
 
-    private bool on_port_symbol_changed (GLib.Binding inBind, GLib.Value inFrom, ref GLib.Value inoutTo) {
-        string portIconName = (string)inFrom;
-        string iconName = "";
+    private bool on_port_symbol_changed (GLib.Binding in_bind, GLib.Value in_from, ref GLib.Value inout_to) {
+        string port_icon_name = (string)in_from;
+        string icon_name = "";
 
-        switch (portIconName) {
+        switch (port_icon_name) {
             case "headset-input":
             case "phone-input":
-                iconName = "audio-input-microphone";
-                m_Symbol.show ();
+                icon_name = "audio-input-microphone";
+                m_symbol.show ();
                 break;
 
             case "video-display":
-                if (m_Port.direction == Direction.OUTPUT) {
-                    iconName = "audio-speakers";
-                    m_Symbol.show ();
-                } else if (m_Port.direction == Direction.INPUT) {
-                    iconName = "audio-input-microphone";
-                    m_Symbol.show ();
+                if (m_port.direction == Direction.OUTPUT) {
+                    icon_name = "audio-speakers";
+                    m_symbol.show ();
+                } else if (m_port.direction == Direction.INPUT) {
+                    icon_name = "audio-input-microphone";
+                    m_symbol.show ();
                 } else {
-                    m_Symbol.hide ();
+                    m_symbol.hide ();
                 }
                 break;
 
             default:
-                m_Symbol.hide ();
+                m_symbol.hide ();
                 break;
         }
 
         if (use_symbolic) {
-            iconName += "-symbolic";
+            icon_name += "-symbolic";
         }
 
-        inoutTo.set_string (iconName);
+        inout_to.set_string (icon_name);
 
         return true;
     }
 
-    private void on_port_destroyed (GLib.Object inObject, bool inIsLastRef) {
-        if (inIsLastRef) {
-            m_Port = null;
+    private void on_port_destroyed (GLib.Object in_object, bool in_is_last_ref) {
+        if (in_is_last_ref) {
+            m_port = null;
         }
     }
 }

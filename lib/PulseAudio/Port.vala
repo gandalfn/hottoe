@@ -20,17 +20,17 @@
  */
 
 internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port {
-    public Port (Device inDevice, global::PulseAudio.CardPortInfo inInfo) {
-        var icon_name = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME);
+    public Port (Device in_device, global::PulseAudio.CardPortInfo in_info) {
+        var icon_name = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME);
         if (icon_name == null) {
-            icon_name = inInfo.name;
+            icon_name = in_info.name;
         }
         Object (
-            device: inDevice,
-            name: inInfo.name,
-            description: inInfo.description,
-            icon_name: icon_name,
-            direction: direction_from_pa_direction (inInfo.direction)
+            device: in_device,
+            direction: direction_from_pa_direction (in_info.direction),
+            name: in_info.name,
+            description: in_info.description,
+            icon_name: icon_name
         );
 
         debug (@"Create $(direction) port $(name)");
@@ -40,12 +40,12 @@ internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port 
         return @"\tport: $(name), description: $(description), icon_name: $(icon_name) direction: $(direction)\n";
     }
 
-    public static int compare (Port inA, Port inB) {
-        return GLib.strcmp (inA.name, inB.name);
+    public static int compare (Port in_a, Port in_b) {
+        return GLib.strcmp (in_a.name, in_b.name);
     }
 
-    private static PantheonSoundControl.Direction direction_from_pa_direction (global::PulseAudio.Direction inDirection) {
-        switch (inDirection) {
+    private static Direction direction_from_pa_direction (global::PulseAudio.Direction in_direction) {
+        switch (in_direction) {
             case global::PulseAudio.Direction.INPUT:
                 return PantheonSoundControl.Direction.INPUT;
 

@@ -19,38 +19,38 @@
  */
 
 public class PantheonSoundControl.Services.DesktopNotification : Services.Notification {
-    private string m_Id;
-    private GLib.Notification m_Notification;
+    private string m_id;
+    private GLib.Notification m_notification;
 
     public static bool enabled { get; set; }
 
-    public DesktopNotification.device_available (Device inDevice) {
-        m_Id = "sound-device-available";
-        m_Notification = new GLib.Notification (_("Sound device available"));
-        string body = inDevice.display_name;
-        if (inDevice.active_profile != null) {
-            body += @"\n$(inDevice.active_profile.description)";
+    public DesktopNotification.device_available (Device in_device) {
+        m_id = "sound-device-available";
+        m_notification = new GLib.Notification (_("Sound device available"));
+        string body = in_device.display_name;
+        if (in_device.active_profile != null) {
+            body += @"\n$(in_device.active_profile.description)";
         }
-        m_Notification.set_body (body);
-        var deviceIcon = new Widgets.DeviceIcon (inDevice);
-        m_Notification.set_icon (deviceIcon.gicon);
+        m_notification.set_body (body);
+        var device_icon = new Widgets.DeviceIcon (in_device);
+        m_notification.set_icon (device_icon.gicon);
     }
 
-    public DesktopNotification.device_not_available (Device inDevice) {
-        m_Id = "sound-device-not-available";
-        m_Notification = new GLib.Notification (_("Sound device disconnected"));
-        string body = inDevice.display_name;
-        if (inDevice.active_profile != null) {
-            body += @"\n$(inDevice.active_profile.description)";
+    public DesktopNotification.device_not_available (Device in_device) {
+        m_id = "sound-device-not-available";
+        m_notification = new GLib.Notification (_("Sound device disconnected"));
+        string body = in_device.display_name;
+        if (in_device.active_profile != null) {
+            body += @"\n$(in_device.active_profile.description)";
         }
-        m_Notification.set_body (body);
-        var deviceIcon = new Widgets.DeviceIcon (inDevice);
-        m_Notification.set_icon (deviceIcon.gicon);
+        m_notification.set_body (body);
+        var device_icon = new Widgets.DeviceIcon (in_device);
+        m_notification.set_icon (device_icon.gicon);
     }
 
     public override void send () {
-        if (enabled && m_Notification != null) {
-            GLib.Application.get_default ().send_notification (m_Id, m_Notification);
+        if (enabled && m_notification != null) {
+            GLib.Application.get_default ().send_notification (m_id, m_notification);
         }
     }
 }

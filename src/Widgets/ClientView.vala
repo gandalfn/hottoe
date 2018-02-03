@@ -19,8 +19,8 @@
  */
 
 public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
-    private Gtk.Revealer m_Content;
-    private Gtk.Grid m_Plugs;
+    private Gtk.Revealer m_content;
+    private Gtk.Grid m_plugs;
 
     public unowned Client client { get; construct; }
     public bool active { get; set; default = false; }
@@ -38,31 +38,31 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
 
         grid.attach (clientIcon, 0, 0, 1, 1);
 
-        var clientLabel = new MaxWidthLabel (180);
-        clientLabel.xalign = 0;
-        clientLabel.hexpand = true;
-        clientLabel.ellipsize = Pango.EllipsizeMode.END;
-        clientLabel.get_style_context ().add_class ("h3");
+        var client_label = new MaxWidthLabel (180);
+        client_label.xalign = 0;
+        client_label.hexpand = true;
+        client_label.ellipsize = Pango.EllipsizeMode.END;
+        client_label.get_style_context ().add_class ("h3");
 
-        grid.attach (clientLabel, 1, 0, 1, 1);
+        grid.attach (client_label, 1, 0, 1, 1);
 
-        m_Plugs = new Gtk.Grid ();
-        m_Plugs.vexpand = true;
-        m_Plugs.valign = Gtk.Align.CENTER;
-        m_Plugs.orientation = Gtk.Orientation.VERTICAL;
+        m_plugs = new Gtk.Grid ();
+        m_plugs.vexpand = true;
+        m_plugs.valign = Gtk.Align.CENTER;
+        m_plugs.orientation = Gtk.Orientation.VERTICAL;
 
-        grid.attach (m_Plugs, 2, 0, 1, 1);
+        grid.attach (m_plugs, 2, 0, 1, 1);
 
-        m_Content = new Gtk.Revealer ();
-        m_Content.reveal_child = false;
-        m_Content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+        m_content = new Gtk.Revealer ();
+        m_content.reveal_child = false;
+        m_content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
 
-        m_Content.add (grid);
+        m_content.add (grid);
 
-        add (m_Content);
+        add (m_content);
 
-        m_Content.bind_property ("reveal-child", this, "active", GLib.BindingFlags.SYNC_CREATE);
-        client.bind_property ("name", clientLabel, "label", GLib.BindingFlags.SYNC_CREATE);
+        m_content.bind_property ("reveal-child", this, "active", GLib.BindingFlags.SYNC_CREATE);
+        client.bind_property ("name", client_label, "label", GLib.BindingFlags.SYNC_CREATE);
 
         client.plug_added.connect_after (on_client_plug_added);
         client.plug_removed.connect_after (on_client_plug_removed);
@@ -71,32 +71,32 @@ public class PantheonSoundControl.Widgets.ClientView : Gtk.Grid {
         on_is_mine_changed ();
     }
 
-    public ClientView (Client inClient) {
+    public ClientView (Client in_client) {
         GLib.Object (
-            client: inClient
+            client: in_client
         );
     }
 
     private void on_is_mine_changed () {
-        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
+        m_content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 
-    private void on_client_plug_added (Plug inPlug) {
-        var plug = new PlugChannelList (inPlug);
+    private void on_client_plug_added (Plug in_plug) {
+        var plug = new PlugChannelList (in_plug);
         plug.show_all ();
-        m_Plugs.add (plug);
+        m_plugs.add (plug);
 
-        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
+        m_content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 
-    private void on_client_plug_removed (Plug inPlug) {
-        m_Plugs.get_children ().foreach ((child) => {
+    private void on_client_plug_removed (Plug in_plug) {
+        m_plugs.get_children ().foreach ((child) => {
             unowned PlugChannelList? list = child as PlugChannelList;
-            if (list != null && list.plug == inPlug) {
+            if (list != null && list.plug == in_plug) {
                 child.destroy ();
             }
         });
 
-        m_Content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
+        m_content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
     }
 }

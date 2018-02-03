@@ -19,16 +19,16 @@
  */
 
 public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widgets.Icon {
-    private Wnck.Window m_Window;
-    private Gdk.Pixbuf m_WindowIcon;
+    private Wnck.Window m_window;
+    private Gdk.Pixbuf m_window_icon;
 
     public unowned Client client { get; construct; }
 
     public override GLib.Icon gicon {
        owned get {
             GLib.Icon ret;
-            if (m_WindowIcon != null) {
-                ret = m_WindowIcon;
+            if (m_window_icon != null) {
+                ret = m_window_icon;
             } else {
                 ret = new GLib.ThemedIcon ("application-default-icon");
             }
@@ -46,26 +46,26 @@ public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widg
         on_client_pid_changed ();
     }
 
-    public ClientIcon (Client inClient, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
+    public ClientIcon (Client in_client, Icon.Size in_size = Icon.Size.LARGE, bool in_use_symbolic = false) {
         GLib.Object (
-            size: inSize,
-            use_symbolic: inUseSymbolic,
-            client: inClient
+            size: in_size,
+            use_symbolic: in_use_symbolic,
+            client: in_client
         );
     }
 
     private void on_client_pid_changed () {
-        if (m_Window != null) {
-            m_Window.icon_changed.disconnect (on_icon_changed);
-            m_Window = null;
+        if (m_window != null) {
+            m_window.icon_changed.disconnect (on_icon_changed);
+            m_window = null;
         }
 
-        unowned Wnck.Screen screen = Wnck.Screen.get_default();
+        unowned Wnck.Screen screen = Wnck.Screen.get_default ();
         screen.force_update ();
-        foreach (unowned Wnck.Window win in screen.get_windows()) {
+        foreach (unowned Wnck.Window win in screen.get_windows ()) {
             if (win.get_pid () == client.pid) {
-                m_Window = win;
-                m_Window.icon_changed.connect (on_icon_changed);
+                m_window = win;
+                m_window.icon_changed.connect (on_icon_changed);
                 break;
             }
         }
@@ -74,18 +74,18 @@ public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widg
     }
 
     private void on_icon_changed () {
-        if (m_Window != null) {
-            m_WindowIcon = m_Window.get_mini_icon ();
+        if (m_window != null) {
+            m_window_icon = m_window.get_mini_icon ();
         } else {
-            m_WindowIcon = null;
+            m_window_icon = null;
         }
 
-        if (m_WindowIcon != null) {
-            m_Icon.pixbuf = m_WindowIcon.scale_simple (size.to_pixel_size (),
+        if (m_window_icon != null) {
+            m_icon.pixbuf = m_window_icon.scale_simple (size.to_pixel_size (),
                                                        size.to_pixel_size (),
                                                        Gdk.InterpType.BILINEAR);
         } else {
-            m_Icon.icon_name = "application-default-icon";
+            m_icon.icon_name = "application-default-icon";
         }
     }
 }

@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
-    private DeviceList m_DeviceList;
-    private ClientList m_ClientList;
+public class PantheonSoundControl.Widgets.IndicatorView : Gtk.Box {
+    private DeviceList m_device_list;
+    private ClientList m_client_list;
 
     public unowned Manager manager { get; construct; }
 
@@ -30,13 +30,13 @@ public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
     construct {
         orientation = Gtk.Orientation.VERTICAL;
 
-        m_DeviceList = new DeviceList (manager);
+        m_device_list = new DeviceList (manager);
 
-        add (m_DeviceList);
+        add (m_device_list);
 
-        m_ClientList = new ClientList (manager);
+        m_client_list = new ClientList (manager);
 
-        add (m_ClientList);
+        add (m_client_list);
 
         var scan_button = new Wingpanel.Widgets.Button (_("Scan Sound Devices…"));
         scan_button.clicked.connect (() => {
@@ -56,9 +56,9 @@ public class PantheonSoundControl.Widgets.IndicatorView  : Gtk.Box {
         });
     }
 
-    public IndicatorView (Manager inManager) {
+    public IndicatorView (Manager in_manager) {
         GLib.Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 }

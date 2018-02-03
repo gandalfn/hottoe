@@ -20,8 +20,8 @@
  */
 
 internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
-    private bool m_IsMuted;
-    private double m_BaseVolume;
+    private bool m_is_muted;
+    private double m_base_volume;
 
     public override double volume {
         get {
@@ -51,17 +51,17 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
 
     public override bool is_muted {
         get {
-            return m_IsMuted;
+            return m_is_muted;
         }
         set {
-            m_IsMuted = value;
-            ((Manager) manager).operations.set_source_mute_by_index (index, m_IsMuted);
+            m_is_muted = value;
+            ((Manager) manager).operations.set_source_mute_by_index (index, m_is_muted);
         }
     }
 
     public override double volume_base {
         get {
-            return m_BaseVolume;
+            return m_base_volume;
         }
     }
 
@@ -73,25 +73,25 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
 
     public override unowned PantheonSoundControl.Port? port {
         get {
-            return m_ActivePort;
+            return m_active_port;
         }
         set {
-            if (m_ActivePort != value) {
+            if (m_active_port != value) {
                 if (value != null) {
-                    ((Manager)manager).operations.set_source_port_by_index (index, m_ActivePort.name, (s) => {
+                    ((Manager)manager).operations.set_source_port_by_index (index, m_active_port.name, (s) => {
                         if (s) {
-                            if (m_ActivePort != null) {
-                                m_ActivePort.device.channel_removed (this);
+                            if (m_active_port != null) {
+                                m_active_port.device.channel_removed (this);
                             }
-                            m_ActivePort = (Port)value;
-                            m_ActivePort.weak_ref (on_active_port_destroyed);
-                            device = (Device)m_ActivePort.device;
+                            m_active_port = (Port)value;
+                            m_active_port.weak_ref (on_active_port_destroyed);
+                            device = (Device)m_active_port.device;
                             notify_property ("port");
                         }
                     });
-                } else if (m_ActivePort != null) {
-                    m_ActivePort.weak_unref (on_active_port_destroyed);
-                    m_ActivePort = null;
+                } else if (m_active_port != null) {
+                    m_active_port.weak_unref (on_active_port_destroyed);
+                    m_active_port = null;
                     device = null;
                     notify_property ("port");
                 }
@@ -99,40 +99,41 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
         }
     }
 
-    public InputChannel (Manager inManager, global::PulseAudio.SourceInfo inSourceInfo) {
+    public InputChannel (Manager in_manager, global::PulseAudio.SourceInfo in_source_info) {
         GLib.Object (
-            manager: inManager,
+            manager: in_manager,
             direction: PantheonSoundControl.Direction.INPUT,
-            index: inSourceInfo.index,
-            monitor_index: inSourceInfo.index,
-            name: inSourceInfo.name,
-            description: inSourceInfo.description
+            index: in_source_info.index,
+            monitor_index: in_source_info.index,
+            name: in_source_info.name,
+            description: in_source_info.description
         );
 
-        update (inSourceInfo);
+        update (in_source_info);
     }
 
     ~InputChannel () {
-        if (m_ActivePort != null) {
-            m_ActivePort.weak_unref (on_active_port_destroyed);
-            m_ActivePort = null;
+        if (m_active_port != null) {
+            m_active_port.weak_unref (on_active_port_destroyed);
+            m_active_port = null;
         }
     }
 
-    public bool update (global::PulseAudio.SourceInfo inSourceInfo) {
+    public bool update (global::PulseAudio.SourceInfo in_source_info) {
         bool updated = false;
 
-        if (inSourceInfo.active_port != null && (m_ActivePort == null || m_ActivePort.name != inSourceInfo.active_port.name)) {
+        if (in_source_info.active_port != null &&
+            (m_active_port == null || m_active_port.name != in_source_info.active_port.name)) {
             bool foundPort = false;
             foreach (var dev in manager.get_devices ()) {
                 foreach (var port in dev.get_input_ports ()) {
-                    if (port.name == inSourceInfo.active_port.name) {
-                        if (m_ActivePort != null) {
-                            m_ActivePort.weak_unref (on_active_port_destroyed);
+                    if (port.name == in_source_info.active_port.name) {
+                        if (m_active_port != null) {
+                            m_active_port.weak_unref (on_active_port_destroyed);
                         }
-                        m_ActivePort = (Port)port;
-                        m_ActivePort.weak_ref (on_active_port_destroyed);
-                        device = (Device)m_ActivePort.device;
+                        m_active_port = (Port)port;
+                        m_active_port.weak_ref (on_active_port_destroyed);
+                        device = (Device)m_active_port.device;
                         notify_property ("port");
                         updated = true;
                         foundPort = true;
@@ -142,36 +143,39 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
                 if (foundPort) break;
             }
 
-            if (!foundPort &&  m_ActivePort != null) {
-                m_ActivePort.weak_unref (on_active_port_destroyed);
-                m_ActivePort = null;
+            if (!foundPort && m_active_port != null) {
+                m_active_port.weak_unref (on_active_port_destroyed);
+                m_active_port = null;
                 device = null;
                 notify_property ("port");
             }
         }
 
-        bool sendVolumeUpdate = (cvolume == null || volume != Channel.volume_to_double (inSourceInfo.volume.max ()));
-        cvolume = inSourceInfo.volume;
-        if (sendVolumeUpdate) {
+        bool send_volume_update = (cvolume == null ||
+                                   volume != Channel.volume_to_double (in_source_info.volume.max ()));
+        cvolume = in_source_info.volume;
+        if (send_volume_update) {
             notify_property ("volume");
             updated = true;
         }
 
-        bool sendBalanceUpdate = (cvolume == null || channel_map == null || balance != inSourceInfo.volume.get_balance (inSourceInfo.channel_map));
-        channel_map = inSourceInfo.channel_map;
-        if (sendBalanceUpdate) {
+        bool send_balance_update = (cvolume == null ||
+                                    channel_map == null ||
+                                    balance != in_source_info.volume.get_balance (in_source_info.channel_map));
+        channel_map = in_source_info.channel_map;
+        if (send_balance_update) {
             notify_property ("balance");
             updated = true;
         }
 
-        if (inSourceInfo.mute != m_IsMuted) {
-            m_IsMuted = inSourceInfo.mute;
+        if (in_source_info.mute != m_is_muted) {
+            m_is_muted = in_source_info.mute;
             notify_property ("is-muted");
             updated = true;
         }
 
-        if (m_BaseVolume != inSourceInfo.base_volume) {
-            m_BaseVolume = Channel.volume_to_double (inSourceInfo.base_volume);
+        if (m_base_volume != in_source_info.base_volume) {
+            m_base_volume = Channel.volume_to_double (in_source_info.base_volume);
             notify_property ("volume-base");
         }
 
@@ -183,7 +187,7 @@ internal class PantheonSoundControl.PulseAudio.InputChannel : Channel {
     }
 
     private void on_active_port_destroyed () {
-        m_ActivePort = null;
+        m_active_port = null;
         notify_property ("port");
     }
 }

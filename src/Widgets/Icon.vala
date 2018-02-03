@@ -48,44 +48,44 @@ public abstract class PantheonSoundControl.Widgets.Icon : Gtk.Grid {
         }
     }
 
-    protected Gtk.Image m_Icon;
-    protected Gtk.Image m_Symbol;
-    protected Gtk.Overlay m_Overlay;
+    protected Gtk.Image m_icon;
+    protected Gtk.Image m_symbol;
+    protected Gtk.Overlay m_overlay;
 
     public Size size { get; construct set; default = Size.LARGE; }
     public bool use_symbolic { get; construct; default = false; }
     public abstract GLib.Icon gicon { owned get; }
 
     construct {
-        m_Icon = new Gtk.Image ();
-        m_Icon.use_fallback = true;
+        m_icon = new Gtk.Image ();
+        m_icon.use_fallback = true;
 
-        m_Symbol = new Gtk.Image ();
-        m_Symbol.no_show_all = true;
-        m_Symbol.halign = Gtk.Align.END;
-        m_Symbol.valign = Gtk.Align.END;
+        m_symbol = new Gtk.Image ();
+        m_symbol.no_show_all = true;
+        m_symbol.halign = Gtk.Align.END;
+        m_symbol.valign = Gtk.Align.END;
 
-        m_Overlay = new Gtk.Overlay ();
-        m_Overlay.width_request = size.to_pixel_size ();
-        m_Overlay.height_request = size.to_pixel_size ();
-        m_Overlay.add (m_Icon);
-        m_Overlay.add_overlay (m_Symbol);
+        m_overlay = new Gtk.Overlay ();
+        m_overlay.width_request = size.to_pixel_size ();
+        m_overlay.height_request = size.to_pixel_size ();
+        m_overlay.add (m_icon);
+        m_overlay.add_overlay (m_symbol);
 
-        add (m_Overlay);
+        add (m_overlay);
 
-        bind_property ("size", m_Overlay, "height-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+        bind_property ("size", m_overlay, "height-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             t.set_int (((Size)f).to_pixel_size ());
             return true;
         });
-        bind_property ("size", m_Overlay, "width-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+        bind_property ("size", m_overlay, "width-request", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             t.set_int (((Size)f).to_pixel_size ());
             return true;
         });
-        bind_property ("size", m_Icon, "pixel-size", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+        bind_property ("size", m_icon, "pixel-size", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             t.set_int (((Size)f).to_pixel_size ());
             return true;
         });
-        bind_property ("size", m_Symbol, "pixel-size", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
+        bind_property ("size", m_symbol, "pixel-size", GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             t.set_int (((Size)f).to_pixel_size () / 2);
             return true;
         });

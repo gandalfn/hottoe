@@ -19,14 +19,14 @@
  */
 
 public class PantheonSoundControl.Widgets.DeviceList : Gtk.ScrolledWindow {
-    private Gtk.Grid m_ListGrid;
-    private Gtk.RadioButton m_DefaultDeviceGroup;
+    private Gtk.Grid m_list_grid;
+    private Gtk.RadioButton m_default_device_group;
 
     public unowned Manager manager { get; construct; }
 
-    public DeviceList (Manager inManager) {
+    public DeviceList (Manager in_manager) {
         Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 
@@ -34,34 +34,34 @@ public class PantheonSoundControl.Widgets.DeviceList : Gtk.ScrolledWindow {
         hscrollbar_policy = Gtk.PolicyType.NEVER;
         vscrollbar_policy = Gtk.PolicyType.NEVER;
 
-        m_ListGrid = new Gtk.Grid ();
-        m_ListGrid.orientation = Gtk.Orientation.VERTICAL;
+        m_list_grid = new Gtk.Grid ();
+        m_list_grid.orientation = Gtk.Orientation.VERTICAL;
 
-        add (m_ListGrid);
+        add (m_list_grid);
 
-        m_DefaultDeviceGroup = new Gtk.RadioButton (null);
+        m_default_device_group = new Gtk.RadioButton (null);
 
         manager.device_added.connect (on_device_added);
         manager.device_removed.connect (on_device_removed);
     }
 
-    private void on_device_added (Device inDevice) {
-        var view = new DeviceView (inDevice);
+    private void on_device_added (Device in_device) {
+        var view = new DeviceView (in_device);
         view.hexpand = true;
-        view.group = m_DefaultDeviceGroup;
+        view.group = m_default_device_group;
         view.show_all ();
-        m_ListGrid.add (view);
+        m_list_grid.add (view);
     }
 
-    private void on_device_removed (Device inDevice) {
-        m_ListGrid.get_children ().foreach ((child) => {
+    private void on_device_removed (Device in_device) {
+        m_list_grid.get_children ().foreach ((child) => {
             unowned DeviceView? view = child as DeviceView;
-            if (view != null && view.device == inDevice) {
+            if (view != null && view.device == in_device) {
                 child.destroy ();
             }
         });
 
-        var notification = new Services.DesktopNotification.device_not_available (inDevice);
+        var notification = new Services.DesktopNotification.device_not_available (in_device);
         notification.send ();
     }
 }

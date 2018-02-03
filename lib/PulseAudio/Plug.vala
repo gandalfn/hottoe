@@ -21,48 +21,48 @@
 
 internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundControl.Plug {
     internal class Monitor : PantheonSoundControl.Plug.Monitor, PantheonSoundControl.PulseAudio.Monitor {
-        private bool m_Active;
-        private global::PulseAudio.Stream m_Stream;
+        private bool m_active;
+        private global::PulseAudio.Stream m_stream;
 
         public override bool active {
             get {
-                return m_Active;
+                return m_active;
             }
             set {
-                if (m_Active != value) {
+                if (m_active != value) {
                     if (value) {
-                        m_Active = value;
-                        if (m_Stream != null) {
-                            stop (m_Stream);
+                        m_active = value;
+                        if (m_stream != null) {
+                            stop (m_stream);
                         }
-                        m_Stream = start ((Channel)plug.channel, (int)((Plug)plug).index);
+                        m_stream = start ((Channel)plug.channel, (int)((Plug)plug).index);
                     } else {
-                        m_Active = value;
-                        if (m_Stream != null) {
-                            stop (m_Stream);
-                            m_Stream = null;
+                        m_active = value;
+                        if (m_stream != null) {
+                            stop (m_stream);
+                            m_stream = null;
                         }
                     }
                 }
             }
         }
 
-        public Monitor (Plug inPlug) {
+        public Monitor (Plug in_plug) {
             Object (
-                plug: inPlug
+                plug: in_plug
             );
         }
 
         ~Monitor () {
-            if (m_Stream != null) {
-                stop (m_Stream);
-                m_Stream = null;
+            if (m_stream != null) {
+                stop (m_stream);
+                m_stream = null;
             }
         }
     }
 
-    protected unowned Client?  m_Client;
-    protected unowned Channel? m_Channel;
+    protected unowned Client? m_client;
+    protected unowned Channel? m_channel;
 
     public uint32 index { get; construct; }
     public global::PulseAudio.CVolume? cvolume { get; set; default = null; }
@@ -70,7 +70,7 @@ internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundCont
 
     public override unowned PantheonSoundControl.Client client {
         get {
-            return m_Client;
+            return m_client;
         }
     }
 
@@ -94,17 +94,17 @@ internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundCont
         return @"plug: $(index), name: $(name)\n";
     }
 
-    public static int compare (Plug inA, Plug inB) {
-        return (int)inA.index - (int)inB.index;
+    public static int compare (Plug in_a, Plug in_b) {
+        return (int)in_a.index - (int)in_b.index;
     }
 
-    public static double volume_to_double (global::PulseAudio.Volume inVolume) {
-        double tmp = (double)(inVolume - global::PulseAudio.Volume.MUTED);
+    public static double volume_to_double (global::PulseAudio.Volume in_volume) {
+        double tmp = (double)(in_volume - global::PulseAudio.Volume.MUTED);
         return 100 * tmp / (double)(global::PulseAudio.Volume.NORM - global::PulseAudio.Volume.MUTED);
     }
 
-    public static global::PulseAudio.Volume double_to_volume (double inVolume) {
-        double tmp = (double)(global::PulseAudio.Volume.NORM - global::PulseAudio.Volume.MUTED) * inVolume / 100;
+    public static global::PulseAudio.Volume double_to_volume (double in_volume) {
+        double tmp = (double)(global::PulseAudio.Volume.NORM - global::PulseAudio.Volume.MUTED) * in_volume / 100;
         return (global::PulseAudio.Volume)tmp + global::PulseAudio.Volume.MUTED;
     }
 }

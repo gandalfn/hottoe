@@ -19,10 +19,10 @@
  */
 
 private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRow {
-    private Gtk.Revealer m_Content;
-    private Gtk.Image m_StatusIcon;
-    private Gtk.Label m_StatusLabel;
-    private Gtk.Label m_TitleLabel;
+    private Gtk.Revealer m_content;
+    private Gtk.Image m_status_icon;
+    private Gtk.Label m_status_label;
+    private Gtk.Label m_title_label;
 
     public unowned DeviceSettingsPage page { get; construct; }
 
@@ -33,56 +33,56 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
     }
 
     construct {
-        m_TitleLabel = new Gtk.Label (page.device.display_name);
-        m_TitleLabel.ellipsize = Pango.EllipsizeMode.END;
-        m_TitleLabel.xalign = 0;
-        m_TitleLabel.get_style_context ().add_class ("h3");
+        m_title_label = new Gtk.Label (page.device.display_name);
+        m_title_label.ellipsize = Pango.EllipsizeMode.END;
+        m_title_label.xalign = 0;
+        m_title_label.get_style_context ().add_class ("h3");
 
-        m_StatusIcon = new Gtk.Image ();
-        m_StatusIcon.halign = Gtk.Align.END;
-        m_StatusIcon.valign = Gtk.Align.START;
+        m_status_icon = new Gtk.Image ();
+        m_status_icon.halign = Gtk.Align.END;
+        m_status_icon.valign = Gtk.Align.START;
 
-        m_StatusLabel = new Gtk.Label (null);
-        m_StatusLabel.use_markup = true;
-        m_StatusLabel.ellipsize = Pango.EllipsizeMode.END;
-        m_StatusLabel.xalign = 0;
+        m_status_label = new Gtk.Label (null);
+        m_status_label.use_markup = true;
+        m_status_label.ellipsize = Pango.EllipsizeMode.END;
+        m_status_label.xalign = 0;
 
         var icon = new DeviceIcon (page.device, Icon.Size.LARGE);
 
         var overlay = new Gtk.Overlay ();
         overlay.width_request = 38;
         overlay.add (icon);
-        overlay.add_overlay (m_StatusIcon);
+        overlay.add_overlay (m_status_icon);
 
         var grid = new Gtk.Grid ();
         grid.margin = 6;
         grid.column_spacing = 6;
         grid.attach (overlay, 0, 0, 1, 2);
-        grid.attach (m_TitleLabel, 1, 0, 1, 1);
-        grid.attach (m_StatusLabel, 1, 1, 1, 1);
+        grid.attach (m_title_label, 1, 0, 1, 1);
+        grid.attach (m_status_label, 1, 1, 1, 1);
 
-        m_Content = new Gtk.Revealer ();
-        m_Content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+        m_content = new Gtk.Revealer ();
+        m_content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
 
-        m_Content.add (grid);
+        m_content.add (grid);
 
-        add (m_Content);
+        add (m_content);
 
-        page.device.bind_property ("display-name", m_TitleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
-        page.device.bind_property ("active", m_Content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
-        page.device.manager.bind_property ("default-output-device", m_StatusIcon, "icon-name",
+        page.device.bind_property ("display-name", m_title_label, "label", GLib.BindingFlags.SYNC_CREATE);
+        page.device.bind_property ("active", m_content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
+        page.device.manager.bind_property ("default-output-device", m_status_icon, "icon-name",
                                            GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             unowned Device? defaultDevice = (Device)f;
             if (defaultDevice == page.device) {
                 t.set_string ("account-logged-in");
-                m_StatusIcon.show ();
+                m_status_icon.show ();
             } else {
                 t.set_string ("");
-                m_StatusIcon.hide ();
+                m_status_icon.hide ();
             }
             return true;
         });
-        page.device.bind_property ("active-profile", m_StatusLabel, "label",
+        page.device.bind_property ("active-profile", m_status_label, "label",
                                    GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             unowned Profile? profile = (Profile)f;
             if (profile != null) {

@@ -19,46 +19,46 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.SettingsPage {
-    private Gtk.Grid m_OutputGrid;
-    private Gtk.Grid m_InputGrid;
-    private Gtk.StackSwitcher m_OutputInputSwitcher;
-    private Gtk.Stack m_OutputInputStack;
+public class PantheonSoundControl.Widgets.DeviceSettingsPage : Granite.SettingsPage {
+    private Gtk.Grid m_output_grid;
+    private Gtk.Grid m_input_grid;
+    private Gtk.StackSwitcher m_output_input_switcher;
+    private Gtk.Stack m_output_input_stack;
 
-    private Gtk.ComboBox m_ProfileSettings;
+    private Gtk.ComboBox m_profile_settings;
 
     public unowned Device device { get; construct; }
 
     construct {
-        var headerIcon = new DeviceIcon (device, Icon.Size.FULL);
-        headerIcon.valign = Gtk.Align.START;
+        var header_icon = new DeviceIcon (device, Icon.Size.FULL);
+        header_icon.valign = Gtk.Align.START;
 
-        var titleLabel = new Gtk.Label ("");
-        titleLabel.xalign = 0;
-        titleLabel.get_style_context ().add_class ("h2");
+        var title_label = new Gtk.Label ("");
+        title_label.xalign = 0;
+        title_label.get_style_context ().add_class ("h2");
 
-        var headerArea = new Gtk.Grid ();
-        headerArea.column_spacing = 12;
-        headerArea.row_spacing = 3;
-        headerArea.attach (headerIcon, 0, 0, 1, 2);
-        headerArea.attach (titleLabel, 1, 0, 1, 1);
+        var header_area = new Gtk.Grid ();
+        header_area.column_spacing = 12;
+        header_area.row_spacing = 3;
+        header_area.attach (header_icon, 0, 0, 1, 2);
+        header_area.attach (title_label, 1, 0, 1, 1);
 
         var renderer = new Gtk.CellRendererText ();
 
         var combo = new Gtk.ComboBox ();
-        m_ProfileSettings = new Gtk.ComboBox ();
-        m_ProfileSettings.width_request = 180;
-        m_ProfileSettings.pack_start (renderer, true);
-        m_ProfileSettings.add_attribute (renderer, "text", 0);
+        m_profile_settings = new Gtk.ComboBox ();
+        m_profile_settings.width_request = 180;
+        m_profile_settings.pack_start (renderer, true);
+        m_profile_settings.add_attribute (renderer, "text", 0);
 
-        Gtk.ListStore profilesList = new Gtk.ListStore (2, typeof (string), typeof (string));
-        m_ProfileSettings.set_model (profilesList);
+        Gtk.ListStore profiles_list = new Gtk.ListStore (2, typeof (string), typeof (string));
+        m_profile_settings.set_model (profiles_list);
 
-        m_ProfileSettings.changed.connect (() => {
+        m_profile_settings.changed.connect (() => {
             Gtk.TreeIter iter;
-            if (m_ProfileSettings.get_active_iter (out iter)) {
+            if (m_profile_settings.get_active_iter (out iter)) {
                 GLib.Value name;
-                m_ProfileSettings.get_model ().get_value (iter, 1, out name);
+                m_profile_settings.get_model ().get_value (iter, 1, out name);
                 foreach (var profile in device.get_profiles ()) {
                     if (profile.name == (string)name) {
                         device.active_profile = profile;
@@ -67,80 +67,80 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
                 }
             }
         });
-        headerArea.attach (m_ProfileSettings, 1, 1, 1, 1);
+        header_area.attach (m_profile_settings, 1, 1, 1, 1);
 
-        var statusSwitch = new Gtk.Switch ();
-        statusSwitch.hexpand = true;
-        statusSwitch.halign = Gtk.Align.END;
-        statusSwitch.valign = Gtk.Align.CENTER;
-        headerArea.attach (statusSwitch, 2, 0, 1, 1);
-        statusSwitch.button_press_event.connect (() => {
-            return statusSwitch.active;
+        var status_switch = new Gtk.Switch ();
+        status_switch.hexpand = true;
+        status_switch.halign = Gtk.Align.END;
+        status_switch.valign = Gtk.Align.CENTER;
+        header_area.attach (status_switch, 2, 0, 1, 1);
+        status_switch.button_press_event.connect (() => {
+            return status_switch.active;
         });
 
-        var contentArea = new Gtk.Grid ();
-        contentArea.orientation = Gtk.Orientation.VERTICAL;
-        contentArea.vexpand = true;
+        var content_area = new Gtk.Grid ();
+        content_area.orientation = Gtk.Orientation.VERTICAL;
+        content_area.vexpand = true;
 
-        m_OutputGrid = new Gtk.Grid ();
-        m_OutputGrid.orientation = Gtk.Orientation.VERTICAL;
-        m_OutputGrid.row_spacing = 24;
-        m_OutputGrid.margin_start = 12;
+        m_output_grid = new Gtk.Grid ();
+        m_output_grid.orientation = Gtk.Orientation.VERTICAL;
+        m_output_grid.row_spacing = 24;
+        m_output_grid.margin_start = 12;
 
-        var outputChannels = new DeviceChannelList (device, Direction.OUTPUT);
-        outputChannels.show_labels = true;
-        outputChannels.show_balance = true;
-        outputChannels.icon_size = Icon.Size.EXTRA_LARGE;
-        outputChannels.monitor_nb_bars = 20.0;
-        m_OutputGrid.add (outputChannels);
+        var output_channels = new DeviceChannelList (device, Direction.OUTPUT);
+        output_channels.show_labels = true;
+        output_channels.show_balance = true;
+        output_channels.icon_size = Icon.Size.EXTRA_LARGE;
+        output_channels.monitor_nb_bars = 20.0;
+        m_output_grid.add (output_channels);
 
-        var outputPlugs = new PlugSettingsList (device, Direction.OUTPUT);
-        m_OutputGrid.add (outputPlugs);
+        var output_plugs = new PlugSettingsList (device, Direction.OUTPUT);
+        m_output_grid.add (output_plugs);
 
-        m_InputGrid = new Gtk.Grid ();
-        m_InputGrid.orientation = Gtk.Orientation.VERTICAL;
-        m_InputGrid.row_spacing = 24;
-        m_InputGrid.margin_start = 12;
+        m_input_grid = new Gtk.Grid ();
+        m_input_grid.orientation = Gtk.Orientation.VERTICAL;
+        m_input_grid.row_spacing = 24;
+        m_input_grid.margin_start = 12;
 
-        var inputChannels = new DeviceChannelList (device, Direction.INPUT);
-        inputChannels.show_labels = true;
-        inputChannels.show_balance = true;
-        inputChannels.icon_size = Icon.Size.EXTRA_LARGE;
-        inputChannels.monitor_nb_bars = 20.0;
-        m_InputGrid.add (inputChannels);
+        var input_channels = new DeviceChannelList (device, Direction.INPUT);
+        input_channels.show_labels = true;
+        input_channels.show_balance = true;
+        input_channels.icon_size = Icon.Size.EXTRA_LARGE;
+        input_channels.monitor_nb_bars = 20.0;
+        m_input_grid.add (input_channels);
 
-        var inputPlugs = new PlugSettingsList (device, Direction.INPUT);
-        m_InputGrid.add (inputPlugs);
+        var input_plugs = new PlugSettingsList (device, Direction.INPUT);
+        m_input_grid.add (input_plugs);
 
-        m_OutputInputStack = new Gtk.Stack ();
-        m_OutputInputStack.margin_top = 24;
-        m_OutputInputStack.expand = true;
+        m_output_input_stack = new Gtk.Stack ();
+        m_output_input_stack.margin_top = 24;
+        m_output_input_stack.expand = true;
 
-        m_OutputInputSwitcher = new Gtk.StackSwitcher ();
-        m_OutputInputSwitcher.halign = Gtk.Align.CENTER;
-        m_OutputInputSwitcher.homogeneous = true;
-        m_OutputInputSwitcher.margin_top = 12;
-        m_OutputInputSwitcher.stack = m_OutputInputStack;
+        m_output_input_switcher = new Gtk.StackSwitcher ();
+        m_output_input_switcher.halign = Gtk.Align.CENTER;
+        m_output_input_switcher.homogeneous = true;
+        m_output_input_switcher.margin_top = 12;
+        m_output_input_switcher.stack = m_output_input_stack;
 
-        m_OutputInputStack.add_titled (m_OutputGrid, "output", _("Output"));
-        m_OutputInputStack.add_titled (m_InputGrid, "input", _("Input"));
-        contentArea.add (m_OutputInputSwitcher);
-        contentArea.add (m_OutputInputStack);
+        m_output_input_stack.add_titled (m_output_grid, "output", _("Output"));
+        m_output_input_stack.add_titled (m_input_grid, "input", _("Input"));
+        content_area.add (m_output_input_switcher);
+        content_area.add (m_output_input_stack);
 
         var grid = new Gtk.Grid ();
         grid.margin = 12;
         grid.orientation = Gtk.Orientation.VERTICAL;
-        grid.add (headerArea);
-        grid.add (contentArea);
+        grid.add (header_area);
+        grid.add (content_area);
 
         add (grid);
 
-        device.manager.bind_property ("default-output-device", statusSwitch, "active",
+        device.manager.bind_property ("default-output-device", status_switch, "active",
                                       GLib.BindingFlags.BIDIRECTIONAL |
                                       GLib.BindingFlags.SYNC_CREATE,
                                       (b, f, ref t) => {
-            unowned Device? defaultDevice = (Device)f;
-            t.set_boolean (defaultDevice == device);
+            unowned Device? default_device = (Device)f;
+            t.set_boolean (default_device == device);
             return true;
         }, (b, f, ref t) => {
             bool ret = false;
@@ -151,7 +151,7 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
             return ret;
         });
 
-        device.bind_property ("display-name", titleLabel, "label", GLib.BindingFlags.SYNC_CREATE);
+        device.bind_property ("display-name", title_label, "label", GLib.BindingFlags.SYNC_CREATE);
 
         device.changed.connect (on_device_changed);
 
@@ -163,47 +163,47 @@ public class PantheonSoundControl.Widgets.DeviceSettingsPage  : Granite.Settings
         on_device_changed ();
     }
 
-    public DeviceSettingsPage (Device inDevice) {
+    public DeviceSettingsPage (Device in_device) {
         GLib.Object (
-            device: inDevice
+            device: in_device
         );
     }
 
     private void on_device_changed () {
-        Gtk.ListStore profilesList = (Gtk.ListStore)m_ProfileSettings.get_model ();
+        Gtk.ListStore profiles_list = (Gtk.ListStore)m_profile_settings.get_model ();
         Gtk.TreeIter iter;
 
-        int activeRow = 0, cpt = 0;
-        profilesList.clear ();
+        int active_row = 0, cpt = 0;
+        profiles_list.clear ();
 
         foreach (var profile in device.get_profiles ()) {
-            profilesList.append (out iter);
-            profilesList.set (iter, 0, profile.description, 1, profile.name);
+            profiles_list.append (out iter);
+            profiles_list.set (iter, 0, profile.description, 1, profile.name);
 
             if (device.active_profile == profile) {
-                activeRow = cpt;
+                active_row = cpt;
             }
             cpt++;
         }
-        m_ProfileSettings.set_active (activeRow);
+        m_profile_settings.set_active (active_row);
 
-        on_device_channels_changed  ();
+        on_device_channels_changed ();
     }
 
     private void on_device_channels_changed () {
-        bool haveOutput = device.get_output_channels ().length > 0;
-        bool haveInput = device.get_input_channels ().length > 0;
+        bool have_output = device.get_output_channels ().length > 0;
+        bool have_input = device.get_input_channels ().length > 0;
 
-        bool switchOnOutput = haveOutput && m_OutputGrid.visible != haveOutput;
+        bool switch_on_output = have_output && m_output_grid.visible != have_output;
 
-        m_OutputGrid.visible = haveOutput;
-        m_InputGrid.visible = haveInput;
+        m_output_grid.visible = have_output;
+        m_input_grid.visible = have_input;
 
-        m_OutputInputSwitcher.visible = haveOutput && haveInput;
+        m_output_input_switcher.visible = have_output && have_input;
 
         // If output become visible switch on it
-        if (switchOnOutput) {
-            m_OutputInputStack.set_visible_child (m_OutputGrid);
+        if (switch_on_output) {
+            m_output_input_stack.set_visible_child (m_output_grid);
         }
     }
 }

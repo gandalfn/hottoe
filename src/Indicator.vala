@@ -20,16 +20,16 @@
  */
 
 public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
-    private Manager m_Manager;
-    private Widgets.IndicatorIcon? m_IndicatorIcon;
-    private Widgets.IndicatorView m_IndicatorView;
-    private uint m_TimeoutActive;
+    private Manager m_manager;
+    private Widgets.IndicatorIcon? m_indicator_icon;
+    private Widgets.IndicatorView m_indicator_view;
+    private uint m_timeout_active;
 
     construct {
-        m_Manager = Manager.get ("pulseaudio");
+        m_manager = Manager.get ("pulseaudio");
     }
 
-    public Indicator (Wingpanel.IndicatorManager.ServerType inServerType) {
+    public Indicator (Wingpanel.IndicatorManager.ServerType in_server_type) {
         // very ugly hack when set code name to set position of indicator before
         // sound indicator since they are sorted by name and type name
         Object (code_name: Wingpanel.Indicator.SYNC,
@@ -38,37 +38,37 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
     }
 
     public override Gtk.Widget get_display_widget () {
-        if (m_IndicatorIcon == null) {
-            m_IndicatorIcon = new Widgets.IndicatorIcon (m_Manager);
+        if (m_indicator_icon == null) {
+            m_indicator_icon = new Widgets.IndicatorIcon (m_manager);
 
-            m_Manager.start ();
+            m_manager.start ();
 
             // TODO: Disable desktop notification since we have a problem when wingpanel has
             // emitter and receiver of notification
             Services.DesktopNotification.enabled = false;
         }
 
-        return m_IndicatorIcon;
+        return m_indicator_icon;
     }
 
     public override Gtk.Widget? get_widget () {
-        if (m_IndicatorView == null) {
-            m_IndicatorView = new Widgets.IndicatorView (m_Manager);
-            m_IndicatorView.open_settings.connect (show_settings);
+        if (m_indicator_view == null) {
+            m_indicator_view = new Widgets.IndicatorView (m_manager);
+            m_indicator_view.open_settings.connect (show_settings);
         }
 
         visible = true;
 
-        return m_IndicatorView;
+        return m_indicator_view;
     }
 
     public override void opened () {
-        if (m_Manager != null) {
-            if (m_TimeoutActive != 0) {
-                GLib.Source.remove (m_TimeoutActive);
-                m_TimeoutActive = 0;
+        if (m_manager != null) {
+            if (m_timeout_active != 0) {
+                GLib.Source.remove (m_timeout_active);
+                m_timeout_active = 0;
             }
-            m_Manager.enable_monitoring = true;
+            m_manager.enable_monitoring = true;
         }
 
         Services.DesktopNotification.enabled = false;
@@ -76,14 +76,14 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
     }
 
     public override void closed () {
-        if (m_Manager != null) {
-            if (m_TimeoutActive != 0) {
-                GLib.Source.remove (m_TimeoutActive);
-                m_TimeoutActive = 0;
+        if (m_manager != null) {
+            if (m_timeout_active != 0) {
+                GLib.Source.remove (m_timeout_active);
+                m_timeout_active = 0;
             }
 
-            m_TimeoutActive = GLib.Timeout.add_seconds (2, ()=> {
-                m_Manager.enable_monitoring = false;
+            m_timeout_active = GLib.Timeout.add_seconds (2, ()=> {
+                m_manager.enable_monitoring = false;
 
                 return true;
             });
@@ -106,15 +106,15 @@ public class PantheonSoundControl.Indicator : Wingpanel.Indicator {
     }
 }
 
-public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType inServerType) {
+public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType in_server_type) {
     debug ("Activating Sound Devices Indicator");
 
-    if (inServerType != Wingpanel.IndicatorManager.ServerType.SESSION) {
+    if (in_server_type != Wingpanel.IndicatorManager.ServerType.SESSION) {
         debug ("Wingpanel is not in session, not loading chat");
         return null;
     }
 
-    var indicator = new PantheonSoundControl.Indicator (inServerType);
+    var indicator = new PantheonSoundControl.Indicator (in_server_type);
     return indicator;
 }
 

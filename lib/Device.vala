@@ -29,16 +29,16 @@ public abstract class PantheonSoundControl.Device : GLib.Object {
     public abstract unowned Profile? active_profile { get; set; }
 
     public signal void changed ();
-    public signal void channel_added (Channel inChannel);
-    public signal void channel_removed (Channel inChannel);
+    public signal void channel_added (Channel in_channel);
+    public signal void channel_removed (Channel in_channel);
 
-    public abstract Profile get_profile (string inName);
+    public abstract Profile get_profile (string in_name);
     public abstract Profile[] get_profiles ();
 
     public abstract Port[] get_output_ports ();
     public abstract Port[] get_input_ports ();
 
-    public abstract bool contains (Channel inChannel);
+    public abstract bool contains (Channel in_channel);
 
     public Channel[] get_output_channels () {
         Channel[] channels = {};

@@ -19,9 +19,9 @@
  */
 
 public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
-    private Gtk.Scale m_Volume;
-    private Gtk.Scale m_Balance;
-    private bool m_Init;
+    private Gtk.Scale m_volume;
+    private Gtk.Scale m_balance;
+    private bool m_init;
 
     public unowned Channel channel { get; construct; }
     public Icon.Size icon_size { get; set; default = Icon.Size.LARGE; }
@@ -30,7 +30,7 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
     public double monitor_nb_bars { get; set; default = 8.0; }
 
     construct {
-        m_Init = true;
+        m_init = true;
 
         hexpand = true;
         row_spacing = 6;
@@ -43,32 +43,35 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
 
         attach (image_box, 0, 0, 1, 3);
 
-        m_Volume = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, channel.volume_muted, channel.volume_max, (channel.volume_max - channel.volume_muted) / 20.0);
-        m_Volume.adjustment.page_increment = 5;
-        m_Volume.adjustment.value = channel.volume;
-        m_Volume.margin_start = 6;
-        m_Volume.set_size_request (200, -1);
-        m_Volume.draw_value = false;
-        m_Volume.hexpand = true;
-        attach (m_Volume, 1, 0, 1, 1);
+        m_volume = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL,
+                                             channel.volume_muted,
+                                             channel.volume_max,
+                                             (channel.volume_max - channel.volume_muted) / 20.0);
+        m_volume.adjustment.page_increment = 5;
+        m_volume.adjustment.value = channel.volume;
+        m_volume.margin_start = 6;
+        m_volume.set_size_request (200, -1);
+        m_volume.draw_value = false;
+        m_volume.hexpand = true;
+        attach (m_volume, 1, 0, 1, 1);
 
         if (channel.direction == Direction.OUTPUT) {
-            m_Balance = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, -1.0, 1.0, 0.1);
-            m_Balance.margin_start = 6;
-            m_Balance.margin_end = 12;
-            m_Balance.margin_bottom = 6;
-            m_Balance.no_show_all = true;
-            m_Balance.adjustment.page_increment = 0.1;
-            m_Balance.set_size_request (200, -1);
-            m_Balance.draw_value = false;
-            m_Balance.has_origin = false;
-            m_Balance.hexpand = true;
+            m_balance = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, -1.0, 1.0, 0.1);
+            m_balance.margin_start = 6;
+            m_balance.margin_end = 12;
+            m_balance.margin_bottom = 6;
+            m_balance.no_show_all = true;
+            m_balance.adjustment.page_increment = 0.1;
+            m_balance.set_size_request (200, -1);
+            m_balance.draw_value = false;
+            m_balance.has_origin = false;
+            m_balance.hexpand = true;
 
-            m_Balance.add_mark (-1, Gtk.PositionType.BOTTOM, _("<small>Left</small>"));
-            m_Balance.add_mark (0, Gtk.PositionType.BOTTOM, _("<small>Center</small>"));
-            m_Balance.add_mark (1, Gtk.PositionType.BOTTOM, _("<small>Right</small>"));
+            m_balance.add_mark (-1, Gtk.PositionType.BOTTOM, _("<small>Left</small>"));
+            m_balance.add_mark (0, Gtk.PositionType.BOTTOM, _("<small>Center</small>"));
+            m_balance.add_mark (1, Gtk.PositionType.BOTTOM, _("<small>Right</small>"));
 
-            attach (m_Balance, 1, 1, 2, 1);
+            attach (m_balance, 1, 1, 2, 1);
         }
 
         var switch_widget = new Gtk.Switch ();
@@ -94,56 +97,64 @@ public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
         image_box.scroll_event.connect (on_scroll);
         switch_widget.scroll_event.connect (on_scroll);
 
-        switch_widget.bind_property ("active", m_Volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);
+        switch_widget.bind_property ("active", m_volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", image, "sensitive", GLib.BindingFlags.SYNC_CREATE);
         switch_widget.bind_property ("active", volume_progressbar, "sensitive", GLib.BindingFlags.SYNC_CREATE);
 
         channel.bind_property ("port", image, "port");
 
-        channel.bind_property ("volume", m_Volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL);
-        channel.bind_property ("is_muted", switch_widget, "active", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.INVERT_BOOLEAN);
+        channel.bind_property ("volume", m_volume.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL);
+        channel.bind_property ("is_muted", switch_widget, "active", GLib.BindingFlags.BIDIRECTIONAL |
+                                                                    GLib.BindingFlags.SYNC_CREATE |
+                                                                    GLib.BindingFlags.INVERT_BOOLEAN);
 
-        bind_property("icon-size", image, "size", GLib.BindingFlags.SYNC_CREATE);
-        bind_property("monitor-nb-bars", volume_progressbar, "nb-bars", GLib.BindingFlags.SYNC_CREATE);
+        bind_property ("icon-size", image, "size", GLib.BindingFlags.SYNC_CREATE);
+        bind_property ("monitor-nb-bars", volume_progressbar, "nb-bars", GLib.BindingFlags.SYNC_CREATE);
 
         if (channel.direction == Direction.OUTPUT) {
-            switch_widget.bind_property ("active", m_Balance, "sensitive", GLib.BindingFlags.SYNC_CREATE);
-            bind_property("show-balance", m_Balance, "visible", GLib.BindingFlags.SYNC_CREATE);
-            channel.bind_property ("balance", m_Balance.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL | GLib.BindingFlags.SYNC_CREATE);
+            switch_widget.bind_property ("active", m_balance, "sensitive", GLib.BindingFlags.SYNC_CREATE);
+            bind_property ("show-balance", m_balance, "visible", GLib.BindingFlags.SYNC_CREATE);
+            channel.bind_property ("balance", m_balance.adjustment, "value", GLib.BindingFlags.BIDIRECTIONAL |
+                                                                             GLib.BindingFlags.SYNC_CREATE);
         }
 
         notify["show-labels"].connect (on_base_volume_changed);
         channel.notify["volume-base"].connect (on_base_volume_changed);
         on_base_volume_changed ();
 
-        m_Volume.adjustment.value_changed.connect (() => {
-            if (!m_Init) {
+        m_volume.adjustment.value_changed.connect (() => {
+            if (!m_init) {
                 var notification = new Services.SoundNotification.volume_change (channel);
                 notification.send ();
             }
-            m_Init = false;
+            m_init = false;
         });
     }
 
-    public ChannelView (Channel inChannel) {
+    public ChannelView (Channel in_channel) {
         GLib.Object (
-            channel: inChannel
+            channel: in_channel
         );
     }
 
-    private bool on_scroll (Gdk.EventScroll event) {
-        m_Volume.scroll_event (event);
+    private bool on_scroll (Gdk.EventScroll in_event) {
+        m_volume.scroll_event (in_event);
 
         return Gdk.EVENT_STOP;
     }
 
     private void on_base_volume_changed () {
-        m_Volume.clear_marks ();
-        m_Volume.add_mark (channel.volume_muted, Gtk.PositionType.BOTTOM, show_labels ? _("<small>Min</small>") : null);
-        m_Volume.add_mark (channel.volume_norm, Gtk.PositionType.BOTTOM, show_labels ? _("<small>100% (0dB)</small>") : null);
+        m_volume.clear_marks ();
+
+        m_volume.add_mark (channel.volume_muted, Gtk.PositionType.BOTTOM,
+                           show_labels ? _("<small>Min</small>") : null);
+
+        m_volume.add_mark (channel.volume_norm, Gtk.PositionType.BOTTOM,
+                           show_labels ? _("<small>100% (0dB)</small>") : null);
 
         if (channel.volume_base > channel.volume_muted && channel.volume_base < channel.volume_norm) {
-            m_Volume.add_mark (channel.volume_base, Gtk.PositionType.BOTTOM, show_labels ? _("<small>Unamplified</small>") : null);
+            m_volume.add_mark (channel.volume_base, Gtk.PositionType.BOTTOM,
+                               show_labels ? _("<small>Unamplified</small>") : null);
         }
     }
 }

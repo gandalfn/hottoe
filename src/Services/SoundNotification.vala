@@ -18,29 +18,29 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Services.SoundNotification :  Services.Notification {
-    private Canberra.Proplist m_Props;
-    private unowned Channel m_Channel;
+public class PantheonSoundControl.Services.SoundNotification : Services.Notification {
+    private Canberra.Proplist m_props;
+    private unowned Channel m_channel;
 
     public static bool enabled { get; set; }
 
-    public SoundNotification.volume_change (Channel? inChannel = null) {
-        m_Channel = inChannel;
+    public SoundNotification.volume_change (Channel? in_channel = null) {
+        m_channel = in_channel;
 
-        Canberra.Proplist.create (out m_Props);
-        m_Props.sets (Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
-        m_Props.sets (Canberra.PROP_EVENT_ID, "audio-volume-change");
+        Canberra.Proplist.create (out m_props);
+        m_props.sets (Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
+        m_props.sets (Canberra.PROP_EVENT_ID, "audio-volume-change");
     }
 
     public override void send () {
         unowned Canberra.Context? ctx = CanberraGtk.context_get ();
         if (ctx != null) {
-            if (m_Channel != null) {
+            if (m_channel != null) {
                 uint32 index;
-                m_Channel.get ("index", out index);
+                m_channel.get ("index", out index);
                 ctx.change_device ("%lu".printf (index));
             }
-            ctx.play_full (0, m_Props);
+            ctx.play_full (0, m_props);
             ctx.change_device (null);
         }
     }

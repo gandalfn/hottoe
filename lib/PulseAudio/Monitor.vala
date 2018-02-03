@@ -20,22 +20,22 @@
  */
 
 internal interface PantheonSoundControl.PulseAudio.Monitor : PantheonSoundControl.Monitor {
-    protected global::PulseAudio.Stream start (Channel inChannel, int inPlugIndex = -1) {
+    protected global::PulseAudio.Stream start (Channel in_channel, int in_plug_index = -1) {
         var ss = global::PulseAudio.SampleSpec () {
             channels = 1,
             format = global::PulseAudio.SampleFormat.FLOAT32NE,
             rate = 25
         };
 
-        global::PulseAudio.Stream stream = ((Manager)inChannel.manager).operations.create_stream (_("Peak detect"), ss);
+        var stream = ((Manager)in_channel.manager).operations.create_stream (_("Peak detect"), ss);
         stream.set_read_callback (on_read);
         stream.set_suspended_callback (on_suspended);
-        if (inPlugIndex >= 0) {
-            stream.set_monitor_stream (inPlugIndex);
+        if (in_plug_index >= 0) {
+            stream.set_monitor_stream (in_plug_index);
         }
 
-        var flags = global::PulseAudio.Stream.Flags.DONT_MOVE      |
-                    global::PulseAudio.Stream.Flags.PEAK_DETECT    |
+        var flags = global::PulseAudio.Stream.Flags.DONT_MOVE |
+                    global::PulseAudio.Stream.Flags.PEAK_DETECT |
                     global::PulseAudio.Stream.Flags.ADJUST_LATENCY |
                     global::PulseAudio.Stream.Flags.START_UNMUTED;
 
@@ -44,46 +44,46 @@ internal interface PantheonSoundControl.PulseAudio.Monitor : PantheonSoundContro
             maxlength = uint32.MAX
         };
 
-        if (stream.connect_record ( "%u".printf (inChannel.monitor_index), attr, flags) < 0) {
+        if (stream.connect_record ( "%u".printf (in_channel.monitor_index), attr, flags) < 0) {
             critical (@"Error on create monitor stream");
         }
 
         return stream;
     }
 
-    protected void stop (global::PulseAudio.Stream inStream) {
-        if (inStream != null) {
+    protected void stop (global::PulseAudio.Stream in_stream) {
+        if (in_stream != null) {
             paused ();
 
-            inStream.set_read_callback (null);
-            inStream.set_suspended_callback (null);
-            inStream.disconnect ();
-            inStream.flush ();
+            in_stream.set_read_callback (null);
+            in_stream.set_suspended_callback (null);
+            in_stream.disconnect ();
+            in_stream.flush ();
         }
     }
 
-    private void on_read (global::PulseAudio.Stream inStream, size_t inLength) {
-        if (inStream != null) {
+    private void on_read (global::PulseAudio.Stream in_stream, size_t in_length) {
+        if (in_stream != null) {
             void* buffer;
 
-            if (inStream.peek (out buffer, out inLength) >= 0) {
+            if (in_stream.peek (out buffer, out in_length) >= 0) {
                 if (buffer != null) {
                     unowned float[] data = (float[])buffer;
-                    data.length = (int)(inLength / sizeof (float));
+                    data.length = (int)(in_length / sizeof (float));
 
                     if (data.length > 0) {
                         peak (data[data.length - 1]);
                     }
                 }
 
-                inStream.drop ();
+                in_stream.drop ();
             } else {
                 critical (@"Failed to read data from stream");
             }
         }
     }
 
-    private void on_suspended (global::PulseAudio.Stream inStream) {
+    private void on_suspended (global::PulseAudio.Stream in_stream) {
         paused ();
     }
 }

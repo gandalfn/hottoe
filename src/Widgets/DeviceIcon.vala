@@ -23,49 +23,49 @@ public class PantheonSoundControl.Widgets.DeviceIcon : PantheonSoundControl.Widg
 
     public override GLib.Icon gicon {
        owned get {
-            string devIconName = device.icon_name;
-            string iconName = devIconName;
+            string dev_icon_name = device.icon_name;
+            string icon_name = dev_icon_name;
 
-            switch (devIconName) {
+            switch (dev_icon_name) {
                 case "audio-card-pci":
-                    iconName = "audio-card";
+                    icon_name = "audio-card";
                     break;
 
                 case "audio-card-bluetooth":
-                    iconName = "bluetooth";
+                    icon_name = "bluetooth";
                     break;
             }
 
             if ("HDMI" in device.display_name) {
-                iconName = "video-display";
+                icon_name = "video-display";
             }
 
-            return new GLib.ThemedIcon.with_default_fallbacks (iconName);
+            return new GLib.ThemedIcon.with_default_fallbacks (icon_name);
         }
     }
 
     construct {
-        string devIconName = device.icon_name;
-        string iconName = devIconName;
+        string dev_icon_name = device.icon_name;
+        string icon_name = dev_icon_name;
 
-        switch (devIconName) {
+        switch (dev_icon_name) {
             case "audio-card-bluetooth":
-                iconName = "bluetooth";
+                icon_name = "bluetooth";
                 break;
         }
 
         if ("HDMI" in device.display_name) {
-            iconName = "video-display";
+            icon_name = "video-display";
         }
 
-        m_Icon.icon_name = iconName;
+        m_icon.icon_name = icon_name;
     }
 
-    public DeviceIcon (Device inDevice, Icon.Size inSize = Icon.Size.LARGE, bool inUseSymbolic = false) {
+    public DeviceIcon (Device in_device, Icon.Size in_size = Icon.Size.LARGE, bool in_use_symbolic = false) {
         GLib.Object (
-            size: inSize,
-            use_symbolic: inUseSymbolic,
-            device: inDevice
+            size: in_size,
+            use_symbolic: in_use_symbolic,
+            device: in_device
         );
     }
 }

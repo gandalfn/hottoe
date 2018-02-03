@@ -21,60 +21,63 @@
 
 
 public class PantheonSoundControl.SwitchboardPlug : Switchboard.Plug {
-    private Manager m_Manager;
-    private Widgets.DeviceSettingsView? m_View;
+    private Manager m_manager;
+    private Widgets.DeviceSettingsView? m_view;
 
     construct {
-        m_Manager = Manager.get ("pulseaudio");
+        m_manager = Manager.get ("pulseaudio");
     }
 
     public SwitchboardPlug () {
         var settings = new Gee.TreeMap<string, string?> (null, null);
         settings.set ("sound-devices", null);
-        Object (category: Category.HARDWARE,
-                code_name: "hardware-pantheon-sound-devices",
-                display_name: _("Sound Devices"),
-                description: _("Configure sound devices"),
-                icon: "audio-card",
-                supported_settings: settings);
+        Object (
+            category: Category.HARDWARE,
+            code_name: "hardware-pantheon-sound-devices",
+            display_name: _("Sound Devices"),
+            description: _("Configure sound devices"),
+            icon: "audio-card",
+            supported_settings: settings
+        );
     }
 
     public override Gtk.Widget get_widget () {
-        if (m_View == null) {
-            m_Manager = Manager.get ("pulseaudio");
+        if (m_view == null) {
+            m_manager = Manager.get ("pulseaudio");
 
-            m_View = new Widgets.DeviceSettingsView (m_Manager);
-            m_View.show_all ();
+            m_view = new Widgets.DeviceSettingsView (m_manager);
+            m_view.show_all ();
 
-            m_Manager.start ();
+            m_manager.start ();
         }
-        return m_View;
+        return m_view;
     }
 
     public override void shown () {
-        if (m_Manager != null) {
-            m_Manager.enable_monitoring = true;
+        if (m_manager != null) {
+            m_manager.enable_monitoring = true;
         }
     }
 
     public override void hidden () {
-        if (m_Manager != null) {
-            m_Manager.enable_monitoring = false;
+        if (m_manager != null) {
+            m_manager.enable_monitoring = false;
         }
     }
 
-    public override void search_callback (string inLocation) {
+    public override void search_callback (string in_location) {
     }
 
     // 'search' returns results like ("Keyboard → Behavior → Duration", "keyboard<sep>behavior")
-    public override async Gee.TreeMap<string, string> search (string inSearch) {
-        var search_results = new Gee.TreeMap<string, string> ((GLib.CompareDataFunc<string>)GLib.strcmp, (Gee.EqualDataFunc<string>)GLib.str_equal);
+    public override async Gee.TreeMap<string, string> search (string in_search) {
+        var search_results = new Gee.TreeMap<string, string> ((GLib.CompareDataFunc<string>)GLib.strcmp,
+                                                              (Gee.EqualDataFunc<string>)GLib.str_equal);
         return search_results;
     }
 }
 
 
-public Switchboard.Plug get_plug (GLib.Module inModule) {
+public Switchboard.Plug get_plug (GLib.Module in_module) {
     debug ("Activating Sound Device plug");
     return new PantheonSoundControl.SwitchboardPlug ();
 }

@@ -23,33 +23,33 @@
 extern const string BACKEND_PATH;
 
 public abstract class PantheonSoundControl.Manager : GLib.Object {
-    private static Gee.TreeSet<Backend> s_Backends = null;
+    private static Gee.TreeSet<Backend> s_backends = null;
 
     internal class Backend : GLib.Object {
         [CCode (has_target = false)]
         private delegate Manager? LoadFunc ();
 
-        private GLib.Module m_Module;
-        private LoadFunc m_LoadFunc;
+        private GLib.Module m_module;
+        private LoadFunc m_load_func;
 
         public string name { get; construct; }
 
-        public Backend (string inName) {
-            GLib.Object (name: inName);
+        public Backend (string in_name) {
+            GLib.Object (name: in_name);
 
-            debug ("Load backend %s", inName);
+            debug ("Load backend %s", in_name);
 
             if (GLib.Module.supported ()) {
-                string path = GLib.Path.build_filename (BACKEND_PATH, "lib%s-backend.so".printf(inName.down ()));
+                string path = GLib.Path.build_filename (BACKEND_PATH, "lib%s-backend.so".printf (in_name.down ()));
 
-                m_Module = GLib.Module.open (path, GLib.ModuleFlags.BIND_LAZY);
-                if (m_Module != null) {
+                m_module = GLib.Module.open (path, GLib.ModuleFlags.BIND_LAZY);
+                if (m_module != null) {
                     void* function;
-                    string loadMethodName = "pantheon_sound_%s_load".printf(inName.down ());
+                    string loadMethodName = "pantheon_sound_%s_load".printf (in_name.down ());
 
-                    m_Module.symbol (loadMethodName, out function);
+                    m_module.symbol (loadMethodName, out function);
                     if (function != null) {
-                        m_LoadFunc = (LoadFunc) function;
+                        m_load_func = (LoadFunc) function;
                     } else {
                         critical ("%s not found in %s", loadMethodName, path);
                     }
@@ -61,16 +61,16 @@ public abstract class PantheonSoundControl.Manager : GLib.Object {
             }
         }
 
-        public Manager? load() {
+        public Manager? load () {
             Manager? ret = null;
-            if (m_LoadFunc != null) {
-                ret = m_LoadFunc ();
+            if (m_load_func != null) {
+                ret = m_load_func ();
             }
             return ret;
         }
 
-        public static int compare (Backend inA, Backend inB) {
-            return GLib.strcmp (inA.name, inB.name);
+        public static int compare (Backend in_a, Backend in_b) {
+            return GLib.strcmp (in_a.name, in_b.name);
         }
     }
 
@@ -82,17 +82,17 @@ public abstract class PantheonSoundControl.Manager : GLib.Object {
     public abstract unowned Device? default_input_device { get; set; }
     public abstract unowned Device? default_output_device { get; set; }
 
-    public static new Manager? get (string inBackend) {
-        if (s_Backends == null) {
-            s_Backends = new Gee.TreeSet<Backend> (Backend.compare);
+    public static new Manager? get (string in_backend) {
+        if (s_backends == null) {
+            s_backends = new Gee.TreeSet<Backend> (Backend.compare);
         }
 
-        var backend = s_Backends.first_match ((b) => {
-            return b.name == inBackend;
+        var backend = s_backends.first_match ((b) => {
+            return b.name == in_backend;
         });
         if (backend == null) {
-            backend = new Backend(inBackend);
-            s_Backends.add (backend);
+            backend = new Backend (in_backend);
+            s_backends.add (backend);
         }
 
         return backend.load ();
@@ -115,7 +115,7 @@ public abstract class PantheonSoundControl.Manager : GLib.Object {
     public abstract Device[] get_devices ();
     public abstract Channel[] get_output_channels ();
     public abstract Channel[] get_input_channels ();
-    public abstract Channel get_channel (string inChannelName);
+    public abstract Channel get_channel (string in_channel_name);
     public abstract Client[] get_clients ();
     public abstract Plug[] get_input_plugs ();
     public abstract Plug[] get_output_plugs ();

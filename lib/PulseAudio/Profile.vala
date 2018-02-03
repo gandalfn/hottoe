@@ -22,11 +22,11 @@
 internal class PantheonSoundControl.PulseAudio.Profile : PantheonSoundControl.Profile {
     public uint32 priority { get; construct; }
 
-    public Profile (global::PulseAudio.CardProfileInfo inInfo) {
+    public Profile (global::PulseAudio.CardProfileInfo in_info) {
         Object (
-            name: inInfo.name,
-            description: inInfo.description,
-            priority: inInfo.priority
+            name: in_info.name,
+            description: in_info.description,
+            priority: in_info.priority
         );
 
         debug (@"Create profile $(name) description: $(description) priority: $(priority)");
@@ -36,7 +36,7 @@ internal class PantheonSoundControl.PulseAudio.Profile : PantheonSoundControl.Pr
         return @"\t\tprofile: $(name), description: $(description), priority: $(priority)";
     }
 
-    public static int compare (Profile inA, Profile inB) {
-        return (int)inB.priority - (int)inA.priority;
+    public static int compare (Profile in_a, Profile in_b) {
+        return (int)in_b.priority - (int)in_a.priority;
     }
 }

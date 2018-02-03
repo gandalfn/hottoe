@@ -19,7 +19,7 @@
  */
 
 public class PantheonSoundControl.Widgets.PlugChannelList : Gtk.Grid {
-    private Gee.LinkedList<ChannelRadioButton> m_Group;
+    private Gee.LinkedList<ChannelRadioButton> m_group;
 
     public unowned Plug plug { get; construct; }
 
@@ -31,7 +31,7 @@ public class PantheonSoundControl.Widgets.PlugChannelList : Gtk.Grid {
         plug.manager.channel_added.connect (on_channel_added);
         plug.manager.channel_removed.connect (on_channel_removed);
 
-        m_Group = new Gee.LinkedList<ChannelRadioButton> ();
+        m_group = new Gee.LinkedList<ChannelRadioButton> ();
 
         Channel[] channels;
         if (plug.direction == Direction.INPUT) {
@@ -41,36 +41,36 @@ public class PantheonSoundControl.Widgets.PlugChannelList : Gtk.Grid {
         }
 
         foreach (unowned Channel channel in channels) {
-            var button = new ChannelRadioButton (channel, m_Group);
-            m_Group.add (button);
+            var button = new ChannelRadioButton (channel, m_group);
+            m_group.add (button);
             button.active = channel == plug.channel;
             button.notify["active"].connect (on_channel_activated);
             add (button);
         }
     }
 
-    public PlugChannelList (Plug inPlug) {
+    public PlugChannelList (Plug in_plug) {
         GLib.Object (
-            plug: inPlug
+            plug: in_plug
         );
     }
 
-    private void on_channel_added (Channel inChannel) {
-        if (inChannel.direction == plug.direction) {
-            var button = new ChannelRadioButton (inChannel, m_Group);
-            m_Group.add (button);
-            button.active = inChannel == plug.channel;
+    private void on_channel_added (Channel in_channel) {
+        if (in_channel.direction == plug.direction) {
+            var button = new ChannelRadioButton (in_channel, m_group);
+            m_group.add (button);
+            button.active = in_channel == plug.channel;
             button.notify["active"].connect (on_channel_activated);
             button.show_all ();
             add (button);
         }
     }
 
-    private void on_channel_removed (Channel inChannel) {
+    private void on_channel_removed (Channel in_channel) {
         get_children ().foreach ((child) => {
             unowned ChannelRadioButton? button = child as ChannelRadioButton;
-            if (button != null && button.channel == inChannel) {
-                m_Group.remove (button);
+            if (button != null && button.channel == in_channel) {
+                m_group.remove (button);
                 child.destroy ();
             }
         });
@@ -85,8 +85,8 @@ public class PantheonSoundControl.Widgets.PlugChannelList : Gtk.Grid {
         });
     }
 
-    private void on_channel_activated (GLib.Object inObject, GLib.ParamSpec inPSpec) {
-        var button = inObject as ChannelRadioButton;
+    private void on_channel_activated (GLib.Object in_object, GLib.ParamSpec in_pspec) {
+        var button = in_object as ChannelRadioButton;
         if (button.active) {
             plug.channel = button.channel;
         }

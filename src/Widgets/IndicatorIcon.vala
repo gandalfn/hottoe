@@ -19,14 +19,14 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
-    private PortIcon m_Icon;
-    private unowned GLib.Binding m_ChannelBind;
+public class PantheonSoundControl.Widgets.IndicatorIcon : Gtk.Grid {
+    private PortIcon m_icon;
+    private unowned GLib.Binding m_channel_bind;
 
     public unowned Manager manager { get; construct; }
 
     construct {
-        m_Icon = new PortIcon (null, Icon.Size.SMALL, true);
+        m_icon = new PortIcon (null, Icon.Size.SMALL, true);
 
         manager.channel_added.connect (on_default_channel_changed);
         manager.channel_removed.connect (on_default_channel_changed);
@@ -36,27 +36,27 @@ public class PantheonSoundControl.Widgets.IndicatorIcon  : Gtk.Grid {
 
         valign = Gtk.Align.CENTER;
 
-        add (m_Icon);
+        add (m_icon);
     }
 
-    public IndicatorIcon (Manager inManager) {
+    public IndicatorIcon (Manager in_manager) {
         GLib.Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 
     private void on_default_channel_changed () {
-        if (m_ChannelBind != null) {
-            m_ChannelBind.unbind ();
-            m_ChannelBind = null;
+        if (m_channel_bind != null) {
+            m_channel_bind.unbind ();
+            m_channel_bind = null;
         }
 
-        var defaultChannel = manager.default_output_channel;
+        var default_channel = manager.default_output_channel;
 
-        if (defaultChannel != null) {
-            m_ChannelBind = defaultChannel.bind_property ("port", m_Icon, "port", GLib.BindingFlags.SYNC_CREATE);
+        if (default_channel != null) {
+            m_channel_bind = default_channel.bind_property ("port", m_icon, "port", GLib.BindingFlags.SYNC_CREATE);
         } else {
-            m_Icon.port = null;
+            m_icon.port = null;
         }
     }
 }

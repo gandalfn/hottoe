@@ -26,10 +26,10 @@ public class PantheonSoundControl.Widgets.DeviceChannelList : Gtk.Grid {
     public bool show_balance { get; set; default = false; }
     public double monitor_nb_bars { get; set; default = 8.0; }
 
-    public DeviceChannelList (Device inDevice, Direction inDirection = Direction.INPUT | Direction.OUTPUT) {
+    public DeviceChannelList (Device in_device, Direction in_direction = Direction.INPUT | Direction.OUTPUT) {
         Object (
-            device: inDevice,
-            direction: inDirection
+            device: in_device,
+            direction: in_direction
         );
     }
 
@@ -45,22 +45,22 @@ public class PantheonSoundControl.Widgets.DeviceChannelList : Gtk.Grid {
         device.manager.channel_removed.connect (on_channel_removed);
     }
 
-    private void on_channel_added (Channel inChannel) {
-        if (inChannel.direction in direction) {
-            var view = new ChannelView (inChannel);
-            bind_property("icon-size", view, "icon-size", GLib.BindingFlags.SYNC_CREATE);
-            bind_property("show-labels", view, "show-labels", GLib.BindingFlags.SYNC_CREATE);
-            bind_property("show-balance", view, "show-balance", GLib.BindingFlags.SYNC_CREATE);
-            bind_property("monitor-nb-bars", view, "monitor-nb-bars", GLib.BindingFlags.SYNC_CREATE);
+    private void on_channel_added (Channel in_channel) {
+        if (in_channel.direction in direction) {
+            var view = new ChannelView (in_channel);
+            bind_property ("icon-size", view, "icon-size", GLib.BindingFlags.SYNC_CREATE);
+            bind_property ("show-labels", view, "show-labels", GLib.BindingFlags.SYNC_CREATE);
+            bind_property ("show-balance", view, "show-balance", GLib.BindingFlags.SYNC_CREATE);
+            bind_property ("monitor-nb-bars", view, "monitor-nb-bars", GLib.BindingFlags.SYNC_CREATE);
             view.show_all ();
             add (view);
         }
     }
 
-    private void on_channel_removed (Channel inChannel) {
+    private void on_channel_removed (Channel in_channel) {
         get_children ().foreach ((child) => {
             unowned ChannelView? view = child as ChannelView;
-            if (view != null && view.channel == inChannel) {
+            if (view != null && view.channel == in_channel) {
                 child.destroy ();
             }
         });

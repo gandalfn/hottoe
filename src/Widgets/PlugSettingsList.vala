@@ -19,7 +19,7 @@
  */
 
 public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
-    private Gtk.ListBox m_Plugs;
+    private Gtk.ListBox m_plugs;
 
     public unowned Device device { get; construct; }
     public Direction direction { get; construct; }
@@ -37,9 +37,9 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
         header_label.halign = Gtk.Align.START;
         header_label.get_style_context ().add_class ("h4");
 
-        m_Plugs = new Gtk.ListBox ();
-        m_Plugs.selection_mode = Gtk.SelectionMode.NONE;
-        scrolled.add (m_Plugs);
+        m_plugs = new Gtk.ListBox ();
+        m_plugs.selection_mode = Gtk.SelectionMode.NONE;
+        scrolled.add (m_plugs);
 
         var add_button = new Gtk.Button.from_icon_name ("list-add-symbolic", Gtk.IconSize.MENU);
         add_button.tooltip_text = _("Add Client…");
@@ -64,58 +64,62 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
         device.manager.plug_removed.connect (on_plug_removed);
     }
 
-    public PlugSettingsList (Device inDevice, Direction inDirection) {
+    public PlugSettingsList (Device in_device, Direction in_direction) {
         GLib.Object (
-            device: inDevice,
-            direction: inDirection
+            device: in_device,
+            direction: in_direction
         );
     }
 
-    private void add_plug (Plug inPlug) {
-        if (inPlug.client != null && !inPlug.client.is_mine && inPlug.channel != null && inPlug.channel in device && inPlug.direction in direction) {
+    private void add_plug (Plug in_plug) {
+        if (in_plug.client != null && !in_plug.client.is_mine &&
+            in_plug.channel != null && in_plug.channel in device &&
+            in_plug.direction in direction) {
             bool found = false;
-            foreach (var child in m_Plugs.get_children ()) {
+            foreach (var child in m_plugs.get_children ()) {
                 unowned PlugSettingsRow? row = ((Gtk.ListBoxRow) child).get_child () as PlugSettingsRow;
-                if (row != null && row.plug == inPlug) {
+                if (row != null && row.plug == in_plug) {
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                PlugSettingsRow row  = new PlugSettingsRow (inPlug);
+                PlugSettingsRow row = new PlugSettingsRow (in_plug);
                 row.margin_bottom = 12;
                 row.show_all ();
-                m_Plugs.add (row);
+                m_plugs.add (row);
             }
         }
     }
 
-    private void remove_plug (Plug inPlug) {
-        foreach (unowned Gtk.Widget? child in m_Plugs.get_children ()) {
+    private void remove_plug (Plug in_plug) {
+        foreach (unowned Gtk.Widget? child in m_plugs.get_children ()) {
             unowned PlugSettingsRow? row = ((Gtk.ListBoxRow) child).get_child () as PlugSettingsRow;
-            if (row != null && row.plug == inPlug) {
+            if (row != null && row.plug == in_plug) {
                 child.destroy ();
                 break;
             }
         }
     }
 
-    private void on_plug_added (Plug inPlug) {
-        inPlug.notify["channel"].connect (on_plug_channel_changed);
+    private void on_plug_added (Plug in_plug) {
+        in_plug.notify["channel"].connect (on_plug_channel_changed);
 
-        add_plug (inPlug);
+        add_plug (in_plug);
     }
 
-    private void on_plug_removed (Plug inPlug) {
-        inPlug.notify["channel"].disconnect (on_plug_channel_changed);
+    private void on_plug_removed (Plug in_plug) {
+        in_plug.notify["channel"].disconnect (on_plug_channel_changed);
 
-        remove_plug (inPlug);
+        remove_plug (in_plug);
     }
 
-    private void on_plug_channel_changed (GLib.Object inObject, GLib.ParamSpec? inSpec) {
-        unowned Plug plug = (Plug)inObject;
+    private void on_plug_channel_changed (GLib.Object in_object, GLib.ParamSpec? in_spec) {
+        unowned Plug plug = (Plug)in_object;
 
-        if (plug.client != null && !plug.client.is_mine && plug.channel != null && plug.channel in device && plug.direction in direction) {
+        if (plug.client != null && !plug.client.is_mine &&
+            plug.channel != null && plug.channel in device &&
+            plug.direction in direction) {
             add_plug (plug);
         } else {
             remove_plug (plug);

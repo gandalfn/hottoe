@@ -19,53 +19,53 @@
  */
 
 public class PantheonSoundControl.Widgets.ClientList : Gtk.Grid {
-    private Gtk.Revealer m_Content;
-    private Gtk.Grid m_ListGrid;
+    private Gtk.Revealer m_content;
+    private Gtk.Grid m_list_grid;
 
     public unowned Manager manager { get; construct; }
 
-    public ClientList (Manager inManager) {
+    public ClientList (Manager in_manager) {
         Object (
-            manager: inManager
+            manager: in_manager
         );
     }
 
     construct {
         orientation = Gtk.Orientation.VERTICAL;
 
-        m_ListGrid = new Gtk.Grid ();
-        m_ListGrid.orientation = Gtk.Orientation.VERTICAL;
+        m_list_grid = new Gtk.Grid ();
+        m_list_grid.orientation = Gtk.Orientation.VERTICAL;
 
         var content_area = new Gtk.Grid ();
         content_area.orientation = Gtk.Orientation.VERTICAL;
-        content_area.add (m_ListGrid);
+        content_area.add (m_list_grid);
         content_area.add (new Wingpanel.Widgets.Separator ());
 
-        m_Content = new Gtk.Revealer ();
-        m_Content.reveal_child = false;
-        m_Content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
-        m_Content.add (content_area);
+        m_content = new Gtk.Revealer ();
+        m_content.reveal_child = false;
+        m_content.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+        m_content.add (content_area);
 
-        add (m_Content);
+        add (m_content);
 
         manager.client_added.connect (on_client_added);
         manager.client_removed.connect (on_client_removed);
     }
 
-    private void on_client_added (Client inClient) {
-        var view = new ClientView (inClient);
+    private void on_client_added (Client in_client) {
+        var view = new ClientView (in_client);
         view.hexpand = true;
         view.show_all ();
-        m_ListGrid.add (view);
+        m_list_grid.add (view);
 
         view.notify["active"].connect (on_client_active_changed);
         on_client_active_changed ();
     }
 
-    private void on_client_removed (Client inClient) {
-        m_ListGrid.get_children ().foreach ((child) => {
+    private void on_client_removed (Client in_client) {
+        m_list_grid.get_children ().foreach ((child) => {
             unowned ClientView? view = child as ClientView;
-            if (view != null && view.client == inClient) {
+            if (view != null && view.client == in_client) {
                 child.destroy ();
             }
         });
@@ -74,14 +74,14 @@ public class PantheonSoundControl.Widgets.ClientList : Gtk.Grid {
     }
 
     private void on_client_active_changed () {
-        bool viewVisible = false;
+        bool view_visible = false;
 
-        m_ListGrid.get_children ().foreach ((child) => {
+        m_list_grid.get_children ().foreach ((child) => {
             unowned ClientView? view = child as ClientView;
             if (view != null && view.active) {
-                viewVisible = true;
+                view_visible = true;
             }
         });
-        m_Content.reveal_child = viewVisible;
+        m_content.reveal_child = view_visible;
     }
 }

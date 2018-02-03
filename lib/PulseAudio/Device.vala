@@ -20,154 +20,153 @@
  */
 
 internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Device {
-    private Gee.TreeSet<Port> m_Ports;
-    private Gee.ArrayList<Profile> m_Profiles;
-    private unowned Profile? m_ActiveProfile;
+    private Gee.TreeSet<Port> m_ports;
+    private Gee.ArrayList<Profile> m_profiles;
+    private unowned Profile? m_active_profile;
 
     public uint32 index { get; construct; default = 0U; }
 
     public override bool active {
         get {
-            return m_Ports.size > 0;
+            return m_ports.size > 0;
         }
     }
 
     public override unowned PantheonSoundControl.Profile? active_profile {
         get {
-            return m_ActiveProfile;
+            return m_active_profile;
         }
         set {
-            if (value != m_ActiveProfile) {
-                if (m_ActiveProfile != null) {
-                    m_ActiveProfile.weak_unref (on_active_profile_destroyed);
+            if (value != m_active_profile) {
+                if (m_active_profile != null) {
+                    m_active_profile.weak_unref (on_active_profile_destroyed);
                 }
 
                 if (value != null) {
                     if (get_profile (value.name) != null) {
                         debug ("%s set default profile %s", name, value.name);
 
-                        m_ActiveProfile = (Profile?)value;
-                        m_ActiveProfile.weak_ref (on_active_profile_destroyed);
+                        m_active_profile = (Profile?)value;
+                        m_active_profile.weak_ref (on_active_profile_destroyed);
                     } else {
                         critical ("Invalid profile %s", value.name);
 
-                        m_ActiveProfile = null;
+                        m_active_profile = null;
                     }
                 } else {
                     debug ("%s set default profile off", name);
-                    m_ActiveProfile = null;
+                    m_active_profile = null;
                 }
 
-                ((Manager)manager).operations.set_card_profile_by_index (index, m_ActiveProfile == null ? "off" : m_ActiveProfile.name);
+                var profile_name = m_active_profile == null ? "off" : m_active_profile.name;
+                ((Manager)manager).operations.set_card_profile_by_index (index, profile_name);
             }
         }
     }
 
     construct {
-        m_Ports = new Gee.TreeSet<Port> (Port.compare);
-        m_Profiles = new Gee.ArrayList<Profile> ();
-        m_ActiveProfile = null;
+        m_ports = new Gee.TreeSet<Port> (Port.compare);
+        m_profiles = new Gee.ArrayList<Profile> ();
+        m_active_profile = null;
     }
 
-    public Device (Manager inManager, global::PulseAudio.CardInfo inInfo) {
-        var description = inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_DESCRIPTION);
-        var display_name = inInfo.proplist.gets ("alsa.card_name");
+    public Device (Manager in_manager, global::PulseAudio.CardInfo in_info) {
+        var description = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_DESCRIPTION);
+        var display_name = in_info.proplist.gets ("alsa.card_name");
         if (display_name == null) {
             display_name = description;
         }
         Object (
-            manager: inManager,
-            index: inInfo.index,
-            name: inInfo.name,
+            manager: in_manager,
+            index: in_info.index,
+            name: in_info.name,
+            icon_name: in_info.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME),
             display_name: display_name,
-            description: description,
-            icon_name: inInfo.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME)
+            description: description
         );
 
         debug (@"Create device $(name) index: $(index)");
 
-        update (inInfo);
+        update (in_info);
     }
 
     ~Device () {
-        if (m_ActiveProfile != null) {
-            m_ActiveProfile.weak_unref (on_active_profile_destroyed);
-            m_ActiveProfile = null;
+        if (m_active_profile != null) {
+            m_active_profile.weak_unref (on_active_profile_destroyed);
+            m_active_profile = null;
         }
     }
 
-    public bool update (global::PulseAudio.CardInfo inInfo) {
+    public bool update (global::PulseAudio.CardInfo in_info) {
         bool updated = false;
 
-        m_Profiles.clear ();
+        m_profiles.clear ();
 
-        foreach (unowned global::PulseAudio.CardProfileInfo? profileInfo in inInfo.profiles) {
-            var profileName = profileInfo.name;
-            Profile profile = m_Profiles.first_match ((p) => {
-                return p.name == profileName;
+        foreach (unowned global::PulseAudio.CardProfileInfo? profileInfo in in_info.profiles) {
+            var profile_name = profileInfo.name;
+            Profile profile = m_profiles.first_match ((p) => {
+                return p.name == profile_name;
             });
             if (profile != null && !profileInfo.available) {
-                m_Profiles.remove (profile);
-            }
-            else if (profile == null && profileInfo.available) {
+                m_profiles.remove (profile);
+            } else if (profile == null && profileInfo.available) {
                 profile = new Profile (profileInfo);
-                m_Profiles.add (profile);
+                m_profiles.add (profile);
             }
         }
 
-        m_Profiles.sort (Profile.compare);
+        m_profiles.sort (Profile.compare);
 
-        int oldSize = m_Ports.size;
-        foreach (unowned global::PulseAudio.CardPortInfo? portInfo in inInfo.ports) {
-            var portName = portInfo.name;
-            Port port = m_Ports.first_match ((p) => {
-                return p.name == portName;
+        int old_size = m_ports.size;
+        foreach (unowned global::PulseAudio.CardPortInfo? portInfo in in_info.ports) {
+            var port_name = portInfo.name;
+            Port port = m_ports.first_match ((p) => {
+                return p.name == port_name;
             });
             if (port != null && portInfo.available == global::PulseAudio.PortAvailable.NO) {
-                m_Ports.remove (port);
+                m_ports.remove (port);
                 updated |= true;
-            }
-            else if (port == null && portInfo.available != global::PulseAudio.PortAvailable.NO) {
+            } else if (port == null && portInfo.available != global::PulseAudio.PortAvailable.NO) {
                 port = new Port (this, portInfo);
-                m_Ports.add (port);
+                m_ports.add (port);
                 updated |= true;
             }
         }
 
-        int newSize = m_Ports.size;
-        if (oldSize != newSize && (oldSize == 0 || newSize == 0)) {
+        int newSize = m_ports.size;
+        if (old_size != newSize && (old_size == 0 || newSize == 0)) {
             notify_property ("active");
         }
 
-        bool foundProfile = false;
-        if (inInfo.active_profile != null) {
-            foreach (var profile in m_Profiles) {
-                if (profile.name == inInfo.active_profile.name) {
-                    bool profileUpdated = m_ActiveProfile != profile;
+        bool found_profile = false;
+        if (in_info.active_profile != null) {
+            foreach (var profile in m_profiles) {
+                if (profile.name == in_info.active_profile.name) {
+                    bool profile_updated = m_active_profile != profile;
 
-                    updated |= profileUpdated;
+                    updated |= profile_updated;
 
-                    if (m_ActiveProfile != null) {
-                        m_ActiveProfile.weak_unref (on_active_profile_destroyed);
+                    if (m_active_profile != null) {
+                        m_active_profile.weak_unref (on_active_profile_destroyed);
                     }
-                    m_ActiveProfile = (Profile)profile;
-                    m_ActiveProfile.weak_ref (on_active_profile_destroyed);
-                    foundProfile = true;
+                    m_active_profile = (Profile)profile;
+                    m_active_profile.weak_ref (on_active_profile_destroyed);
+                    found_profile = true;
 
-                    if (profileUpdated) {
+                    if (profile_updated) {
                         notify_property ("active-profile");
                     }
                     break;
                 }
             }
         }
-        if (!foundProfile) {
-            if (m_ActiveProfile != null) {
-                m_ActiveProfile.weak_unref (on_active_profile_destroyed);
+        if (!found_profile) {
+            if (m_active_profile != null) {
+                m_active_profile.weak_unref (on_active_profile_destroyed);
             }
-            m_ActiveProfile = null;
+            m_active_profile = null;
 
-            if (inInfo.active_profile != null && inInfo.active_profile.name != "off") {
+            if (in_info.active_profile != null && in_info.active_profile.name != "off") {
                 debug ("%s set default profile off", name);
                 ((Manager)manager).operations.set_card_profile_by_index (index, "off");
                 updated = true;
@@ -181,19 +180,19 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
         return updated;
     }
 
-    public override PantheonSoundControl.Profile get_profile (string inName) {
-        return m_Profiles.first_match ((p) => {
-            return p.name == inName;
+    public override PantheonSoundControl.Profile get_profile (string in_name) {
+        return m_profiles.first_match ((p) => {
+            return p.name == in_name;
         });
     }
 
     public override Profile[] get_profiles () {
-        return m_Profiles.to_array ();
+        return m_profiles.to_array ();
     }
 
     public override Port[] get_output_ports () {
         Port[] ret = {};
-        foreach (var port in m_Ports) {
+        foreach (var port in m_ports) {
             if (port.direction == PantheonSoundControl.Direction.OUTPUT) {
                 ret += port;
             }
@@ -203,7 +202,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
 
     public override Port[] get_input_ports () {
         Port[] ret = {};
-        foreach (var port in m_Ports) {
+        foreach (var port in m_ports) {
             if (port.direction == PantheonSoundControl.Direction.INPUT) {
                 ret += port;
             }
@@ -211,29 +210,29 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
         return ret;
     }
 
-    public override bool contains (PantheonSoundControl.Channel inChannel) {
-        return inChannel.port != null && (Port)inChannel.port in m_Ports;
+    public override bool contains (PantheonSoundControl.Channel in_channel) {
+        return in_channel.port != null && (Port)in_channel.port in m_ports;
     }
 
     public override string to_string () {
         string ret = @"device: $(index), name: $(name), description: $(description) icon_name: $(icon_name)\n";
-        foreach (var port in m_Ports) {
+        foreach (var port in m_ports) {
             ret += @"$(port)\n";
         }
-        foreach (var profile in m_Profiles) {
+        foreach (var profile in m_profiles) {
             ret += @"$(profile)\n";
         }
-        if (m_ActiveProfile != null) {
-            ret += @"active profile:\n$(m_ActiveProfile)\n";
+        if (m_active_profile != null) {
+            ret += @"active profile:\n$(m_active_profile)\n";
         }
         return ret;
     }
 
-    private void on_active_profile_destroyed (GLib.Object inObject) {
-        m_ActiveProfile = null;
+    private void on_active_profile_destroyed (GLib.Object in_object) {
+        m_active_profile = null;
     }
 
-    public static int compare (Device inA, Device inB) {
-        return (int)inA.index - (int)inB.index;
+    public static int compare (Device in_a, Device in_b) {
+        return (int)in_a.index - (int)in_b.index;
     }
 }
