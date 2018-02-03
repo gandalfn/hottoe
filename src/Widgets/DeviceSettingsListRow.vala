@@ -72,8 +72,8 @@ private class PantheonSoundControl.Widgets.DeviceSettingsListRow : Gtk.ListBoxRo
         page.device.bind_property ("active", m_content, "reveal_child", GLib.BindingFlags.SYNC_CREATE);
         page.device.manager.bind_property ("default-output-device", m_status_icon, "icon-name",
                                            GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
-            unowned Device? defaultDevice = (Device)f;
-            if (defaultDevice == page.device) {
+            unowned Device? default_device = (Device)f;
+            if (default_device == page.device) {
                 t.set_string ("account-logged-in");
                 m_status_icon.show ();
             } else {
