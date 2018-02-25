@@ -20,8 +20,6 @@ public class PantheonSoundControl.Widgets.MaxWidthLabel : Gtk.Label {
 
     public MaxWidthLabel (int in_max_width) {
         max_width = in_max_width;
-        // Fix this when on gtk 3.16
-        this.set ("xalign ", 0);
     }
 
     public override void get_preferred_width (out int out_minimum_width, out int out_natural_width) {
