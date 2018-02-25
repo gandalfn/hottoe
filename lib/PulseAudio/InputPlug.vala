@@ -75,7 +75,7 @@ internal class PantheonSoundControl.PulseAudio.InputPlug : Plug {
                     m_channel.weak_unref (on_channel_destroyed);
                     m_channel = null;
                 }
-                if (m_channel != null && value != null) {
+                if (value != null) {
                     ((Manager)manager).operations.move_source_output_by_index (index, ((Channel) value).index, (s) => {
                         if (s) {
                             m_channel = (Channel)value;
