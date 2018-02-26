@@ -2,7 +2,7 @@
 Name=Pantheon Sound Control
 GenericName=Pantheon Sound Control
 Comment=Pantheon Sound Devices control
-Categories=Sound;
+Categories=AudioVideo;Audio;Mixer;
 Exec=switchboard settings://sound-devices
 Icon=audio-card
 Terminal=false
