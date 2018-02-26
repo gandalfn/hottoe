@@ -1,7 +1,7 @@
 wingpanel_dep = dependency('wingpanel-2.0')
 
 libpantheon_sound_control_widgets = static_library (
-    meson.project_name() + '-widgets',
+    meson.project_name() + '.widgets',
     [
         'Widgets/MaxWidthLabel.vala',
         'Widgets/Icon.vala',
@@ -28,7 +28,7 @@ libpantheon_sound_control_widgets = static_library (
 )
 
 shared_module(
-    'sound-devices-indicator',
+    meson.project_name() + '.indicator',
     [
         'Indicator.vala',
         'Widgets/IndicatorIcon.vala',
@@ -56,7 +56,7 @@ shared_module(
 switchboard_dep = dependency('switchboard-2.0')
 
 shared_module(
-    'sound-devices-plug',
+    meson.project_name() + '.plug',
     [
         'SwitchboardPlug.vala',
         'Widgets/DeviceSettingsView.vala',

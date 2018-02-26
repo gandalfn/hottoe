@@ -1,4 +1,4 @@
-project('pantheon-sound-control', [ 'c', 'vala' ], version: '0.1.0')
+project('com.github.gandalfn.pantheon-sound-control', [ 'c', 'vala' ], version: '0.1.0')
 
 gettext_name = meson.project_name()
 
@@ -15,3 +15,4 @@ subdir('lib')
 subdir('src')
 subdir('test')
 subdir('po')
+subdir('data')

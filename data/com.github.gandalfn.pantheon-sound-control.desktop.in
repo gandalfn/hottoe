@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Pantheon Sound Control
+GenericName=Pantheon Sound Control
+Comment=Pantheon Sound Devices control
+Categories=Sound;
+Exec=switchboard settings://sound-devices
+Icon=audio-card
+Terminal=false
+Type=Application
+X-GNOME-Gettext-Domain=pantheon-sound-control
+Keywords=Sound;Devies;Control;
