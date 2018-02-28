@@ -20,6 +20,7 @@
 
 public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
     private Gtk.ListBox m_plugs;
+    private PlugChooser m_plugs_chooser;
 
     public unowned Device device { get; construct; }
     public Direction direction { get; construct; }
@@ -43,6 +44,15 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
 
         var add_button = new Gtk.Button.from_icon_name ("list-add-symbolic", Gtk.IconSize.MENU);
         add_button.tooltip_text = _("Add Client…");
+
+        m_plugs_chooser = new PlugChooser(add_button, device, direction);
+        m_plugs_chooser.modal = true;
+        m_plugs_chooser.plug_selected.connect(on_plug_selected);
+        add_button.clicked.connect(() => {
+            if (m_plugs_chooser.available > 0) {
+                m_plugs_chooser.show_all();
+            }
+        });
 
         var toolbar = new Gtk.ActionBar ();
         toolbar.get_style_context ().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
@@ -123,6 +133,14 @@ public class PantheonSoundControl.Widgets.PlugSettingsList : Gtk.Grid {
             add_plug (plug);
         } else {
             remove_plug (plug);
+        }
+    }
+
+    private void on_plug_selected(Plug in_plug) {
+        if (direction == Direction.OUTPUT) {
+            in_plug.channel = device.get_output_channels()[0];
+        } else {
+            in_plug.channel = device.get_input_channels()[0];
         }
     }
 }

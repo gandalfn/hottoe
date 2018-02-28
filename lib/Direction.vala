@@ -30,7 +30,7 @@ public enum PantheonSoundControl.Direction {
         if (this == INPUT) {
             ret += "input";
         }
-        if (this == INPUT) {
+        if (this == OUTPUT) {
             ret += ret != "" ? " | output" : "output";
         }
 

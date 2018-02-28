@@ -1,5 +1,5 @@
 shared_module(
-    meson.project_name() + '.pulseaudio-backend',
+    'pulseaudio-backend',
     [
         'Operations.vala',
         'Manager.vala',
