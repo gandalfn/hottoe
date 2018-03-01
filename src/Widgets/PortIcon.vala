@@ -78,7 +78,11 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
             }
 
             if (use_symbolic) {
-                icon_name += "-symbolic";
+                if (icon_name == "audio-speakers") {
+                    icon_name = "audio-card-symbolic";
+                } else {
+                    icon_name += "-symbolic";
+                }
             }
 
             return new GLib.ThemedIcon.with_default_fallbacks (icon_name);
@@ -119,7 +123,11 @@ public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widget
         }
 
         if (use_symbolic) {
-            icon_name += "-symbolic";
+            if (icon_name == "audio-speakers") {
+                icon_name = "audio-card-symbolic";
+            } else {
+                icon_name += "-symbolic";
+            }
         }
 
         inout_to.set_string (icon_name);
