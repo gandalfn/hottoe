@@ -18,6 +18,10 @@ appdata_file = i18n.merge_file(
     po_dir: join_paths(meson.source_root(), 'po')
 )
 
+install_data('com.github.gandalfn.pantheon-sound-control',
+             install_dir : get_option('bindir'),
+             install_mode : ['rwxr-xr-x'])
+
 test(
     'Validate desktop file',
     find_program('desktop-file-validate'),

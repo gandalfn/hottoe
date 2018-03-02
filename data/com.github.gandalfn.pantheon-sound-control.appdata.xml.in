@@ -25,6 +25,7 @@
         </release>
     </releases>
     <provides>
+        <binary>com.github.gandalfn.pantheon-sound-control</binary>
         <library>libcom.github.gandalfn.pantheon-sound-control.so.0</library>
     </provides>
     <developer_name>Nicolas Bruguier</developer_name>
