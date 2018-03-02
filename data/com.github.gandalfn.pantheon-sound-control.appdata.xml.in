@@ -18,7 +18,7 @@
         </p>
     </description>
     <releases>
-        <release version="0.1.5" date="2018-03-02" urgency="medium">
+        <release version="0.1.6" date="2018-03-02" urgency="medium">
             <description>
                 <p>First release.</p>
             </description>
