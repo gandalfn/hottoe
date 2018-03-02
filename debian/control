@@ -1,0 +1,29 @@
+
+Source: com.github.gandalfn.pantheon-sound-control
+Section: x11
+Priority: extra
+Maintainer: Nicolas Bruguier <gandalfn@club-internet.fr>
+Build-Depends: debhelper (>= 9),
+               libgranite-dev,
+               libgtk-3-dev,
+               libwingpanel-2.0-dev,
+               libswitchboard-2.0-dev,
+               libwnck-3-dev,
+               libgee-0.8-dev,
+               libpulse-dev,
+               libcanberra-gtk-dev,
+               meson,
+               valac
+Standards-Version: 3.9.6
+
+Package: com.github.gandalfn.pantheon-sound-control
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Pantheon Sound Devices Controller
+ Pantheon Sound Control is a simple Elementary based volume
+ control tool (mixer).In contrast to classic mixer tools this
+ one allows you to control both the volume of hardware devices
+ and of each playback stream separately. It also allows you to
+ redirect a playback stream to another output device without
+ interrupting playback.
+.
