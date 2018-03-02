@@ -26,4 +26,3 @@ Description: Pantheon Sound Devices Controller
  and of each playback stream separately. It also allows you to
  redirect a playback stream to another output device without
  interrupting playback.
-.
