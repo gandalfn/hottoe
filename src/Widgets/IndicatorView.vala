@@ -38,17 +38,6 @@ public class PantheonSoundControl.Widgets.IndicatorView : Gtk.Box {
 
         add (m_client_list);
 
-        var scan_button = new Wingpanel.Widgets.Button (_("Scan Sound Devices…"));
-        scan_button.clicked.connect (() => {
-            try {
-                GLib.Process.spawn_command_line_async ("xrandr");
-            }
-            catch (GLib.Error err) {
-                critical (err.message);
-            }
-        });
-        add (scan_button);
-
         var settings_button = new Wingpanel.Widgets.Button (_("Sound Devices Settings…"));
         add (settings_button);
         settings_button.clicked.connect (() => {
