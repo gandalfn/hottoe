@@ -22,14 +22,14 @@ install_data('com.github.gandalfn.pantheon-sound-control',
              install_dir : get_option('bindir'),
              install_mode : ['rwxr-xr-x'])
 
-test(
-    'Validate desktop file',
-    find_program('desktop-file-validate'),
-    args: desktop_file
-)
+# test(
+#     'Validate desktop file',
+#     find_program('desktop-file-validate'),
+#     args: desktop_file
+# )
 
-test(
-    'Validate appdata file',
-    find_program('appstreamcli'),
-    args: ['validate', appdata_file]
-)
+# test(
+#     'Validate appdata file',
+#     find_program('appstreamcli'),
+#     args: ['validate', appdata_file]
+# )
