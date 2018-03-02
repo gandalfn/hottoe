@@ -18,6 +18,16 @@
         </p>
     </description>
     <releases>
+        <release version="0.1.2" date="2018-03-02" urgency="medium">
+            <description>
+                <p>Add script which launch switchboard sound device page.</p>
+            </description>
+        </release>
+        <release version="0.1.1" date="2018-03-02" urgency="medium">
+            <description>
+                <p>First release.</p>
+            </description>
+        </release>
         <release version="0.1.0" date="2018-02-26" urgency="medium">
             <description>
                 <p>Initial release.</p>
