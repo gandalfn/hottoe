@@ -22,6 +22,9 @@ install_data('com.github.gandalfn.pantheon-sound-control',
              install_dir : get_option('bindir'),
              install_mode : ['rwxr-xr-x'])
 
+install_data('com.github.gandalfn.pantheon-sound-control.svg',
+             install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', '64x64', 'apps'))
+
 # test(
 #     'Validate desktop file',
 #     find_program('desktop-file-validate'),
