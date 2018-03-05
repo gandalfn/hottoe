@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class PantheonSoundControl.PulseAudio.Operations : GLib.Object {
+internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
     public abstract class Operation : GLib.Object {
         public unowned Operations parent;
         public unowned Operation? prev;

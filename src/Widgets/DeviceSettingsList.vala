@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.DeviceSettingsList : Gtk.ScrolledWindow {
+public class SukaHottoe.Widgets.DeviceSettingsList : Gtk.ScrolledWindow {
     private Gtk.ListBox m_list_box;
 
     public unowned Manager manager { get; construct; }

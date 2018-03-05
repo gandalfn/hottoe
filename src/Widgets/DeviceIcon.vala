@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.DeviceIcon : PantheonSoundControl.Widgets.Icon {
+public class SukaHottoe.Widgets.DeviceIcon : SukaHottoe.Widgets.Icon {
     public unowned Device device { get; construct; }
 
     public override GLib.Icon gicon {

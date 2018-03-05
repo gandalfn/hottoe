@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.IndicatorIcon : Gtk.Grid {
+public class SukaHottoe.Widgets.IndicatorIcon : Gtk.Grid {
     private PortIcon m_icon;
     private unowned GLib.Binding m_channel_bind;
 

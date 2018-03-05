@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.VolumeMeter : Gtk.LevelBar {
+public class SukaHottoe.Widgets.VolumeMeter : Gtk.LevelBar {
     private int m_current;
     private double m_levels[5];
     private Monitor m_monitor;

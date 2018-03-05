@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.ChannelView : Gtk.Grid {
+public class SukaHottoe.Widgets.ChannelView : Gtk.Grid {
     private Gtk.Scale m_volume;
     private Gtk.Scale m_balance;
     private bool m_init;

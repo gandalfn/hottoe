@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundControl.Plug {
-    internal class Monitor : PantheonSoundControl.Plug.Monitor, PantheonSoundControl.PulseAudio.Monitor {
+internal abstract class SukaHottoe.PulseAudio.Plug : SukaHottoe.Plug {
+    internal class Monitor : SukaHottoe.Plug.Monitor, SukaHottoe.PulseAudio.Monitor {
         private bool m_active;
         private global::PulseAudio.Stream m_stream;
 
@@ -68,7 +68,7 @@ internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundCont
     public global::PulseAudio.CVolume? cvolume { get; set; default = null; }
     public global::PulseAudio.ChannelMap? channel_map { get; set; default = null; }
 
-    public override unowned PantheonSoundControl.Client client {
+    public override unowned SukaHottoe.Client client {
         get {
             return m_client;
         }
@@ -86,7 +86,7 @@ internal abstract class PantheonSoundControl.PulseAudio.Plug : PantheonSoundCont
         }
     }
 
-    public override PantheonSoundControl.Plug.Monitor create_monitor () {
+    public override SukaHottoe.Plug.Monitor create_monitor () {
         return new Monitor (this);
     }
 

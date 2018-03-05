@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Client {
+internal class SukaHottoe.PulseAudio.Client : SukaHottoe.Client {
     private Gee.TreeSet<unowned Plug> m_plugs;
 
     public uint32 index { get; construct; }
@@ -27,7 +27,7 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
 
     public override bool is_mine {
         get {
-            return pid == Posix.getpid () || id == "com.github.gandalfn.pantheon-sound-control";
+            return pid == Posix.getpid () || id == "com.github.gandalfn.suka-hottoe";
         }
     }
 
@@ -51,11 +51,11 @@ internal class PantheonSoundControl.PulseAudio.Client : PantheonSoundControl.Cli
         );
     }
 
-    public override void plug_added (PantheonSoundControl.Plug in_plug) {
+    public override void plug_added (SukaHottoe.Plug in_plug) {
         m_plugs.add ((Plug) in_plug);
     }
 
-    public override void plug_removed (PantheonSoundControl.Plug in_plug) {
+    public override void plug_removed (SukaHottoe.Plug in_plug) {
         m_plugs.remove ((Plug) in_plug);
     }
 

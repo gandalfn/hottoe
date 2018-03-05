@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Device {
+internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
     private Gee.TreeSet<Port> m_ports;
     private Gee.ArrayList<Profile> m_profiles;
     private unowned Profile? m_active_profile;
@@ -32,7 +32,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
         }
     }
 
-    public override unowned PantheonSoundControl.Profile? active_profile {
+    public override unowned SukaHottoe.Profile? active_profile {
         get {
             return m_active_profile;
         }
@@ -180,7 +180,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
         return updated;
     }
 
-    public override PantheonSoundControl.Profile get_profile (string in_name) {
+    public override SukaHottoe.Profile get_profile (string in_name) {
         return m_profiles.first_match ((p) => {
             return p.name == in_name;
         });
@@ -193,7 +193,7 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
     public override Port[] get_output_ports () {
         Port[] ret = {};
         foreach (var port in m_ports) {
-            if (port.direction == PantheonSoundControl.Direction.OUTPUT) {
+            if (port.direction == SukaHottoe.Direction.OUTPUT) {
                 ret += port;
             }
         }
@@ -203,14 +203,14 @@ internal class PantheonSoundControl.PulseAudio.Device : PantheonSoundControl.Dev
     public override Port[] get_input_ports () {
         Port[] ret = {};
         foreach (var port in m_ports) {
-            if (port.direction == PantheonSoundControl.Direction.INPUT) {
+            if (port.direction == SukaHottoe.Direction.INPUT) {
                 ret += port;
             }
         }
         return ret;
     }
 
-    public override bool contains (PantheonSoundControl.Channel in_channel) {
+    public override bool contains (SukaHottoe.Channel in_channel) {
         return in_channel.port != null && (Port)in_channel.port in m_ports;
     }
 

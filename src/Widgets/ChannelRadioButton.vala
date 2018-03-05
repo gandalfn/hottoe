@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.ChannelRadioButton : Wingpanel.Widgets.Container {
+public class SukaHottoe.Widgets.ChannelRadioButton : Wingpanel.Widgets.Container {
     private bool m_active;
     private Gtk.Image m_check_icon;
 

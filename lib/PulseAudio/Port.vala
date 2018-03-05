@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port {
+internal class SukaHottoe.PulseAudio.Port : SukaHottoe.Port {
     public Port (Device in_device, global::PulseAudio.CardPortInfo in_info) {
         var icon_name = in_info.proplist.gets (global::PulseAudio.Proplist.PROP_DEVICE_ICON_NAME);
         if (icon_name == null) {
@@ -47,12 +47,12 @@ internal class PantheonSoundControl.PulseAudio.Port : PantheonSoundControl.Port 
     private static Direction direction_from_pa_direction (global::PulseAudio.Direction in_direction) {
         switch (in_direction) {
             case global::PulseAudio.Direction.INPUT:
-                return PantheonSoundControl.Direction.INPUT;
+                return SukaHottoe.Direction.INPUT;
 
             case global::PulseAudio.Direction.OUTPUT:
-                return PantheonSoundControl.Direction.OUTPUT;
+                return SukaHottoe.Direction.OUTPUT;
         }
 
-        return PantheonSoundControl.Direction.OUTPUT;
+        return SukaHottoe.Direction.OUTPUT;
     }
 }

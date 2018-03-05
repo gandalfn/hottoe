@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Services.DesktopNotification : Services.Notification {
+public class SukaHottoe.Services.DesktopNotification : Services.Notification {
     private string m_id;
     private GLib.Notification m_notification;
 

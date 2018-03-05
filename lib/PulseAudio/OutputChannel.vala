@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
+internal class SukaHottoe.PulseAudio.OutputChannel : Channel {
     private bool m_is_muted;
     private double m_base_volume;
 
@@ -72,7 +72,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
     }
 
     [CCode (notify = false)]
-    public override unowned PantheonSoundControl.Port? port {
+    public override unowned SukaHottoe.Port? port {
         get {
             return m_active_port;
         }
@@ -103,7 +103,7 @@ internal class PantheonSoundControl.PulseAudio.OutputChannel : Channel {
     public OutputChannel (Manager in_manager, global::PulseAudio.SinkInfo in_sink_info) {
         GLib.Object (
             manager: in_manager,
-            direction: PantheonSoundControl.Direction.OUTPUT,
+            direction: SukaHottoe.Direction.OUTPUT,
             index: in_sink_info.index,
             monitor_index: in_sink_info.monitor_source,
             name: in_sink_info.name,

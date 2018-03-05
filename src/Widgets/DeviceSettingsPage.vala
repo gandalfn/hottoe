@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.DeviceSettingsPage : Granite.SettingsPage {
+public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
     private Gtk.Grid m_output_grid;
     private Gtk.Grid m_input_grid;
     private Gtk.StackSwitcher m_output_input_switcher;

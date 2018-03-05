@@ -1,6 +1,6 @@
-static void on_device_changed (PantheonSoundControl.Device in_device) {
+static void on_device_changed (SukaHottoe.Device in_device) {
     print (@"Device changed $(in_device)\n");
-    PantheonSoundControl.Port? hdmi_port = null;
+    SukaHottoe.Port? hdmi_port = null;
     foreach (var port in in_device.get_output_ports ()) {
         if (port.name.has_prefix ("hdmi")) {
             print (@"HDMI device !!! \n");
@@ -17,25 +17,25 @@ static void on_device_changed (PantheonSoundControl.Device in_device) {
     }
 }
 
-static void on_device_added (PantheonSoundControl.Device in_device) {
+static void on_device_added (SukaHottoe.Device in_device) {
     print (@"Device added $(in_device)\n");
     in_device.changed.connect (on_device_changed);
 }
 
-static void on_channel_changed (PantheonSoundControl.Channel in_channel) {
+static void on_channel_changed (SukaHottoe.Channel in_channel) {
     print (@"Channel changed $(in_channel)\n");
 }
 
-static void on_channel_added (PantheonSoundControl.Channel in_channel) {
+static void on_channel_added (SukaHottoe.Channel in_channel) {
     print (@"Channel added $(in_channel)\n");
     in_channel.changed.connect (on_channel_changed);
 }
 
-static void on_client_changed (PantheonSoundControl.Client in_client) {
+static void on_client_changed (SukaHottoe.Client in_client) {
     print (@"Client changed $(in_client)\n");
 }
 
-static void on_client_added (PantheonSoundControl.Client in_client) {
+static void on_client_added (SukaHottoe.Client in_client) {
     print (@"Client added $(in_client)\n");
     in_client.changed.connect (on_client_changed);
 }
@@ -46,7 +46,7 @@ static int main (string[] inArgs) {
 
     var loop = new MainLoop ();
 
-    PantheonSoundControl.Manager? mgr = PantheonSoundControl.Manager.get ("pulseaudio");
+    SukaHottoe.Manager? mgr = SukaHottoe.Manager.get ("pulseaudio");
 
     mgr.device_added.connect (on_device_added);
 

@@ -22,7 +22,7 @@
 [CCode (cname = "BACKEND_PATH")]
 extern const string BACKEND_PATH;
 
-public abstract class PantheonSoundControl.Manager : GLib.Object {
+public abstract class SukaHottoe.Manager : GLib.Object {
     private static Gee.TreeSet<Backend> s_backends = null;
 
     internal class Backend : GLib.Object {
@@ -45,7 +45,7 @@ public abstract class PantheonSoundControl.Manager : GLib.Object {
                 m_module = GLib.Module.open (path, GLib.ModuleFlags.BIND_LAZY);
                 if (m_module != null) {
                     void* function;
-                    string loadMethodName = "pantheon_sound_%s_load".printf (in_name.down ());
+                    string loadMethodName = "suka_hottoe_%s_load".printf (in_name.down ());
 
                     m_module.symbol (loadMethodName, out function);
                     if (function != null) {
@@ -57,7 +57,7 @@ public abstract class PantheonSoundControl.Manager : GLib.Object {
                     critical (GLib.Module.error ());
                 }
             } else {
-                critical ("Pantheon sound backend loading is not supported by this system!");
+                critical ("Suka Hottoe sound backend loading is not supported by this system!");
             }
         }
 

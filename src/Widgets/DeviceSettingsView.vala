@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.DeviceSettingsView : Gtk.Grid {
+public class SukaHottoe.Widgets.DeviceSettingsView : Gtk.Grid {
     private DeviceSettingsList m_devices_list;
 
     public unowned Manager manager { get; construct; }

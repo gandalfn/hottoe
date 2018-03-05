@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.DeviceChannelList : Gtk.Grid {
+public class SukaHottoe.Widgets.DeviceChannelList : Gtk.Grid {
     public unowned Device device { get; construct; }
     public Direction direction { get; construct; }
     public Icon.Size icon_size { get; set; default = Icon.Size.LARGE; }

@@ -16,7 +16,7 @@ shared_module(
         'InputPlug.vala'
     ],
     dependencies: [
-        pantheon_sound_control_dep,
+        suka_hottoe_dep,
         dependency('gio-2.0'),
         dependency('gee-0.8'),
         meson.get_compiler('vala').find_library('posix'),

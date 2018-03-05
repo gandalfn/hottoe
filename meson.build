@@ -1,4 +1,4 @@
-project('com.github.gandalfn.pantheon-sound-control', [ 'c', 'vala' ], version: '0.1.8')
+project('com.github.gandalfn.suka-hottoe', [ 'c', 'vala' ], version: '0.2.0')
 
 gettext_name = meson.project_name()
 

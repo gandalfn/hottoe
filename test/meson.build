@@ -4,7 +4,7 @@ executable(
         'TestManager.vala'
     ],
     dependencies: [
-        pantheon_sound_control_dep,
+        suka_hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0')
     ],

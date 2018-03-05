@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class PantheonSoundControl.Widgets.IndicatorView : Gtk.Box {
+public class SukaHottoe.Widgets.IndicatorView : Gtk.Box {
     private DeviceList m_device_list;
     private ClientList m_client_list;
 

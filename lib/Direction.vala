@@ -20,7 +20,7 @@
  */
 
 [Flags]
-public enum PantheonSoundControl.Direction {
+public enum SukaHottoe.Direction {
     INPUT,
     OUTPUT;
 

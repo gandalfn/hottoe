@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Services.SoundNotification : Services.Notification {
+public class SukaHottoe.Services.SoundNotification : Services.Notification {
     private Canberra.Proplist m_props;
     private unowned Channel m_channel;
 

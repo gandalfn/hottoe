@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.ClientIcon : PantheonSoundControl.Widgets.Icon {
+public class SukaHottoe.Widgets.ClientIcon : SukaHottoe.Widgets.Icon {
     private Wnck.Window m_window;
     private Gdk.Pixbuf m_window_icon;
 

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.PortIcon : PantheonSoundControl.Widgets.Icon {
+public class SukaHottoe.Widgets.PortIcon : SukaHottoe.Widgets.Icon {
     private unowned Port m_port;
     private GLib.Binding m_port_icon_bind;
     private GLib.Binding m_port_symbol_bind;

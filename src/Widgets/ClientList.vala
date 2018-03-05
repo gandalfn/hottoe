@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.ClientList : Gtk.Grid {
+public class SukaHottoe.Widgets.ClientList : Gtk.Grid {
     private Gtk.Revealer m_content;
     private Gtk.Grid m_list_grid;
 

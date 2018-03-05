@@ -1,8 +1,8 @@
 backend_path = join_paths(get_option('prefix'), get_option('libdir'), meson.project_name())
 
-libpantheon_sound_control_inc = include_directories('.')
+libsuka_hottoe_inc = include_directories('.')
 
-libpantheon_sound_control = library(
+libsuka_hottoe = library(
     meson.project_name(),
     [
         'Direction.vala',
@@ -22,18 +22,18 @@ libpantheon_sound_control = library(
         dependency('gee-0.8')
     ],
     c_args: [ '-DBACKEND_PATH="' + backend_path + '"'],
-    include_directories: libpantheon_sound_control_inc,
+    include_directories: libsuka_hottoe_inc,
     install: true,
     install_dir : [true, true, true],
     version: meson.project_version()
 )
 
-pantheon_sound_control_dep = declare_dependency(
+suka_hottoe_dep = declare_dependency(
     dependencies: [
         dependency('glib-2.0'),
         dependency('gobject-2.0')
     ],
-    link_with: libpantheon_sound_control,
-    include_directories: libpantheon_sound_control_inc)
+    link_with: libsuka_hottoe,
+    include_directories: libsuka_hottoe_inc)
 
 subdir('PulseAudio')

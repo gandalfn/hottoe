@@ -1,6 +1,6 @@
 wingpanel_dep = dependency('wingpanel-2.0')
 
-libpantheon_sound_control_widgets = static_library (
+libsuka_hottoe_widgets = static_library (
     meson.project_name() + '.widgets',
     [
         'Widgets/MaxWidthLabel.vala',
@@ -16,7 +16,7 @@ libpantheon_sound_control_widgets = static_library (
         'Services/DesktopNotification.vala'
     ],
     dependencies: [
-        pantheon_sound_control_dep,
+        suka_hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('libcanberra'),
@@ -41,12 +41,12 @@ shared_module(
         'Widgets/DeviceList.vala'
     ],
     dependencies: [
-        pantheon_sound_control_dep,
+        suka_hottoe_dep,
         wingpanel_dep,
         dependency('libwnck-3.0')
     ],
     link_with: [
-        libpantheon_sound_control_widgets
+        libsuka_hottoe_widgets
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,
@@ -69,15 +69,15 @@ shared_module(
         'Widgets/PlugChooserRow.vala'
     ],
     dependencies: [
-        pantheon_sound_control_dep,
+        suka_hottoe_dep,
         switchboard_dep,
         dependency('granite'),
         dependency('libwnck-3.0')
     ],
     link_with: [
-        libpantheon_sound_control_widgets
+        libsuka_hottoe_widgets
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,
-    install_dir : switchboard_dep.get_pkgconfig_variable('plugsdir')
+    install_dir : join_paths(switchboard_dep.get_pkgconfig_variable('plugsdir'), 'hardware')
 )

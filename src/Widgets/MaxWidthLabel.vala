@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-public class PantheonSoundControl.Widgets.MaxWidthLabel : Gtk.Label {
+public class SukaHottoe.Widgets.MaxWidthLabel : Gtk.Label {
     private int max_width;
 
     public MaxWidthLabel (int in_max_width) {

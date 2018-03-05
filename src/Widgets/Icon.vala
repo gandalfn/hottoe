@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public abstract class PantheonSoundControl.Widgets.Icon : Gtk.Grid {
+public abstract class SukaHottoe.Widgets.Icon : Gtk.Grid {
     public enum Size {
         SMALL,
         MEDIUM,

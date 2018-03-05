@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class PantheonSoundControl.Client : GLib.Object {
+public abstract class SukaHottoe.Client : GLib.Object {
     public unowned Manager manager { get; construct; }
     public string name { get; set; }
     public int pid { get; set; }

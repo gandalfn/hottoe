@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class PantheonSoundControl.Plug : GLib.Object {
-    public abstract class Monitor : PantheonSoundControl.Monitor {
+public abstract class SukaHottoe.Plug : GLib.Object {
+    public abstract class Monitor : SukaHottoe.Monitor {
         public unowned Plug? plug { get; construct; }
     }
 

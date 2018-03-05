@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class PantheonSoundControl.Widgets.PlugSettingsRow : Gtk.Grid {
+public class SukaHottoe.Widgets.PlugSettingsRow : Gtk.Grid {
     private Gtk.Scale m_volume;
 
     public unowned Plug plug { get; construct; }

@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-namespace PantheonSoundControl.PulseAudio {
-    internal class Manager : PantheonSoundControl.Manager {
+namespace SukaHottoe.PulseAudio {
+    internal class Manager : SukaHottoe.Manager {
         private global::PulseAudio.Context m_context;
         private global::PulseAudio.GLibMainLoop m_loop;
         private bool m_is_ready = false;
@@ -36,9 +36,9 @@ namespace PantheonSoundControl.PulseAudio {
 
         public Operations operations { get; private set; }
 
-        public override unowned PantheonSoundControl.Channel? default_input_channel {
+        public override unowned SukaHottoe.Channel? default_input_channel {
             get {
-                unowned PantheonSoundControl.Channel? ret = null;
+                unowned SukaHottoe.Channel? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_source_name);
                     ret = channel;
@@ -47,9 +47,9 @@ namespace PantheonSoundControl.PulseAudio {
             }
         }
 
-        public override unowned PantheonSoundControl.Channel? default_output_channel {
+        public override unowned SukaHottoe.Channel? default_output_channel {
             get {
-                unowned PantheonSoundControl.Channel? ret = null;
+                unowned SukaHottoe.Channel? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_sink_name);
                     ret = channel;
@@ -59,9 +59,9 @@ namespace PantheonSoundControl.PulseAudio {
         }
 
         [CCode (notify = false)]
-        public override unowned PantheonSoundControl.Device? default_input_device {
+        public override unowned SukaHottoe.Device? default_input_device {
             get {
-                unowned PantheonSoundControl.Device? ret = null;
+                unowned SukaHottoe.Device? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_source_name);
                     if (channel != null) {
@@ -95,9 +95,9 @@ namespace PantheonSoundControl.PulseAudio {
         }
 
         [CCode (notify = false)]
-        public override unowned PantheonSoundControl.Device? default_output_device {
+        public override unowned SukaHottoe.Device? default_output_device {
             get {
-                unowned PantheonSoundControl.Device? ret = null;
+                unowned SukaHottoe.Device? ret = null;
                 if (m_default_sink_name != null) {
                     var channel = get_channel (m_default_sink_name);
                     if (channel != null) {
@@ -167,8 +167,8 @@ namespace PantheonSoundControl.PulseAudio {
             return m_output_plugs.to_array ();
         }
 
-        public override PantheonSoundControl.Channel get_channel (string in_channel_name) {
-            PantheonSoundControl.Channel ret = m_input_channels.first_match ((c) => {
+        public override SukaHottoe.Channel get_channel (string in_channel_name) {
+            SukaHottoe.Channel ret = m_input_channels.first_match ((c) => {
                 return c.name == in_channel_name;
             });
 
@@ -202,7 +202,7 @@ namespace PantheonSoundControl.PulseAudio {
             }
 
             var props = new global::PulseAudio.Proplist ();
-            props.sets (global::PulseAudio.Proplist.PROP_APPLICATION_ID, "com.github.gandalfn.pantheon-sound-control");
+            props.sets (global::PulseAudio.Proplist.PROP_APPLICATION_ID, "com.github.gandalfn.suka-hottoe");
             m_context = new global::PulseAudio.Context (m_loop.get_api (), null, props);
             m_context.set_state_callback (context_state_callback);
 
@@ -587,8 +587,8 @@ namespace PantheonSoundControl.PulseAudio {
         }
     }
 
-    [CCode (cname = "pantheon_sound_pulseaudio_load")]
-    public static PantheonSoundControl.Manager? load () {
+    [CCode (cname = "suka_hottoe_pulseaudio_load")]
+    public static SukaHottoe.Manager? load () {
         return new Manager ();
     }
 }

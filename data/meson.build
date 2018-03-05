@@ -18,11 +18,11 @@ appdata_file = i18n.merge_file(
     po_dir: join_paths(meson.source_root(), 'po')
 )
 
-install_data('com.github.gandalfn.pantheon-sound-control',
+install_data('com.github.gandalfn.suka-hottoe',
              install_dir : get_option('bindir'),
              install_mode : ['rwxr-xr-x'])
 
-install_data('com.github.gandalfn.pantheon-sound-control.svg',
+install_data('com.github.gandalfn.suka-hottoe.svg',
              install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', '64x64', 'apps'))
 
 # test(
