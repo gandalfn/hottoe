@@ -87,7 +87,7 @@ public abstract class SukaHottoe.Manager : GLib.Object {
             s_backends = new Gee.TreeSet<Backend> (Backend.compare);
         }
 
-        var backend = s_backends.first_match ((b) => {
+        Backend backend = s_backends.first_match ((b) => {
             return b.name == in_backend;
         });
         if (backend == null) {

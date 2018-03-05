@@ -274,7 +274,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug ("Remove Card event");
-                            var device = m_devices.first_match ((d) => {
+                            Device device = m_devices.first_match ((d) => {
                                 return d.index == in_index;
                             });
                             if (device != null) {
@@ -296,7 +296,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug ("Remove sink event");
-                            var channel = m_output_channels.first_match ((d) => {
+                            Channel channel = m_output_channels.first_match ((d) => {
                                 return d.index == in_index;
                             });
                             if (channel != null) {
@@ -319,7 +319,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug ("Remove source event");
-                            var channel = m_input_channels.first_match ((d) => {
+                            Channel channel = m_input_channels.first_match ((d) => {
                                 return d.index == in_index;
                             });
                             if (channel != null) {
@@ -342,7 +342,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug (@"Remove client event $(in_index)");
-                            var client = m_clients.first_match ((c) => {
+                            Client client = m_clients.first_match ((c) => {
                                 return c.index == in_index;
                             });
                             if (client != null) {
@@ -364,7 +364,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug ("Remove sink input event");
-                            var plug = m_output_plugs.first_match ((p) => {
+                            Plug plug = m_output_plugs.first_match ((p) => {
                                 return p.index == in_index;
                             });
                             if (plug != null) {
@@ -390,7 +390,7 @@ namespace SukaHottoe.PulseAudio {
 
                         case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
                             debug ("Remove source output event");
-                            var plug = m_input_plugs.first_match ((p) => {
+                            Plug plug = m_input_plugs.first_match ((p) => {
                                 return p.index == in_index;
                             });
                             if (plug != null) {
