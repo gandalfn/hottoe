@@ -13,7 +13,9 @@ shared_module(
         'Client.vala',
         'Plug.vala',
         'OutputPlug.vala',
-        'InputPlug.vala'
+        'InputPlug.vala',
+        'Module.vala',
+        'Equalizer.vala'
     ],
     dependencies: [
         suka_hottoe_dep,
@@ -21,7 +23,8 @@ shared_module(
         dependency('gee-0.8'),
         meson.get_compiler('vala').find_library('posix'),
         dependency('libpulse'),
-        dependency('libpulse-mainloop-glib')
+        dependency('libpulse-mainloop-glib'),
+        dependency('gstreamer-1.0')
     ],
     install: true,
     install_dir: backend_path

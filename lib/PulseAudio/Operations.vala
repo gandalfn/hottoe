@@ -966,6 +966,68 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         }
     }
 
+    public class LoadModule : Operation {
+        public string name;
+        public string args;
+        public delegate void Callback (uint32 in_index);
+
+        public Callback? callback;
+
+        public LoadModule (global::PulseAudio.Context in_context,
+                           string in_name,
+                           string? in_args,
+                           owned Callback? in_callback) {
+            debug (@"load module $(in_name) operation");
+            name = in_name;
+            args = in_args;
+            callback = (owned)in_callback;
+            operation = in_context.load_module (name, args, on_finish);
+        }
+
+        public override bool compare (Operation in_other) {
+            return in_other is LoadModule &&
+                   ((LoadModule)in_other).name == name &&
+                   ((LoadModule)in_other).args == args;
+        }
+
+        private void on_finish (global::PulseAudio.Context in_context, uint32 in_index) {
+            debug (@"finish load module $(in_index)");
+            if (callback != null) {
+                callback (in_index);
+            }
+            finish ();
+        }
+    }
+
+    public class UnloadModule : Operation {
+        public delegate void Callback (bool in_success);
+
+        public uint32 index;
+        public Callback? callback;
+
+        public UnloadModule (global::PulseAudio.Context in_context,
+                             uint32 in_index,
+                             owned Callback? in_callback) {
+            debug (@"unload module $(index) operation");
+            index = in_index;
+            callback = (owned)in_callback;
+            operation = in_context.unload_module (index, on_finish);
+        }
+
+        public override bool compare (Operation in_other) {
+            return in_other is UnloadModule &&
+                   ((UnloadModule)in_other).index == index;
+        }
+
+        private void on_finish (global::PulseAudio.Context in_context, bool in_success) {
+            debug (@"finish unload module $(index)");
+            if (callback != null) {
+                callback (in_success);
+            }
+            finish ();
+        }
+    }
+
     private Operation? head;
     private unowned Operation? tail;
     private global::PulseAudio.Context context;
@@ -1133,6 +1195,14 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
 
     public void get_sink_input_info (uint32 in_index, owned GetSinkInputInfo.Callback? in_callback) {
         push (new GetSinkInputInfo (context, in_index, (owned)in_callback));
+    }
+
+    public void load_module (string in_name, string? in_args, owned LoadModule.Callback? in_callback) {
+        push (new LoadModule (context, in_name, in_args, (owned)in_callback));
+    }
+
+    public void unload_module (uint32 in_index, owned UnloadModule.Callback? in_callback) {
+        push (new UnloadModule (context, in_index, (owned)in_callback));
     }
 
     private void push (Operation in_operation) {

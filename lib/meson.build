@@ -13,6 +13,7 @@ libsuka_hottoe = library(
         'Profile.vala',
         'Port.vala',
         'Device.vala',
+        'Equalizer.vala',
         'Manager.vala'
     ],
     dependencies: [
