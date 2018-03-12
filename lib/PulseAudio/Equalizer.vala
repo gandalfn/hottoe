@@ -52,9 +52,10 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             if (m_preset != null) {
                 m_preset.changed.disconnect (on_preset_freq_changed);
             }
-            if (value != null) {
-                m_preset = new SukaHottoe.Equalizer.Preset.copy (value);
 
+            m_preset = value;
+
+            if (m_preset != null) {
                 float last_freq = 0;
                 for (int cpt = 0; cpt < m_preset.length; cpt++) {
                     GLib.Object? band = ((Gst.ChildProxy)m_equalizer).get_child_by_index (cpt);
@@ -70,8 +71,6 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
                     }
                 }
                 m_preset.changed.connect (on_preset_freq_changed);
-            } else {
-                m_preset = null;
             }
         }
     }
@@ -81,7 +80,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
 
         Module.Arg[] args = {};
         args += Module.Arg("sink_name", name);
-        args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(name)'");
+        args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(description)'");
         args += Module.Arg("channels", "2");
         m_sink_module.load.begin (args);
 
@@ -108,10 +107,11 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         m_pipeline.link_many (m_source, m_equalizer, m_sink);
     }
 
-    public Equalizer(string in_name, Manager in_manager) {
+    public Equalizer(string in_name, string in_description, Manager in_manager) {
         GLib.Object(
             manager: in_manager,
-            name: in_name
+            name: in_name,
+            description: in_description
         );
     }
 

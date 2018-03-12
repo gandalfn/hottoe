@@ -30,21 +30,13 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
         }
     }
 
-    public class Preset : GLib.Object  {
-        private Frequency[] m_frequencies;
+    public abstract class Preset : GLib.Object  {
+        protected Frequency[] m_frequencies;
 
         public string name { get; set; }
-        public int length {
-            get {
-                return 10;
-            }
-        }
+        public abstract int length { get; }
 
         public signal void changed (int in_index);
-
-        construct {
-            m_frequencies = new Frequency[10];
-        }
 
         public Preset (string in_name) {
             GLib.Object (
@@ -52,36 +44,60 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
             );
         }
 
-        public Preset.copy (Preset in_preset) {
-            this (in_preset.name);
-
-            m_frequencies = in_preset.m_frequencies;
-        }
+        public abstract Preset copy ();
 
         public new Frequency @get (int in_index)
-            requires (in_index >= 0 && in_index < 10)  {
+            requires (in_index >= 0 && in_index < m_frequencies.length)  {
             return m_frequencies[in_index];
         }
 
-        public new void @set (int in_index, Frequency in_val)
-            requires (in_index >= 0 && in_index < 10)  {
-            if (m_frequencies[in_index] != in_val) {
-                m_frequencies[in_index] = in_val;
+        public new void @set (int in_index, Frequency in_frequency)
+            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            if (m_frequencies[in_index] != in_frequency) {
+                m_frequencies[in_index] = in_frequency;
                 changed(in_index);
             }
         }
     }
 
+    public class Preset10Bands : Preset {
+        public override int length {
+            get {
+                return m_frequencies.length;
+            }
+        }
+
+        construct {
+            m_frequencies = new Frequency[10];
+            m_frequencies[0] = Frequency (60,    0);
+            m_frequencies[1] = Frequency (170,   0);
+            m_frequencies[2] = Frequency (310,   0);
+            m_frequencies[3] = Frequency (600,   0);
+            m_frequencies[4] = Frequency (1000,  0);
+            m_frequencies[5] = Frequency (3000,  0);
+            m_frequencies[6] = Frequency (6000,  0);
+            m_frequencies[7] = Frequency (12000, 0);
+            m_frequencies[8] = Frequency (14000, 0);
+            m_frequencies[9] = Frequency (16000, 0);
+        }
+
+        public Preset10Bands (string in_name) {
+            base (in_name);
+        }
+
+        public override Preset copy () {
+            var ret = new Preset10Bands (name);
+
+            ret.m_frequencies = m_frequencies;
+
+            return ret;
+        }
+    }
+
     public string name { get; construct; }
     public unowned Manager manager { get; construct; }
+    public string description { get; construct; }
     public abstract unowned Device device { get; set; }
 
     public abstract Preset preset { get; set; }
-
-    public Equalizer(string in_name, Manager in_manager) {
-        GLib.Object(
-            manager: in_manager,
-            name: in_name
-        );
-    }
 }

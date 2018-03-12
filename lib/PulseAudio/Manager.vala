@@ -185,6 +185,10 @@ namespace SukaHottoe.PulseAudio {
             return m_clients.to_array ();
         }
 
+        public override SukaHottoe.Equalizer create_equalizer (string in_name, string in_description) {
+            return new Equalizer (in_name, in_description, this);
+        }
+
         private bool reconnect_timeout () {
             if (m_reconnect_timer_id != 0U) {
                 m_reconnect_timer_id = 0U;

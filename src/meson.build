@@ -13,7 +13,9 @@ libsuka_hottoe_widgets = static_library (
         'Widgets/DeviceChannelList.vala',
         'Services/Notification.vala',
         'Services/SoundNotification.vala',
-        'Services/DesktopNotification.vala'
+        'Services/DesktopNotification.vala',
+        'Settings/Equalizer.vala',
+        'Settings/Main.vala'
     ],
     dependencies: [
         suka_hottoe_dep,
@@ -38,11 +40,13 @@ shared_module(
         'Widgets/PlugChannelList.vala',
         'Widgets/ChannelRadioButton.vala',
         'Widgets/DeviceView.vala',
-        'Widgets/DeviceList.vala'
+        'Widgets/DeviceList.vala',
+        'Services/EqualizerManager.vala'
     ],
     dependencies: [
         suka_hottoe_dep,
         wingpanel_dep,
+        dependency('granite'),
         dependency('libwnck-3.0')
     ],
     link_with: [

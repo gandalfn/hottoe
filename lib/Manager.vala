@@ -119,4 +119,6 @@ public abstract class SukaHottoe.Manager : GLib.Object {
     public abstract Client[] get_clients ();
     public abstract Plug[] get_input_plugs ();
     public abstract Plug[] get_output_plugs ();
+
+    public abstract Equalizer create_equalizer (string in_name, string in_description);
 }
