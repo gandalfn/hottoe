@@ -1,4 +1,14 @@
 wingpanel_dep = dependency('wingpanel-2.0')
+switchboard_dep = dependency('switchboard-2.0')
+
+indicatorsdir = wingpanel_dep.get_pkgconfig_variable(
+    'indicatorsdir',
+    default: join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel')
+)
+plugsdir = switchboard_dep.get_pkgconfig_variable(
+    'plugsdir',
+    default: join_paths(get_option('prefix'), get_option('libdir'), 'switchboard')
+)
 
 libhottoe_widgets = static_library (
     meson.project_name() + '.widgets',
@@ -54,10 +64,8 @@ shared_module(
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,
-    install_dir : wingpanel_dep.get_pkgconfig_variable('indicatorsdir')
+    install_dir : indicatorsdir
 )
-
-switchboard_dep = dependency('switchboard-2.0')
 
 shared_module(
     meson.project_name() + '.plug',
@@ -84,5 +92,5 @@ shared_module(
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,
-    install_dir : join_paths(switchboard_dep.get_pkgconfig_variable('plugsdir'), 'hardware')
+    install_dir : join_paths(plugsdir, 'hardware')
 )
