@@ -18,6 +18,11 @@
         </p>
     </description>
     <releases>
+        <release version="0.2.1" date="2018-03-14" urgency="medium">
+            <description>
+                <p>Fix build on loki.</p>
+            </description>
+        </release>
         <release version="0.2.0" date="2018-03-05" urgency="medium">
             <description>
                 <p>First release.</p>
