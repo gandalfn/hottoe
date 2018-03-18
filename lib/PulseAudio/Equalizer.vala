@@ -38,7 +38,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
                 m_device = (Device)value;
 
                 if (m_channel_set) m_pipeline.set_state (Gst.State.PAUSED);
-                m_sink.set_property("device", m_device.name);
+                m_sink.set_property("device", m_device.get_output_channels()[0].name);
                 if (m_channel_set) m_pipeline.set_state (Gst.State.PLAYING);
             }
         }
@@ -75,23 +75,46 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         }
     }
 
+    static construct {
+        unowned string[]? args = null;
+        Gst.init(ref args);
+    }
+
     construct {
-        m_sink_module = new Module((Manager)device.manager, "module-null-sink");
+        m_sink_module = null;
+        foreach (var module in ((Manager)manager).get_modules ()) {
+            if (module.name == "module-null-sink") {
+                foreach (var arg in module.get_arguments ()) {
+                    if (arg.name == "sink_name") {
+                        if (arg.val == name) {
+                            m_sink_module = module;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (m_sink_module != null) break;
+        }
+        if (m_sink_module == null) {
+            m_sink_module = new Module((Manager)manager, "module-null-sink");
 
-        Module.Arg[] args = {};
-        args += Module.Arg("sink_name", name);
-        args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(description)'");
-        args += Module.Arg("channels", "2");
-        m_sink_module.load.begin (args);
-
-        manager.channel_added.connect(on_channel_added);
+            Module.Arg[] args = {};
+            args += Module.Arg("sink_name", name);
+            args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(description)'");
+            args += Module.Arg("channels", "2");
+            m_sink_module.load.begin (args);
+        }
 
         m_pipeline = new Gst.Pipeline (name);
+
+        var props = Gst.Structure.from_string ("props,media.role=music,application.id=com.github.gandalfn.suka-hottoe", null);
 
         m_source = Gst.ElementFactory.make ("pulsesrc", "source");
         m_source.set_property("volume", 1.0);
         m_source.set_property("mute", false);
         m_source.set_property("provide_clock", false);
+        m_source.set_property("slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP);
+        m_source.set_property("stream-properties", props);
 
         m_equalizer = Gst.ElementFactory.make ("equalizer-10bands", "equalizer");
 
@@ -99,12 +122,31 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         m_sink.set_property("volume", 1.0);
         m_sink.set_property("mute", false);
         m_sink.set_property("provide_clock", true);
+        m_sink.set_property("stream-properties", props);
 
         m_pipeline.add (m_source);
         m_pipeline.add (m_equalizer);
         m_pipeline.add (m_sink);
 
-        m_pipeline.link_many (m_source, m_equalizer, m_sink);
+        debug("create equalizer\n");
+
+        m_source.link (m_equalizer);
+        m_equalizer.link(m_sink);
+
+        var bus = m_pipeline.get_bus ();
+        bus.add_watch (0, on_bus_callback);
+
+        manager.channel_added.connect(on_channel_added);
+
+        string channel_name = @"$(name).monitor";
+        foreach (var channel in manager.get_input_channels()) {
+            if (channel.name == channel_name) {
+                m_source.set_property ("device", channel_name);
+                m_channel_set = true;
+                m_pipeline.set_state (Gst.State.PLAYING);
+                break;
+            }
+        }
     }
 
     public Equalizer(string in_name, string in_description, Manager in_manager) {
@@ -116,11 +158,13 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
     }
 
     private void on_channel_added(SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
-        if (in_channel.direction == Direction.OUTPUT && in_channel.name == name) {
-            m_pipeline.set_state (Gst.State.PAUSED);
-            m_source.set_property ("device", name + ".monitor");
-            m_pipeline.set_state (Gst.State.PLAYING);
-            m_channel_set = true;
+        debug(@"channel added $(in_channel.name) == $(name)");
+        if (in_channel.direction == Direction.INPUT && in_channel.name == @"$(name).monitor") {
+            in_channel.changed.connect (() => {
+                m_source.set_property ("device", @"$(name).monitor");
+                m_channel_set = true;
+                m_pipeline.set_state (Gst.State.PLAYING);
+            });
         }
     }
 
@@ -135,5 +179,33 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             }
             band.set_property("gain", gain);
         }
+    }
+
+    private bool on_bus_callback (Gst.Bus in_bus, Gst.Message in_message) {
+        switch (in_message.type) {
+            case Gst.MessageType.ERROR:
+                GLib.Error err;
+                string debug;
+                in_message.parse_error (out err, out debug);
+                debug ("Error: %s\n", err.message);
+                break;
+            case Gst.MessageType.EOS:
+                debug ("end of stream\n");
+                break;
+            case Gst.MessageType.STATE_CHANGED:
+                Gst.State oldstate;
+                Gst.State newstate;
+                Gst.State pending;
+                in_message.parse_state_changed (out oldstate, out newstate,
+                                            out pending);
+                debug ("state changed: %s->%s:%s\n",
+                       oldstate.to_string (), newstate.to_string (),
+                       pending.to_string ());
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }
