@@ -1077,6 +1077,76 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         }
     }
 
+    public class GetModuleInfo : Operation {
+        public delegate void Callback (global::PulseAudio.ModuleInfo? in_info);
+
+        public uint32 index;
+        public Callback? callback;
+
+        public GetModuleInfo (global::PulseAudio.Context in_context, uint32 in_index, owned Callback? in_callback) {
+            debug (@"new get module info by index $(in_index) operation");
+            index = in_index;
+            callback = (owned)in_callback;
+            operation = in_context.get_module_info (index, on_finish);
+        }
+
+        public override bool compare (Operation in_other) {
+            bool ret = in_other is GetModuleInfo;
+            if (ret) {
+                ret = (index == ((GetModuleInfo) in_other).index);
+            }
+            return ret;
+        }
+
+        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ModuleInfo? in_info, bool in_eol) {
+            if (in_info != null) {
+                debug (@"finish module info $(index)");
+                if (callback != null) {
+                    callback (in_info);
+                }
+            }
+            if (in_eol) {
+                debug (@"finish and destroy module info $(index)");
+                finish ();
+            }
+        }
+    }
+
+    public class GetModuleInfoList : Operation {
+        public delegate void Callback (global::PulseAudio.ModuleInfo? in_info);
+        public delegate void Finished ();
+
+        public Callback? callback;
+        public Finished? finished;
+
+        public GetModuleInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+            debug (@"new get module info list operation");
+            callback = (owned)in_callback;
+            finished = (owned)in_finished;
+            operation = in_context.get_module_info_list (on_finish);
+        }
+
+        public override bool compare (Operation in_other) {
+            return in_other is GetModuleInfoList;
+        }
+
+        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ModuleInfo? in_info, bool in_eol) {
+            if (in_info != null) {
+                debug (@"finish module info list");
+                if (callback != null) {
+                    callback (in_info);
+                }
+            }
+            if (in_eol) {
+                debug (@"finish and destroy module info list");
+                if (finished != null) {
+                    finished ();
+                }
+                finish ();
+            }
+        }
+    }
+
     private Operation? head;
     private unowned Operation? tail;
     private global::PulseAudio.Context context;
@@ -1254,6 +1324,15 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
 
     public void unload_module (uint32 in_index, owned UnloadModule.Callback? in_callback) {
         push (new UnloadModule (context, in_index, (owned)in_callback));
+    }
+
+    public void get_module_info (uint32 in_index, owned GetModuleInfo.Callback? in_callback) {
+        push (new GetModuleInfo (context, in_index, (owned)in_callback));
+    }
+
+    public void get_module_info_list (owned GetModuleInfoList.Callback? in_callback,
+                                      owned GetModuleInfoList.Finished? in_finished = null) {
+        push (new GetModuleInfoList (context, (owned)in_callback, (owned)in_finished));
     }
 
     private void push (Operation in_operation) {
