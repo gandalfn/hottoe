@@ -23,6 +23,7 @@ namespace SukaHottoe.PulseAudio {
     internal class Manager : SukaHottoe.Manager {
         private global::PulseAudio.Context m_context;
         private global::PulseAudio.GLibMainLoop m_loop;
+        private int m_cpt_init_list = 0;
         private bool m_is_ready = false;
         private uint m_reconnect_timer_id = 0U;
         private Gee.TreeSet<Device> m_devices;
@@ -31,6 +32,7 @@ namespace SukaHottoe.PulseAudio {
         private Gee.TreeSet<Client> m_clients;
         private Gee.TreeSet<Plug> m_input_plugs;
         private Gee.TreeSet<Plug> m_output_plugs;
+        private Gee.TreeSet<Module> m_modules;
         private string m_default_sink_name;
         private string m_default_source_name;
 
@@ -138,6 +140,7 @@ namespace SukaHottoe.PulseAudio {
             m_clients = new Gee.TreeSet<Client> (Client.compare);
             m_input_plugs = new Gee.TreeSet<Plug> (Plug.compare);
             m_output_plugs = new Gee.TreeSet<Plug> (Plug.compare);
+            m_modules = new Gee.TreeSet<Module> (Module.compare);
         }
 
         public Manager () {
@@ -165,6 +168,10 @@ namespace SukaHottoe.PulseAudio {
 
         public override Plug[] get_output_plugs () {
             return m_output_plugs.to_array ();
+        }
+
+        public Module[] get_modules () {
+            return m_modules.to_array ();
         }
 
         public override SukaHottoe.Channel get_channel (string in_channel_name) {
@@ -228,15 +235,28 @@ namespace SukaHottoe.PulseAudio {
                                           global::PulseAudio.Context.SubscriptionMask.SOURCE |
                                           global::PulseAudio.Context.SubscriptionMask.CLIENT |
                                           global::PulseAudio.Context.SubscriptionMask.SINK_INPUT |
-                                          global::PulseAudio.Context.SubscriptionMask.SOURCE_OUTPUT);
+                                          global::PulseAudio.Context.SubscriptionMask.SOURCE_OUTPUT |
+                                          global::PulseAudio.Context.SubscriptionMask.MODULE);
+
                     operations.get_server_info (server_info_callback);
-                    operations.get_card_info_list (card_info_callback);
-                    operations.get_sink_info_list (sink_info_callback);
-                    operations.get_source_info_list (source_info_callback);
-                    operations.get_client_info_list (client_info_callback);
-                    operations.get_source_output_info_list (source_output_info_callback);
-                    operations.get_sink_input_info_list (sink_input_info_callback);
+
+                    m_cpt_init_list = 0;
+                    operations.get_card_info_list (card_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_sink_info_list (sink_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_source_info_list (source_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_client_info_list (client_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_source_output_info_list (source_output_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_sink_input_info_list (sink_input_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
+                    operations.get_module_info_list (module_info_callback, on_get_list_finished);
+                    m_cpt_init_list++;
                     m_is_ready = true;
+
                     break;
 
                 case global::PulseAudio.Context.State.FAILED:
@@ -251,6 +271,13 @@ namespace SukaHottoe.PulseAudio {
                 default:
                     m_is_ready = false;
                     break;
+            }
+        }
+
+        private void on_get_list_finished () {
+            m_cpt_init_list--;
+            if (m_cpt_init_list == 0) {
+                ready ();
             }
         }
 
@@ -408,6 +435,28 @@ namespace SukaHottoe.PulseAudio {
                             break;
                     }
                     break;
+
+                case global::PulseAudio.Context.SubscriptionEventType.MODULE:
+                    var event_type = in_event_type & global::PulseAudio.Context.SubscriptionEventType.TYPE_MASK;
+                    switch (event_type) {
+                        case global::PulseAudio.Context.SubscriptionEventType.NEW:
+                        case global::PulseAudio.Context.SubscriptionEventType.CHANGE:
+                            debug ("Module change event");
+                            operations.get_module_info (in_index, module_info_callback);
+                            break;
+
+                        case global::PulseAudio.Context.SubscriptionEventType.REMOVE:
+                            debug ("Module event");
+                            Module module = m_modules.first_match ((p) => {
+                                return p.index == in_index;
+                            });
+                            if (module != null) {
+                                debug (@"Remove module $(module.name)");
+                                m_modules.remove (module);
+                            }
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -489,7 +538,8 @@ namespace SukaHottoe.PulseAudio {
                 debug ("Source %s changed :", in_info.name);
 
                 var channelIndex = in_info.index;
-                if (!in_info.name.has_suffix (".monitor")) {
+                //  if (!in_info.name.has_suffix (".monitor")) {
+                {
                     InputChannel channel = m_input_channels.first_match ((d) => {
                         return channelIndex == d.index;
                     }) as InputChannel;
@@ -586,6 +636,26 @@ namespace SukaHottoe.PulseAudio {
                     debug (@"Update plug $(plug.name)");
 
                     plug.update (in_info);
+                }
+            }
+        }
+
+        private void module_info_callback (global::PulseAudio.ModuleInfo? in_info) {
+            if (in_info != null) {
+                debug ("Module %s changed :", in_info.name);
+
+                var moduleIndex = in_info.index;
+                Module module = m_modules.first_match ((p) => {
+                    return moduleIndex == p.index;
+                }) as Module;
+                if (module == null) {
+                    module = new Module (this, in_info.name, in_info.index);
+                    module.update (in_info);
+                    m_modules.add (module);
+                } else {
+                    debug (@"Update module $(module.name)");
+
+                    module.update (in_info);
                 }
             }
         }

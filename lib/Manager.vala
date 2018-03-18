@@ -98,6 +98,8 @@ public abstract class SukaHottoe.Manager : GLib.Object {
         return backend.load ();
     }
 
+    public signal void ready ();
+
     public signal void device_added (Device inDevice);
     public signal void device_removed (Device inDevice);
 

@@ -30,20 +30,22 @@ internal class SukaHottoe.PulseAudio.Module : GLib.Object {
         }
     }
 
-    private uint32 m_index = global::PulseAudio.INVALID_INDEX;
+    private string? m_args;
 
+    public uint32 index { get; construct set; default = global::PulseAudio.INVALID_INDEX; }
     public unowned Manager? manager { get; construct; }
-    public string name { get; construct; }
-    public uint32 index {
+    public string name { get; construct set; }
+    public bool loaded {
         get {
-            return m_index;
+            return index != global::PulseAudio.INVALID_INDEX;
         }
     }
 
-    public Module (Manager in_manager, string in_name) {
+    public Module (Manager in_manager, string in_name, uint32 in_index = global::PulseAudio.INVALID_INDEX) {
         GLib.Object (
             manager: in_manager,
-            name: in_name
+            name: in_name,
+            index: in_index
         );
     }
 
@@ -51,31 +53,67 @@ internal class SukaHottoe.PulseAudio.Module : GLib.Object {
         unload();
     }
 
+    public Arg[] get_arguments () {
+        Arg[] ret = {};
+        if (m_args != null) {
+            foreach (var arg in m_args.split(" ")) {
+                string[] val = arg.split("=", 2);
+                ret += Arg(val[0], val[1]);
+            }
+        }
+        return ret;
+    }
+
     public async bool load (Arg[]? in_args = null) {
-        string? args = null;
+        m_args = null;
         if (in_args != null) {
             foreach (unowned Arg? arg in in_args) {
-                if (args == null) {
-                    args += @"$(arg.name)=$(arg.val)";
+                if (m_args == null) {
+                    m_args = @"$(arg.name)=$(arg.val)";
                 } else {
-                    args += @" $(arg.name)=$(arg.val)";
+                    m_args += @" $(arg.name)=$(arg.val)";
                 }
             }
         }
-        manager.operations.load_module (name, args, (i) => {
-            m_index = i;
+        manager.operations.load_module (name, m_args, (i) => {
+            index = i;
             load.callback ();
         });
 
         yield;
 
-        return m_index != global::PulseAudio.INVALID_INDEX;
+        return index != global::PulseAudio.INVALID_INDEX;
     }
 
     public void unload () {
-        if (m_index != global::PulseAudio.INVALID_INDEX) {
-            manager.operations.unload_module (m_index, null);
-            m_index = global::PulseAudio.INVALID_INDEX;
+        if (index != global::PulseAudio.INVALID_INDEX) {
+            manager.operations.unload_module (index, null);
+            index = global::PulseAudio.INVALID_INDEX;
         }
+    }
+
+    public bool update (global::PulseAudio.ModuleInfo in_info) {
+        bool updated = false;
+
+        if (in_info.name != name) {
+            name = in_info.name;
+            updated = true;
+        }
+
+        if (in_info.index != index) {
+            index = in_info.index;
+            updated = true;
+        }
+
+        if (in_info.argument != m_args) {
+            m_args = in_info.argument;
+            updated = true;
+        }
+
+        return updated;
+    }
+
+    public static int compare (Module in_a, Module in_b) {
+        return (int)in_a.index - (int)in_b.index;
     }
 }
