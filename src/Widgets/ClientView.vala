@@ -82,11 +82,13 @@ public class SukaHottoe.Widgets.ClientView : Gtk.Grid {
     }
 
     private void on_client_plug_added (Plug in_plug) {
-        var plug = new PlugChannelList (in_plug);
-        plug.show_all ();
-        m_plugs.add (plug);
+        if (!in_plug.is_mine) {
+            var plug = new PlugChannelList (in_plug);
+            plug.show_all ();
+            m_plugs.add (plug);
 
-        m_content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
+            m_content.reveal_child = !client.is_mine && (client.get_plugs ().length > 0);
+        }
     }
 
     private void on_client_plug_removed (Plug in_plug) {

@@ -56,7 +56,7 @@ public class SukaHottoe.Widgets.PlugChannelList : Gtk.Grid {
     }
 
     private void on_channel_added (Channel in_channel) {
-        if (in_channel.direction == plug.direction) {
+        if (in_channel.direction == plug.direction && !in_channel.is_mine) {
             var button = new ChannelRadioButton (in_channel, m_group);
             m_group.add (button);
             button.active = in_channel == plug.channel;
