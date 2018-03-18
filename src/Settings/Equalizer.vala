@@ -20,20 +20,15 @@
  */
 
 public class SukaHottoe.Settings.Equalizer : Granite.Services.Settings {
-    private string m_id;
+    public string id;
 
-    public string id {
-        get {
-            return m_id;
-        }
-    }
     public string name { get; set; }
     public string device { get; set; }
-    public int[] values { get; set; }
+    public string[] values { get; set; }
 
     public Equalizer(string in_id) {
         base.with_path ("com.github.gandalfn.suka-hottoe.equalizer",
-                        "/com/github/gandalfn/suka-hottoe/" + in_id);
-        m_id = in_id;
+                        "/com/github/gandalfn/suka-hottoe/" + in_id + "/");
+        id = in_id;
     }
 }
