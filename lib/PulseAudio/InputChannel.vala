@@ -179,9 +179,7 @@ internal class SukaHottoe.PulseAudio.InputChannel : Channel {
             notify_property ("volume-base");
         }
 
-        if (updated) {
-            changed ();
-        }
+        changed ();
 
         return updated;
     }
