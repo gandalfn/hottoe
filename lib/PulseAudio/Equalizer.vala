@@ -185,8 +185,8 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         switch (in_message.type) {
             case Gst.MessageType.ERROR:
                 GLib.Error err;
-                string debug;
-                in_message.parse_error (out err, out debug);
+                string msg;
+                in_message.parse_error (out err, out msg);
                 debug ("Error: %s\n", err.message);
                 break;
             case Gst.MessageType.EOS:
