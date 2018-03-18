@@ -507,28 +507,26 @@ namespace SukaHottoe.PulseAudio {
                 debug ("Sink %s changed :", in_info.name);
 
                 var channelIndex = in_info.index;
-                if (!in_info.name.has_suffix (".monitor")) {
-                    OutputChannel channel = m_output_channels.first_match ((d) => {
-                        return channelIndex == d.index;
-                    }) as OutputChannel;
-                    if (channel == null) {
-                        channel = new OutputChannel (this, in_info);
-                        m_output_channels.add (channel);
+                OutputChannel channel = m_output_channels.first_match ((d) => {
+                    return channelIndex == d.index;
+                }) as OutputChannel;
+                if (channel == null) {
+                    channel = new OutputChannel (this, in_info);
+                    m_output_channels.add (channel);
 
-                        debug (@"Add channel $(channel.name)");
+                    debug (@"Add channel $(channel.name)");
 
-                        channel_added (channel);
+                    channel_added (channel);
 
-                        // Send default output device notification if new channel matches default
-                        if (m_default_sink_name == channel.name) {
-                            notify_property ("default-output-device");
-                            notify_property ("default-output-channel");
-                        }
-                    } else {
-                        debug (@"Update channel $(channel.name)");
-
-                        channel.update (in_info);
+                    // Send default output device notification if new channel matches default
+                    if (m_default_sink_name == channel.name) {
+                        notify_property ("default-output-device");
+                        notify_property ("default-output-channel");
                     }
+                } else {
+                    debug (@"Update channel $(channel.name)");
+
+                    channel.update (in_info);
                 }
             }
         }
@@ -538,29 +536,26 @@ namespace SukaHottoe.PulseAudio {
                 debug ("Source %s changed :", in_info.name);
 
                 var channelIndex = in_info.index;
-                //  if (!in_info.name.has_suffix (".monitor")) {
-                {
-                    InputChannel channel = m_input_channels.first_match ((d) => {
-                        return channelIndex == d.index;
-                    }) as InputChannel;
-                    if (channel == null) {
-                        channel = new InputChannel (this, in_info);
-                        m_input_channels.add (channel);
+                InputChannel channel = m_input_channels.first_match ((d) => {
+                    return channelIndex == d.index;
+                }) as InputChannel;
+                if (channel == null) {
+                    channel = new InputChannel (this, in_info);
+                    m_input_channels.add (channel);
 
-                        debug (@"Add channel $(channel.name)");
+                    debug (@"Add channel $(channel.name)");
 
-                        channel_added (channel);
+                    channel_added (channel);
 
-                        // Send default input device notification if new channel matches default
-                        if (m_default_source_name == channel.name) {
-                            notify_property ("default-input-device");
-                            notify_property ("default-input-channel");
-                        }
-                    } else {
-                        debug (@"Update channel $(channel.name)");
-
-                        channel.update (in_info);
+                    // Send default input device notification if new channel matches default
+                    if (m_default_source_name == channel.name) {
+                        notify_property ("default-input-device");
+                        notify_property ("default-input-channel");
                     }
+                } else {
+                    debug (@"Update channel $(channel.name)");
+
+                    channel.update (in_info);
                 }
             }
         }

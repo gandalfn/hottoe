@@ -100,7 +100,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
 
             Module.Arg[] args = {};
             args += Module.Arg("sink_name", name);
-            args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(description)'");
+            args += Module.Arg("sink_properties", @"device.icon_name='media-eq-symbolic'device.description='$(description)'application.id='com.github.gandalfn.suka-hottoe'");
             args += Module.Arg("channels", "2");
             m_sink_module.load.begin (args);
         }

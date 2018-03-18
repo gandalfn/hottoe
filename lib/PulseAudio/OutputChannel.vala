@@ -105,6 +105,7 @@ internal class SukaHottoe.PulseAudio.OutputChannel : Channel {
             manager: in_manager,
             direction: SukaHottoe.Direction.OUTPUT,
             index: in_sink_info.index,
+            id: in_sink_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
             monitor_index: in_sink_info.monitor_source,
             name: in_sink_info.name,
             description: in_sink_info.description

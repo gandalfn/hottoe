@@ -33,6 +33,7 @@ public abstract class SukaHottoe.Plug : GLib.Object {
     public abstract double volume { get; set; }
     public abstract float balance { get; set; }
     public abstract bool is_muted { get; set; }
+    public abstract bool is_mine { get; }
 
     public abstract double volume_muted { get; }
     public abstract double volume_norm { get; }

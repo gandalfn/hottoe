@@ -65,6 +65,7 @@ internal abstract class SukaHottoe.PulseAudio.Plug : SukaHottoe.Plug {
     protected unowned Channel? m_channel;
 
     public uint32 index { get; construct; }
+    public string id { get; construct set; }
     public global::PulseAudio.CVolume? cvolume { get; set; default = null; }
     public global::PulseAudio.ChannelMap? channel_map { get; set; default = null; }
 
@@ -83,6 +84,12 @@ internal abstract class SukaHottoe.PulseAudio.Plug : SukaHottoe.Plug {
     public override double volume_norm {
         get {
             return volume_to_double (global::PulseAudio.Volume.NORM);
+        }
+    }
+
+    public override bool is_mine {
+        get {
+            return id == "com.github.gandalfn.suka-hottoe";
         }
     }
 

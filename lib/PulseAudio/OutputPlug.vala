@@ -99,6 +99,7 @@ internal class SukaHottoe.PulseAudio.OutputPlug : Plug {
             manager: in_manager,
             direction: SukaHottoe.Direction.OUTPUT,
             index: in_info.index,
+            id: in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
             name: in_info.name
         );
 
