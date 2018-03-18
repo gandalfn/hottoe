@@ -58,6 +58,22 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
                 changed(in_index);
             }
         }
+
+        public void set_freq (int in_index, int in_freq)
+            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            if (m_frequencies[in_index].freq != in_freq) {
+                m_frequencies[in_index].freq = in_freq;
+                changed(in_index);
+            }
+        }
+
+        public void set_val (int in_index, int in_val)
+            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            if (m_frequencies[in_index].val != in_val) {
+                m_frequencies[in_index].val = in_val;
+                changed(in_index);
+            }
+        }
     }
 
     public class Preset10Bands : Preset {

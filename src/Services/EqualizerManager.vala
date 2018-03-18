@@ -34,6 +34,8 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
 
             settings.notify["device"].connect (on_device_changed);
             settings.notify["values"].connect (on_values_changed);
+
+            on_values_changed ();
         }
 
         public Item (Settings.Equalizer in_settings, Manager in_manager)  {
@@ -61,7 +63,7 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
         private void on_values_changed () {
             int cpt = 0;
             foreach (var val in settings.values) {
-                m_equalizer.preset[cpt].val = int.parse (val);
+                m_equalizer.preset.set_val (cpt, int.parse (val));
                 cpt++;
             }
         }
