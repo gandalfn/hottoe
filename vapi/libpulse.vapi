@@ -968,25 +968,25 @@ namespace PulseAudio {
                 [CCode (cname = "pa_context_subscribe_cb_t")]
                 public delegate void SubscribeCb(Context c, SubscriptionEventType t, uint32 idx);
                 [CCode (cname = "pa_sink_info_cb_t")]
-                public delegate void SinkInfoCb(Context c, SinkInfo? i, int eol);
+                public delegate void SinkInfoCb(Context c, SinkInfo? i, bool eol);
                 [CCode (cname = "pa_source_info_cb_t")]
-                public delegate void SourceInfoCb(Context c, SourceInfo? i, int eol);
+                public delegate void SourceInfoCb(Context c, SourceInfo? i, bool eol);
                 [CCode (cname = "pa_card_info_cb_t")]
-                public delegate void CardInfoCb(Context c, CardInfo? i, int eol);
+                public delegate void CardInfoCb(Context c, CardInfo? i, bool eol);
                 [CCode (cname = "pa_sink_input_info_cb_t")]
-                public delegate void SinkInputInfoCb(Context c, SinkInputInfo? i, int eol);
+                public delegate void SinkInputInfoCb(Context c, SinkInputInfo? i, bool eol);
                 [CCode (cname = "pa_source_output_info_cb_t")]
-                public delegate void SourceOutputInfoCb(Context c, SourceOutputInfo? i, int eol);
+                public delegate void SourceOutputInfoCb(Context c, SourceOutputInfo? i, bool eol);
                 [CCode (cname = "pa_server_info_cb_t")]
                 public delegate void ServerInfoCb(Context c, ServerInfo? i);
                 [CCode (cname = "pa_stat_info_cb_t")]
                 public delegate void StatInfoCb(Context c, ServerInfo? i);
                 [CCode (cname = "pa_module_info_cb_t")]
-                public delegate void ModuleInfoCb(Context c, ModuleInfo? i, int eol);
+                public delegate void ModuleInfoCb(Context c, ModuleInfo? i, bool eol);
                 [CCode (cname = "pa_client_info_cb_t")]
-                public delegate void ClientInfoCb(Context c, ClientInfo? i, int eol);
+                public delegate void ClientInfoCb(Context c, ClientInfo? i, bool eol);
                 [CCode (cname = "pa_sample_info_cb_t")]
-                public delegate void SampleInfoCb(Context c, SampleInfo? i, int eol);
+                public delegate void SampleInfoCb(Context c, SampleInfo? i, bool eol);
                 [CCode (cname = "pa_context_index_cb_t")]
                 public delegate void IndexCb(Context c, uint32 idx);
 
