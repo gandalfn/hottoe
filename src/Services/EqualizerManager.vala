@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class SukaHottoe.Service.EqualizerManager : GLib.Object {
+public class SukaHottoe.Services.EqualizerManager : GLib.Object {
     public class Item : GLib.Object {
         private Equalizer m_equalizer;
 
@@ -61,7 +61,7 @@ public class SukaHottoe.Service.EqualizerManager : GLib.Object {
         private void on_values_changed () {
             int cpt = 0;
             foreach (var val in settings.values) {
-                m_equalizer.preset[cpt].val = val;
+                m_equalizer.preset[cpt].val = int.parse (val);
                 cpt++;
             }
         }
