@@ -24,7 +24,8 @@ shared_module(
         meson.get_compiler('vala').find_library('posix'),
         dependency('libpulse'),
         dependency('libpulse-mainloop-glib'),
-        dependency('gstreamer-1.0')
+        dependency('gstreamer-1.0'),
+        dependency('gstreamer-audio-1.0')
     ],
     install: true,
     install_dir: backend_path
