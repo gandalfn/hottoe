@@ -24,7 +24,6 @@ namespace SukaHottoe.PulseAudio {
         private global::PulseAudio.Context m_context;
         private global::PulseAudio.GLibMainLoop m_loop;
         private int m_cpt_init_list = 0;
-        private bool m_is_ready = false;
         private uint m_reconnect_timer_id = 0U;
         private Gee.TreeSet<Device> m_devices;
         private Gee.TreeSet<Channel> m_input_channels;
@@ -192,10 +191,6 @@ namespace SukaHottoe.PulseAudio {
             return m_clients.to_array ();
         }
 
-        public override SukaHottoe.Equalizer create_equalizer (string in_name, string in_description) {
-            return new Equalizer (in_name, in_description, this);
-        }
-
         private bool reconnect_timeout () {
             if (m_reconnect_timer_id != 0U) {
                 m_reconnect_timer_id = 0U;
@@ -205,11 +200,11 @@ namespace SukaHottoe.PulseAudio {
         }
 
         private async void reconnect_to_pulse () {
-            if (m_is_ready) {
+            if (is_ready) {
                 operations = null;
                 m_context.disconnect ();
                 m_context = null;
-                m_is_ready = false;
+                is_ready = false;
             }
 
             var props = new global::PulseAudio.Proplist ();
@@ -255,7 +250,6 @@ namespace SukaHottoe.PulseAudio {
                     m_cpt_init_list++;
                     operations.get_module_info_list (module_info_callback, on_get_list_finished);
                     m_cpt_init_list++;
-                    m_is_ready = true;
 
                     break;
 
@@ -269,7 +263,7 @@ namespace SukaHottoe.PulseAudio {
                     break;
 
                 default:
-                    m_is_ready = false;
+                    is_ready = false;
                     break;
             }
         }
@@ -277,7 +271,7 @@ namespace SukaHottoe.PulseAudio {
         private void on_get_list_finished () {
             m_cpt_init_list--;
             if (m_cpt_init_list == 0) {
-                ready ();
+                is_ready = true;
             }
         }
 

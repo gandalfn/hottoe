@@ -74,6 +74,7 @@ public abstract class SukaHottoe.Manager : GLib.Object {
         }
     }
 
+    public bool is_ready { get; set; default = false; }
     public bool enable_monitoring { get; set; default = false; }
 
     public abstract unowned Channel? default_input_channel { get; }
@@ -98,8 +99,6 @@ public abstract class SukaHottoe.Manager : GLib.Object {
         return backend.load ();
     }
 
-    public signal void ready ();
-
     public signal void device_added (Device inDevice);
     public signal void device_removed (Device inDevice);
 
@@ -121,6 +120,4 @@ public abstract class SukaHottoe.Manager : GLib.Object {
     public abstract Client[] get_clients ();
     public abstract Plug[] get_input_plugs ();
     public abstract Plug[] get_output_plugs ();
-
-    public abstract Equalizer create_equalizer (string in_name, string in_description);
 }

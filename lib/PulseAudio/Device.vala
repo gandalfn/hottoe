@@ -23,6 +23,8 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
     private Gee.TreeSet<Port> m_ports;
     private Gee.ArrayList<Profile> m_profiles;
     private unowned Profile? m_active_profile;
+    private bool m_enable_equalizer;
+    private Equalizer m_equalizer;
 
     public uint32 index { get; construct; default = 0U; }
 
@@ -64,10 +66,30 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
         }
     }
 
+    public override bool enable_equalizer {
+        get {
+            return m_enable_equalizer;
+        }
+        set {
+            if (m_enable_equalizer != value) {
+                m_enable_equalizer = value;
+                on_manager_is_ready_nofify ();
+            }
+        }
+    }
+
+    public override unowned SukaHottoe.Equalizer? equalizer {
+        get {
+            return m_equalizer;
+        }
+    }
+
     construct {
         m_ports = new Gee.TreeSet<Port> (Port.compare);
         m_profiles = new Gee.ArrayList<Profile> ();
         m_active_profile = null;
+
+        manager.notify["is-ready"].connect (on_manager_is_ready_nofify);
     }
 
     public Device (Manager in_manager, global::PulseAudio.CardInfo in_info) {
@@ -226,6 +248,16 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
             ret += @"active profile:\n$(m_active_profile)\n";
         }
         return ret;
+    }
+
+    private void on_manager_is_ready_nofify () {
+        if (manager.is_ready && enable_equalizer && m_equalizer == null) {
+            string eq_name = @"$(name).equalizer";
+            string eq_desc = @"$(display_name)-Equalizer".replace (" ", "-");
+            m_equalizer = new Equalizer (this, eq_name, eq_desc);
+        } else if (!manager.is_ready || !enable_equalizer) {
+            m_equalizer = null;
+        }
     }
 
     private void on_active_profile_destroyed (GLib.Object in_object) {

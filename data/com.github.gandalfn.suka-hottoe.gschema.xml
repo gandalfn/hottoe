@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema path="/com/github/gandalfn/suka-hottoe/" id="com.github.gandalfn.suka-hottoe">
-    <key type="as" name="equalizers">
-      <default>[]</default>
-      <summary>List of equalizers</summary>
-      <description>List of defined equalizers</description>
-    </key>
-  </schema>
   <schema id="com.github.gandalfn.suka-hottoe.equalizer">
     <key type="s" name="name">
       <default>''</default>
       <summary>Equalizer name</summary>
       <description>Equalizer name</description>
     </key>
-    <key type="s" name="device">
-      <default>''</default>
-      <summary>Device</summary>
-      <description>Device name on which equalizer is connected</description>
+    <key type="b" name="enabled">
+      <default>false</default>
+      <summary>Equalizer enabled</summary>
+      <description>Equalizer enabled</description>
     </key>
     <key type="as" name="values">
-      <default>[]</default>
+      <default>['0','0','0','0','0','0','0','0','0','0']</default>
       <summary>List of values</summary>
       <description>List of equalizer values</description>
     </key>

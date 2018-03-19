@@ -14,7 +14,6 @@ executable(
 executable(
     'test-equalizer',
     [
-        join_paths(meson.source_root(), 'src', 'Settings', 'Main.vala'),
         join_paths(meson.source_root(), 'src', 'Settings', 'Equalizer.vala'),
         join_paths(meson.source_root(), 'src', 'Services', 'EqualizerManager.vala'),
         'TestEqualizer.vala'

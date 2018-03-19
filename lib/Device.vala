@@ -27,6 +27,8 @@ public abstract class SukaHottoe.Device : GLib.Object {
     public string icon_name { get; construct; }
     public abstract bool active { get; }
     public abstract unowned Profile? active_profile { get; set; }
+    public abstract bool enable_equalizer { get; set; }
+    public abstract unowned Equalizer? equalizer { get; }
 
     public signal void changed ();
     public signal void channel_added (Channel in_channel);

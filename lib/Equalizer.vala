@@ -110,10 +110,9 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
         }
     }
 
+    public unowned Device device { get; construct; }
     public string name { get; construct; }
-    public unowned Manager manager { get; construct; }
     public string description { get; construct; }
-    public abstract unowned Device device { get; set; }
 
     public abstract Preset preset { get; set; }
 }

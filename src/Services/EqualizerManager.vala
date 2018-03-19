@@ -24,40 +24,29 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
         private Equalizer m_equalizer;
 
         public Settings.Equalizer settings { get; construct; }
-        public Manager manager { get; construct; }
+        public unowned Device device { get; construct; }
 
         construct {
-            m_equalizer = manager.create_equalizer (settings.id, settings.name);
-            m_equalizer.preset = new Equalizer.Preset10Bands(settings.id);
+            if (device.enable_equalizer) {
+                device.equalizer.preset = new Equalizer.Preset10Bands(settings.device);
+            }
 
-            manager.device_added.connect (on_device_added);
+            if (device.get_output_channels().length > 0) {
+                settings.enabled = true;
+            }
 
-            settings.notify["device"].connect (on_device_changed);
+            device.enable_equalizer = settings.enabled;
+
             settings.notify["values"].connect (on_values_changed);
 
             on_values_changed ();
         }
 
-        public Item (Settings.Equalizer in_settings, Manager in_manager)  {
+        public Item (Settings.Equalizer in_settings, Device in_device)  {
             GLib.Object (
-                manager: in_manager,
+                device: in_device,
                 settings: in_settings
             );
-        }
-
-        private void on_device_added (Device in_device) {
-            if (in_device.name == settings.device) {
-                m_equalizer.device = in_device;
-            }
-        }
-
-        private void on_device_changed () {
-            foreach (var device in manager.get_devices ()) {
-                if (device.name == settings.device) {
-                    on_device_added (device);
-                    break;
-                }
-            }
         }
 
         private void on_values_changed () {
@@ -69,59 +58,62 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
         }
 
         public static int compare (Item in_a, Item in_b) {
-            return GLib.strcmp (in_a.settings.id, in_b.settings.id);
+            return GLib.strcmp (in_a.device.name, in_b.device.name);
         }
     }
 
     private Gee.TreeSet<Item> m_items;
 
-    public Settings.Main settings { get; construct; }
     public Manager manager { get; construct; }
 
     construct {
         m_items = new Gee.TreeSet<Item> (Item.compare);
 
-        settings.notify["equalizers"].connect (on_equalizers_changed);
+        manager.notify["is-ready"].connect (on_manager_ready);
 
-        on_equalizers_changed ();
+        on_manager_ready ();
     }
 
-    public EqualizerManager(Settings.Main in_settings, Manager in_manager) {
+    public EqualizerManager(Manager in_manager) {
         GLib.Object (
-            settings: in_settings,
             manager: in_manager
         );
     }
 
-    private void on_equalizers_changed () {
-        foreach (var equalizer_id in settings.equalizers) {
-            Item? item = m_items.first_match ((i) => {
-                return i.settings.id == equalizer_id;
-            });
-
-            if (item == null) {
-                Settings.Equalizer equalizer_setting = new Settings.Equalizer(equalizer_id);
-
-                item = new Item (equalizer_setting, manager);
-                m_items.add (item);
+    private void on_manager_ready () {
+        if (manager.is_ready) {
+            manager.device_added.connect (on_device_added);
+            manager.device_removed.connect (on_device_removed);
+            foreach (var device in manager.get_devices ()) {
+                on_device_added (device);
             }
+        } else {
+            m_items.clear ();
+            manager.device_added.disconnect (on_device_added);
+            manager.device_removed.disconnect (on_device_removed);
         }
+    }
 
-        var to_remove = new Gee.TreeSet<Item> (Item.compare);
+    private void on_device_added (Device in_device) {
+        bool found = false;
         foreach (var item in m_items) {
-            bool found = false;
-            foreach (var equalizer_id in settings.equalizers) {
-                if (equalizer_id == item.settings.id) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                to_remove.add (item);
+            if (item.device == in_device) {
+                found = true;
+                break;
             }
         }
-        foreach (var item in to_remove) {
-            m_items.remove (item);
+        if (!found) {
+            Settings.Equalizer settings = new Settings.Equalizer (in_device.name);
+            m_items.add (new Item (settings, in_device));
+        }
+    }
+
+    private void on_device_removed (Device in_device) {
+        foreach (var item in m_items) {
+            if (item.device == in_device) {
+                m_items.remove (item);
+                break;
+            }
         }
     }
 }

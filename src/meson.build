@@ -14,8 +14,7 @@ libsuka_hottoe_widgets = static_library (
         'Services/Notification.vala',
         'Services/SoundNotification.vala',
         'Services/DesktopNotification.vala',
-        'Settings/Equalizer.vala',
-        'Settings/Main.vala'
+        'Settings/Equalizer.vala'
     ],
     dependencies: [
         suka_hottoe_dep,
