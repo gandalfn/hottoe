@@ -49,8 +49,8 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
                         float bandwidth = freq - last_freq;
                         last_freq = freq;
 
-                        band.set_property("freq", freq);
-                        band.set_property("bandwidth", bandwidth);
+                        band.set_property ("freq", freq);
+                        band.set_property ("bandwidth", bandwidth);
                         on_preset_freq_changed (cpt);
                     }
                 }
@@ -61,7 +61,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
 
     static construct {
         unowned string[]? args = null;
-        Gst.init(ref args);
+        Gst.init (ref args);
     }
 
     construct {
@@ -80,51 +80,54 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             if (m_sink_module != null) break;
         }
         if (m_sink_module == null) {
-            m_sink_module = new Module((Manager)device.manager, "module-null-sink");
+            m_sink_module = new Module ((Manager)device.manager, "module-null-sink");
 
             Module.Arg[] args = {};
-            args += Module.Arg("sink_name", "'" + name + "'");
-            args += Module.Arg("sink_properties",  "device.icon_name='media-eq-symbolic'" +
-                                                  @"device.description='$(description)'" +
+            args += Module.Arg ("sink_name", "'" + name + "'");
+            args += Module.Arg ("sink_properties", "device.icon_name='media-eq-symbolic'" +
+                                                   @"device.description='$(description)'" +
                                                    "device.equalizer='1'" +
                                                    "application.id='com.github.gandalfn.suka-hottoe'");
-            args += Module.Arg("channels", "2");
+            args += Module.Arg ("channels", "2");
             m_sink_module.load.begin (args);
         }
 
         m_pipeline = new Gst.Pipeline (name);
 
-        var props = Gst.Structure.from_string ("props,media.role=music,application.id=com.github.gandalfn.suka-hottoe", null);
+        var props = Gst.Structure.from_string ("props," +
+                                               "media.role=music," +
+                                               "application.id=com.github.gandalfn.suka-hottoe", null);
 
         m_source = Gst.ElementFactory.make ("pulsesrc", "source");
-        m_source.set_property("volume", 1.0);
-        m_source.set_property("mute", false);
-        m_source.set_property("provide_clock", false);
-        m_source.set_property("slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP);
-        m_source.set_property("stream-properties", props);
+        m_source.set_property ("volume", 1.0);
+        m_source.set_property ("mute", false);
+        m_source.set_property ("provide_clock", false);
+        m_source.set_property ("slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP);
+        m_source.set_property ("stream-properties", props);
 
         m_equalizer = Gst.ElementFactory.make ("equalizer-10bands", "equalizer");
 
         m_sink = Gst.ElementFactory.make ("pulsesink", "sink");
-        m_sink.set_property("volume", 1.0);
-        m_sink.set_property("mute", false);
-        m_sink.set_property("provide_clock", true);
-        m_sink.set_property("stream-properties", props);
-        m_sink.set_property("device", device.get_output_channels()[0].name);
+        m_sink.set_property ("volume", 1.0);
+        m_sink.set_property ("mute", false);
+        m_sink.set_property ("provide_clock", true);
+        m_sink.set_property ("stream-properties", props);
+        // TODO: manage device without output
+        m_sink.set_property ("device", device.get_output_channels ()[0].name);
 
         m_pipeline.add (m_source);
         m_pipeline.add (m_equalizer);
         m_pipeline.add (m_sink);
 
-        debug("create equalizer\n");
+        debug ("create equalizer\n");
 
         m_source.link (m_equalizer);
-        m_equalizer.link(m_sink);
+        m_equalizer.link (m_sink);
 
-        device.manager.channel_added.connect(on_channel_added);
+        device.manager.channel_added.connect (on_channel_added);
 
         string channel_name = @"$(name).monitor";
-        foreach (var channel in device.manager.get_input_channels()) {
+        foreach (var channel in device.manager.get_input_channels ()) {
             if (channel.name == channel_name) {
                 m_source.set_property ("device", channel_name);
                 m_channel_set = true;
@@ -134,8 +137,8 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         }
     }
 
-    public Equalizer(Device in_device, string in_name, string in_description) {
-        GLib.Object(
+    public Equalizer (Device in_device, string in_name, string in_description) {
+        GLib.Object (
             device: in_device,
             name: in_name,
             description: in_description
@@ -152,8 +155,8 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         }
     }
 
-    private void on_channel_added(SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
-        debug(@"channel added $(in_channel.name) == $(name)");
+    private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
+        debug (@"channel added $(in_channel.name) == $(name)");
         if (in_channel.direction == Direction.INPUT && in_channel.name == @"$(name).monitor") {
             in_channel.changed.connect (() => {
                 m_source.set_property ("device", @"$(name).monitor");
@@ -163,7 +166,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         }
     }
 
-    private void on_preset_freq_changed(int in_index) {
+    private void on_preset_freq_changed (int in_index) {
         GLib.Object? band = ((Gst.ChildProxy)m_equalizer).get_child_by_index (in_index);
         if (band != null) {
             float gain = m_preset[in_index].val;
@@ -172,7 +175,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             } else {
                 gain *= 0.12f;
             }
-            band.set_property("gain", gain);
+            band.set_property ("gain", gain);
         }
     }
 }

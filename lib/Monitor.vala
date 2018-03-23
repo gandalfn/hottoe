@@ -19,7 +19,7 @@
  */
 
 public abstract class SukaHottoe.Monitor : GLib.Object {
-    public signal void peak (float inValue);
+    public signal void peak (float in_value);
     public signal void paused ();
 
     public abstract bool active { get; set; }

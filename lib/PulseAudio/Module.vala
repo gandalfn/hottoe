@@ -24,7 +24,7 @@ internal class SukaHottoe.PulseAudio.Module : GLib.Object {
         public string name;
         public string val;
 
-        public Arg(string in_name, string in_val) {
+        public Arg (string in_name, string in_val) {
             name = in_name;
             val = in_val;
         }
@@ -49,16 +49,16 @@ internal class SukaHottoe.PulseAudio.Module : GLib.Object {
         );
     }
 
-    ~Module() {
-        unload();
+    ~Module () {
+        unload ();
     }
 
     public Arg[] get_arguments () {
         Arg[] ret = {};
         if (m_args != null) {
-            foreach (var arg in m_args.split(" ")) {
-                string[] val = arg.split("=", 2);
-                ret += Arg(val[0], val[1]);
+            foreach (var arg in m_args.split (" ")) {
+                string[] val = arg.split ("=", 2);
+                ret += Arg (val[0], val[1]);
             }
         }
         return ret;

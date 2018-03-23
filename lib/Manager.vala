@@ -99,17 +99,17 @@ public abstract class SukaHottoe.Manager : GLib.Object {
         return backend.load ();
     }
 
-    public signal void device_added (Device inDevice);
-    public signal void device_removed (Device inDevice);
+    public signal void device_added (Device in_device);
+    public signal void device_removed (Device in_device);
 
-    public signal void channel_added (Channel inChannel);
-    public signal void channel_removed (Channel inChannel);
+    public signal void channel_added (Channel in_channel);
+    public signal void channel_removed (Channel in_channel);
 
-    public signal void client_added (Client inClient);
-    public signal void client_removed (Client inClient);
+    public signal void client_added (Client in_client);
+    public signal void client_removed (Client in_client);
 
-    public signal void plug_added (Plug inPlug);
-    public signal void plug_removed (Plug inPlug);
+    public signal void plug_added (Plug in_plug);
+    public signal void plug_removed (Plug in_plug);
 
     public abstract void start ();
 

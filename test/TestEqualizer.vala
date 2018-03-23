@@ -1,8 +1,8 @@
-static int main (string[] inArgs) {
+static int main (string[] in_args) {
     Granite.Services.Logger.initialize ("test-manager");
     Granite.Services.Logger.DisplayLevel = Granite.Services.LogLevel.DEBUG;
 
-    Gst.init(ref inArgs);
+    Gst.init (ref in_args);
 
     var loop = new MainLoop ();
 
@@ -10,7 +10,7 @@ static int main (string[] inArgs) {
 
     mgr.start ();
 
-    SukaHottoe.Services.EqualizerManager eq_mgr = new SukaHottoe.Services.EqualizerManager(mgr);
+    SukaHottoe.Services.EqualizerManager eq_mgr = new SukaHottoe.Services.EqualizerManager (mgr);
 
     loop.run ();
 

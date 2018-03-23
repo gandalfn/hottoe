@@ -19,7 +19,7 @@
  */
 
 public class SukaHottoe.Widgets.PlugChooserRow : Gtk.Grid {
-    public unowned Plug plug  { get; construct; }
+    public unowned Plug plug { get; construct; }
 
     construct {
         hexpand = true;
@@ -42,7 +42,7 @@ public class SukaHottoe.Widgets.PlugChooserRow : Gtk.Grid {
         });
     }
 
-    public PlugChooserRow(Plug in_plug) {
+    public PlugChooserRow (Plug in_plug) {
         GLib.Object (
             plug: in_plug
         );

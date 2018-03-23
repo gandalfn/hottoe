@@ -25,7 +25,7 @@ public class SukaHottoe.Settings.Equalizer : Granite.Services.Settings {
     public bool enabled { get; set; }
     public string[] values { get; set; }
 
-    public Equalizer(string in_device) {
+    public Equalizer (string in_device) {
         base.with_path ("com.github.gandalfn.suka-hottoe.equalizer",
                         "/com/github/gandalfn/suka-hottoe/" + in_device + "/");
         device = in_device;

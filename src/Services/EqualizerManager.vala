@@ -28,10 +28,10 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
 
         construct {
             if (device.enable_equalizer) {
-                device.equalizer.preset = new Equalizer.Preset10Bands(settings.device);
+                device.equalizer.preset = new Equalizer.Preset10Bands (settings.device);
             }
 
-            if (device.get_output_channels().length > 0) {
+            if (device.get_output_channels ().length > 0) {
                 settings.enabled = true;
             }
 
@@ -42,7 +42,7 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
             on_values_changed ();
         }
 
-        public Item (Settings.Equalizer in_settings, Device in_device)  {
+        public Item (Settings.Equalizer in_settings, Device in_device) {
             GLib.Object (
                 device: in_device,
                 settings: in_settings
@@ -74,7 +74,7 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
         on_manager_ready ();
     }
 
-    public EqualizerManager(Manager in_manager) {
+    public EqualizerManager (Manager in_manager) {
         GLib.Object (
             manager: in_manager
         );

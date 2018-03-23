@@ -30,7 +30,7 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
         }
     }
 
-    public abstract class Preset : GLib.Object  {
+    public abstract class Preset : GLib.Object {
         protected Frequency[] m_frequencies;
 
         public string name { get; set; }
@@ -47,31 +47,31 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
         public abstract Preset copy ();
 
         public new Frequency @get (int in_index)
-            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            requires (in_index >= 0 && in_index < m_frequencies.length) {
             return m_frequencies[in_index];
         }
 
         public new void @set (int in_index, Frequency in_frequency)
-            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            requires (in_index >= 0 && in_index < m_frequencies.length) {
             if (m_frequencies[in_index] != in_frequency) {
                 m_frequencies[in_index] = in_frequency;
-                changed(in_index);
+                changed (in_index);
             }
         }
 
         public void set_freq (int in_index, int in_freq)
-            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            requires (in_index >= 0 && in_index < m_frequencies.length) {
             if (m_frequencies[in_index].freq != in_freq) {
                 m_frequencies[in_index].freq = in_freq;
-                changed(in_index);
+                changed (in_index);
             }
         }
 
         public void set_val (int in_index, int in_val)
-            requires (in_index >= 0 && in_index < m_frequencies.length)  {
+            requires (in_index >= 0 && in_index < m_frequencies.length) {
             if (m_frequencies[in_index].val != in_val) {
                 m_frequencies[in_index].val = in_val;
-                changed(in_index);
+                changed (in_index);
             }
         }
     }
@@ -85,13 +85,13 @@ public abstract class SukaHottoe.Equalizer : GLib.Object {
 
         construct {
             m_frequencies = new Frequency[10];
-            m_frequencies[0] = Frequency (60,    0);
-            m_frequencies[1] = Frequency (170,   0);
-            m_frequencies[2] = Frequency (310,   0);
-            m_frequencies[3] = Frequency (600,   0);
-            m_frequencies[4] = Frequency (1000,  0);
-            m_frequencies[5] = Frequency (3000,  0);
-            m_frequencies[6] = Frequency (6000,  0);
+            m_frequencies[0] = Frequency (60, 0);
+            m_frequencies[1] = Frequency (170, 0);
+            m_frequencies[2] = Frequency (310, 0);
+            m_frequencies[3] = Frequency (600, 0);
+            m_frequencies[4] = Frequency (1000, 0);
+            m_frequencies[5] = Frequency (3000, 0);
+            m_frequencies[6] = Frequency (6000, 0);
             m_frequencies[7] = Frequency (12000, 0);
             m_frequencies[8] = Frequency (14000, 0);
             m_frequencies[9] = Frequency (16000, 0);

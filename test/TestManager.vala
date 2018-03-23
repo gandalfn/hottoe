@@ -40,7 +40,7 @@ static void on_client_added (SukaHottoe.Client in_client) {
     in_client.changed.connect (on_client_changed);
 }
 
-static int main (string[] inArgs) {
+static int main (string[] in_args) {
     Granite.Services.Logger.initialize ("test-manager");
     Granite.Services.Logger.DisplayLevel = Granite.Services.LogLevel.DEBUG;
 

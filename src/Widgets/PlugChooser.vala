@@ -27,8 +27,8 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
         get {
             Gtk.ListBoxRow? row = null;
             int ret = 0, cpt = 0;
-            while ((row = m_plug_list.get_row_at_index(cpt)) != null) {
-                unowned PlugChooserRow? pr = row.get_child() as PlugChooserRow;
+            while ((row = m_plug_list.get_row_at_index (cpt)) != null) {
+                unowned PlugChooserRow? pr = row.get_child () as PlugChooserRow;
                 if (pr.plug.client != null && !pr.plug.client.is_mine &&
                     pr.plug.channel != null && !(pr.plug.channel in device)) {
                     ret++;
@@ -40,7 +40,7 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
         }
     }
 
-    public signal void plug_selected(Plug in_plug);
+    public signal void plug_selected (Plug in_plug);
 
     construct {
         var scrolled = new Gtk.ScrolledWindow (null, null);
@@ -92,8 +92,8 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
             bool found = false;
             Gtk.ListBoxRow? row = null;
             int cpt = 0;
-            while ((row = m_plug_list.get_row_at_index(cpt)) != null) {
-                unowned PlugChooserRow? pr = row.get_child() as PlugChooserRow;
+            while ((row = m_plug_list.get_row_at_index (cpt)) != null) {
+                unowned PlugChooserRow? pr = row.get_child () as PlugChooserRow;
                 if (pr.plug == in_plug) {
                     found = true;
                     break;
@@ -101,9 +101,9 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
                 cpt++;
             }
             if (!found) {
-                var r = new PlugChooserRow(in_plug);
+                var r = new PlugChooserRow (in_plug);
                 r.show_all ();
-                m_plug_list.prepend(r);
+                m_plug_list.prepend (r);
             }
         }
     }
@@ -113,8 +113,8 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
 
         Gtk.ListBoxRow? row = null;
         int cpt = 0;
-        while ((row = m_plug_list.get_row_at_index(cpt)) != null) {
-            unowned PlugChooserRow? pr = row.get_child() as PlugChooserRow;
+        while ((row = m_plug_list.get_row_at_index (cpt)) != null) {
+            unowned PlugChooserRow? pr = row.get_child () as PlugChooserRow;
             if (pr != null && pr.plug == in_plug) {
                 row.destroy ();
             }
@@ -123,18 +123,18 @@ public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
     }
 
     private void on_plug_selected (Gtk.ListBoxRow in_row) {
-        var row = in_row.get_child() as PlugChooserRow;
+        var row = in_row.get_child () as PlugChooserRow;
         plug_selected (row.plug);
         hide ();
     }
 
     private bool filter_function (Gtk.ListBoxRow in_row) {
-        var row = in_row.get_child() as PlugChooserRow;
+        var row = in_row.get_child () as PlugChooserRow;
         return row.plug.client != null && !row.plug.client.is_mine &&
                row.plug.channel != null && !(row.plug.channel in device);
     }
 
     private void on_plug_channel_changed (GLib.Object in_object, GLib.ParamSpec? in_spec) {
-        m_plug_list.invalidate_filter();
+        m_plug_list.invalidate_filter ();
     }
 }

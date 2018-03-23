@@ -129,7 +129,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetCardInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetCardInfoList (global::PulseAudio.Context in_context,
+                                owned Callback? in_callback,
+                                owned Finished? in_finished) {
             debug (@"new card info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -140,7 +142,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetCardInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.CardInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.CardInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish card info list");
                 if (callback != null) {
@@ -180,7 +184,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.CardInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.CardInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish card info by index $(index)");
                 if (callback != null) {
@@ -201,7 +207,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetSinkInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetSinkInfoList (global::PulseAudio.Context in_context,
+                                owned Callback? in_callback,
+                                owned Finished? in_finished) {
             debug (@"new get sink info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -212,7 +220,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetSinkInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SinkInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SinkInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish get sink info list");
                 if (callback != null) {
@@ -252,7 +262,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SinkInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SinkInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish sink info by index $(index)");
                 if (callback != null) {
@@ -273,7 +285,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetSourceInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetSourceInfoList (global::PulseAudio.Context in_context,
+                                  owned Callback? in_callback,
+                                  owned Finished? in_finished) {
             debug (@"new get source info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -284,7 +298,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetSourceInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SourceInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SourceInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish source info list");
                 if (callback != null) {
@@ -324,7 +340,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SourceInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SourceInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish source info by index $(index)");
                 if (callback != null) {
@@ -623,7 +641,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetClientInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetClientInfoList (global::PulseAudio.Context in_context,
+                                  owned Callback? in_callback,
+                                  owned Finished? in_finished) {
             debug (@"new get client info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -634,7 +654,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetClientInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ClientInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.ClientInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish client info list");
                 if (callback != null) {
@@ -657,7 +679,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public uint32 index;
         public Callback? callback;
 
-        public GetClientInfo (global::PulseAudio.Context in_context, uint32 in_index, owned Callback? in_callback) {
+        public GetClientInfo (global::PulseAudio.Context in_context,
+                              uint32 in_index, owned Callback? in_callback) {
             debug (@"new get client info by index $(in_index) operation");
             index = in_index;
             callback = (owned)in_callback;
@@ -672,7 +695,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ClientInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.ClientInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish client info $(index)");
                 if (callback != null) {
@@ -879,7 +904,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetSourceOutputInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetSourceOutputInfoList (global::PulseAudio.Context in_context,
+                                        owned Callback? in_callback,
+                                        owned Finished? in_finished) {
             debug (@"new get source output info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -890,7 +917,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetSourceOutputInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SourceOutputInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SourceOutputInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish source output info list");
                 if (callback != null) {
@@ -914,7 +943,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetSinkInputInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetSinkInputInfoList (global::PulseAudio.Context in_context,
+                                     owned Callback? in_callback,
+                                     owned Finished? in_finished) {
             debug (@"new get sink input info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -925,7 +956,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetSinkInputInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SinkInputInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SinkInputInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish sink input info list");
                 if (callback != null) {
@@ -965,7 +998,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SourceOutputInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SourceOutputInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish source output info $(index)");
                 if (callback != null) {
@@ -985,7 +1020,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public uint32 index;
         public Callback? callback;
 
-        public GetSinkInputInfo (global::PulseAudio.Context in_context, uint32 in_index, owned Callback? in_callback) {
+        public GetSinkInputInfo (global::PulseAudio.Context in_context,
+                                 uint32 in_index, owned Callback? in_callback) {
             debug (@"new get sink input info by index $(in_index) operation");
             index = in_index;
             callback = (owned)in_callback;
@@ -1000,7 +1036,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.SinkInputInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.SinkInputInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish sink input info $(index)");
                 if (callback != null) {
@@ -1030,7 +1068,6 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             args = in_args;
             callback = (owned)in_callback;
             operation = in_context.load_module (name, args, on_finish);
-            message(@"load module $(operation == null) $(global::PulseAudio.strerror(in_context.errno()))");
         }
 
         public override bool compare (Operation in_other) {
@@ -1083,7 +1120,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public uint32 index;
         public Callback? callback;
 
-        public GetModuleInfo (global::PulseAudio.Context in_context, uint32 in_index, owned Callback? in_callback) {
+        public GetModuleInfo (global::PulseAudio.Context in_context,
+                              uint32 in_index, owned Callback? in_callback) {
             debug (@"new get module info by index $(in_index) operation");
             index = in_index;
             callback = (owned)in_callback;
@@ -1098,7 +1136,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return ret;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ModuleInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.ModuleInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish module info $(index)");
                 if (callback != null) {
@@ -1119,7 +1159,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         public Callback? callback;
         public Finished? finished;
 
-        public GetModuleInfoList (global::PulseAudio.Context in_context, owned Callback? in_callback, owned Finished? in_finished) {
+        public GetModuleInfoList (global::PulseAudio.Context in_context,
+                                  owned Callback? in_callback,
+                                  owned Finished? in_finished) {
             debug (@"new get module info list operation");
             callback = (owned)in_callback;
             finished = (owned)in_finished;
@@ -1130,7 +1172,9 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
             return in_other is GetModuleInfoList;
         }
 
-        private void on_finish (global::PulseAudio.Context in_context, global::PulseAudio.ModuleInfo? in_info, bool in_eol) {
+        private void on_finish (global::PulseAudio.Context in_context,
+                                global::PulseAudio.ModuleInfo? in_info,
+                                bool in_eol) {
             if (in_info != null) {
                 debug (@"finish module info list");
                 if (callback != null) {
@@ -1175,7 +1219,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         push (new GetServerInfo (context, (owned)in_callback));
     }
 
-    public void get_card_info_list (owned GetCardInfoList.Callback? in_callback, owned GetCardInfoList.Finished? in_finished = null) {
+    public void get_card_info_list (owned GetCardInfoList.Callback? in_callback,
+                                    owned GetCardInfoList.Finished? in_finished = null) {
         push (new GetCardInfoList (context, (owned)in_callback, (owned)in_finished));
     }
 
@@ -1189,7 +1234,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         push (new SetCardProfileByIndex (context, in_index, in_name, (owned)in_callback));
     }
 
-    public void get_sink_info_list (owned GetSinkInfoList.Callback? in_callback, owned GetSinkInfoList.Finished? in_finished = null) {
+    public void get_sink_info_list (owned GetSinkInfoList.Callback? in_callback,
+                                    owned GetSinkInfoList.Finished? in_finished = null) {
         push (new GetSinkInfoList (context, (owned)in_callback, (owned)in_finished));
     }
 
@@ -1197,7 +1243,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         push (new GetSinkInfoByIndex (context, in_index, (owned)in_callback));
     }
 
-    public void get_source_info_list (owned GetSourceInfoList.Callback? in_callback, owned GetSourceInfoList.Finished? in_finished = null) {
+    public void get_source_info_list (owned GetSourceInfoList.Callback? in_callback,
+                                      owned GetSourceInfoList.Finished? in_finished = null) {
         push (new GetSourceInfoList (context, (owned)in_callback, (owned)in_finished));
     }
 
@@ -1256,7 +1303,8 @@ internal class SukaHottoe.PulseAudio.Operations : GLib.Object {
         return new global::PulseAudio.Stream (context, in_name, in_sample_spec, in_channel_map, in_proplist);
     }
 
-    public void get_client_info_list (owned GetClientInfoList.Callback? in_callback, owned GetClientInfoList.Finished? in_finished = null) {
+    public void get_client_info_list (owned GetClientInfoList.Callback? in_callback,
+                                      owned GetClientInfoList.Finished? in_finished = null) {
         push (new GetClientInfoList (context, (owned)in_callback, (owned)in_finished));
     }
 
