@@ -70,6 +70,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             if (module.name == "module-null-sink") {
                 foreach (var arg in module.get_arguments ()) {
                     if (arg.name == "sink_name") {
+                        message (@"$(arg.val) == $(name)");
                         if (arg.val == name) {
                             m_sink_module = module;
                             break;
@@ -83,7 +84,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             m_sink_module = new Module ((Manager)device.manager, "module-null-sink");
 
             Module.Arg[] args = {};
-            args += Module.Arg ("sink_name", "'" + name + "'");
+            args += Module.Arg ("sink_name", name);
             args += Module.Arg ("sink_properties", "device.icon_name='media-eq-symbolic'" +
                                                    @"device.description='$(description)'" +
                                                    "device.equalizer='1'" +

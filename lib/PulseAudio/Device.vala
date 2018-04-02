@@ -73,7 +73,9 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
         set {
             if (m_enable_equalizer != value) {
                 m_enable_equalizer = value;
-                on_manager_is_ready_nofify ();
+                if (manager.is_ready) {
+                    on_manager_is_ready_nofify ();
+                }
             }
         }
     }
@@ -90,6 +92,10 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
         m_active_profile = null;
 
         manager.notify["is-ready"].connect (on_manager_is_ready_nofify);
+
+        if (manager.is_ready) {
+            on_manager_is_ready_nofify ();
+        }
     }
 
     public Device (Manager in_manager, global::PulseAudio.CardInfo in_info) {
@@ -255,8 +261,10 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
             string eq_name = @"$(name).equalizer";
             string eq_desc = @"$(display_name)-Equalizer".replace (" ", "-");
             m_equalizer = new Equalizer (this, eq_name, eq_desc);
+            notify_property("equalizer");
         } else if (!manager.is_ready || !enable_equalizer) {
             m_equalizer = null;
+            notify_property("equalizer");
         }
     }
 

@@ -10,7 +10,11 @@ static int main (string[] in_args) {
 
     mgr.start ();
 
-    SukaHottoe.Services.EqualizerManager eq_mgr = new SukaHottoe.Services.EqualizerManager (mgr);
+    SukaHottoe.Services.EqualizerManager eq_mgr = null;
+
+    mgr.notify["is-ready"].connect (() => {
+        eq_mgr = new SukaHottoe.Services.EqualizerManager (mgr);
+    });
 
     loop.run ();
 

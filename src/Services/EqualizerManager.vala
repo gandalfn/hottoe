@@ -21,16 +21,10 @@
 
 public class SukaHottoe.Services.EqualizerManager : GLib.Object {
     public class Item : GLib.Object {
-        private Equalizer m_equalizer;
-
         public Settings.Equalizer settings { get; construct; }
         public unowned Device device { get; construct; }
 
         construct {
-            if (device.enable_equalizer) {
-                device.equalizer.preset = new Equalizer.Preset10Bands (settings.device);
-            }
-
             if (device.get_output_channels ().length > 0) {
                 settings.enabled = true;
             }
@@ -38,8 +32,10 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
             device.enable_equalizer = settings.enabled;
 
             settings.notify["values"].connect (on_values_changed);
+            device.notify["enable_equalizer"].connect (on_device_equalizer_changed);
+            device.notify["equalizer"].connect (on_device_equalizer_changed);
 
-            on_values_changed ();
+            on_device_equalizer_changed ();
         }
 
         public Item (Settings.Equalizer in_settings, Device in_device) {
@@ -50,10 +46,20 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
         }
 
         private void on_values_changed () {
-            int cpt = 0;
-            foreach (var val in settings.values) {
-                m_equalizer.preset.set_val (cpt, int.parse (val));
-                cpt++;
+            if (device.enable_equalizer && device.equalizer != null) {
+                int cpt = 0;
+                foreach (var val in settings.values) {
+                    device.equalizer.preset.set_val (cpt, int.parse (val));
+                    cpt++;
+                }
+            }
+        }
+
+        private void on_device_equalizer_changed () {
+            if (device.enable_equalizer && device.equalizer != null) {
+                device.equalizer.preset = new Equalizer.Preset10Bands (settings.device);
+
+                on_values_changed ();
             }
         }
 
@@ -71,7 +77,9 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
 
         manager.notify["is-ready"].connect (on_manager_ready);
 
-        on_manager_ready ();
+        if (manager.is_ready) {
+            on_manager_ready ();
+        }
     }
 
     public EqualizerManager (Manager in_manager) {
