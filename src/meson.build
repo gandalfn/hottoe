@@ -62,6 +62,7 @@ shared_module(
     meson.project_name() + '.plug',
     [
         'SwitchboardPlug.vala',
+        'Widgets/Equalizer.vala',
         'Widgets/DeviceSettingsView.vala',
         'Widgets/DeviceSettingsPage.vala',
         'Widgets/DeviceSettingsListRow.vala',

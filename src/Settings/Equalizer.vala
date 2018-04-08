@@ -1,6 +1,6 @@
 /* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * Main.vala
+ * Equalizer.vala
  * Copyright (C) Nicolas Bruguier 2018 <gandalfn@club-internet.fr>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ public class SukaHottoe.Settings.Equalizer : Granite.Services.Settings {
     public string device;
 
     public bool enabled { get; set; }
+    public string[] frequencies { get; set; }
     public string[] values { get; set; }
 
     public Equalizer (string in_device) {

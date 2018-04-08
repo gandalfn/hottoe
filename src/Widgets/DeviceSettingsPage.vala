@@ -94,6 +94,9 @@ public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         output_channels.monitor_nb_bars = 20.0;
         m_output_grid.add (output_channels);
 
+        var output_equalizer = new Widgets.Equalizer(device);
+        m_output_grid.add (output_equalizer);
+
         var output_plugs = new PlugSettingsList (device, Direction.OUTPUT);
         m_output_grid.add (output_plugs);
 

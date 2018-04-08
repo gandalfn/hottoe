@@ -11,6 +11,11 @@
       <summary>Equalizer enabled</summary>
       <description>Equalizer enabled</description>
     </key>
+    <key type="as" name="frequencies">
+      <default>['60','170','310','600','1000','3000','6000','12000','14000','16000']</default>
+      <summary>List of frequencies</summary>
+      <description>List of equalizer frequencies</description>
+    </key>
     <key type="as" name="values">
       <default>['0','0','0','0','0','0','0','0','0','0']</default>
       <summary>List of values</summary>

@@ -57,8 +57,12 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
 
         private void on_device_equalizer_changed () {
             if (device.enable_equalizer && device.equalizer != null) {
-                device.equalizer.preset = new Equalizer.Preset10Bands (settings.device);
-
+                var preset = new Equalizer.Preset10Bands (settings.device);
+                int cpt = 0;
+                foreach (var freq in settings.frequencies) {
+                    preset.set_freq (cpt, int.parse (freq));
+                }
+                device.equalizer.preset = preset;
                 on_values_changed ();
             }
         }

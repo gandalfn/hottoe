@@ -82,6 +82,11 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
 
     public override unowned SukaHottoe.Equalizer? equalizer {
         get {
+            if (m_enable_equalizer && m_equalizer == null) {
+                string eq_name = @"$(name).equalizer";
+                string eq_desc = @"$(display_name)-Equalizer".replace (" ", "-");
+                m_equalizer = new Equalizer (this, eq_name, eq_desc);
+            }
             return m_equalizer;
         }
     }
@@ -257,15 +262,10 @@ internal class SukaHottoe.PulseAudio.Device : SukaHottoe.Device {
     }
 
     private void on_manager_is_ready_nofify () {
-        if (manager.is_ready && enable_equalizer && m_equalizer == null) {
-            string eq_name = @"$(name).equalizer";
-            string eq_desc = @"$(display_name)-Equalizer".replace (" ", "-");
-            m_equalizer = new Equalizer (this, eq_name, eq_desc);
-            notify_property("equalizer");
-        } else if (!manager.is_ready || !enable_equalizer) {
+        if  (!manager.is_ready || !enable_equalizer) {
             m_equalizer = null;
-            notify_property("equalizer");
         }
+        notify_property("equalizer");
     }
 
     private void on_active_profile_destroyed (GLib.Object in_object) {
