@@ -81,7 +81,7 @@ public class SukaHottoe.Widgets.ChannelView : Gtk.Grid {
         switch_widget.margin_end = 12;
         attach (switch_widget, 2, 0, 1, 1);
 
-        var volume_progressbar = new VolumeMeter (channel);
+        var volume_progressbar = new VuMeter (channel);
         volume_progressbar.margin_start = 6;
         volume_progressbar.margin_end = 24;
         attach (volume_progressbar, 1, 2, 2, 1);

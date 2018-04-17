@@ -10,6 +10,7 @@ libsuka_hottoe_widgets = static_library (
         'Widgets/ClientIcon.vala',
         'Widgets/VolumeMeter.vala',
         'Widgets/ChannelView.vala',
+        'Widgets/VuMeter.vala',
         'Widgets/DeviceChannelList.vala',
         'Services/Notification.vala',
         'Services/SoundNotification.vala',
