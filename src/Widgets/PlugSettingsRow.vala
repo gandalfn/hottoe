@@ -64,10 +64,10 @@ public class SukaHottoe.Widgets.PlugSettingsRow : Gtk.Grid {
         switch_widget.margin_end = 12;
         attach (switch_widget, 2, 1, 1, 1);
 
-        var vumeter = new VolumeMeter.plug (plug);
+        var vumeter = new VuMeter.plug (plug);
         vumeter.margin_start = 6;
         vumeter.margin_end = 24;
-        vumeter.nb_bars = 20;
+        vumeter.nb_bars = 25;
         attach (vumeter, 1, 2, 2, 1);
 
         switch_widget.bind_property ("active", m_volume, "sensitive", GLib.BindingFlags.SYNC_CREATE);

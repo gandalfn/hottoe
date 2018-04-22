@@ -22,31 +22,39 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
     private Monitor m_monitor;
     private double m_value;
     private int64 m_last_frame = 0;
+    private uint m_id_refresh;
     private Granite.Drawing.BufferSurface m_buffer;
 
-    public unowned Channel channel { get; construct; }
     public double level { get; set; default = 100.0; }
     public int nb_bars { get; set; default = 10; }
     public Gtk.Orientation orientation { get; set; default = Gtk.Orientation.VERTICAL; }
 
     construct {
-        m_monitor = channel.create_monitor ();
-        m_monitor.peak.connect (on_monitor_peak);
-        m_monitor.paused.connect (on_monitor_paused);
+        on_orientation_changed ();
 
-        channel.manager.bind_property ("enable-monitoring", m_monitor, "active", GLib.BindingFlags.SYNC_CREATE);
-        m_monitor.bind_property ("active", this, "sensitive");
-        channel.bind_property ("volume", this, "level", GLib.BindingFlags.SYNC_CREATE);
+        notify["orientation"].connect (on_orientation_changed);
 
-        height_request = 8;
-
-        add_tick_callback (on_tick);
+        m_id_refresh = add_tick_callback (on_tick);
     }
 
     public VuMeter (Channel in_channel) {
-        GLib.Object (
-            channel: in_channel
-        );
+        m_monitor = in_channel.create_monitor ();
+        m_monitor.peak.connect (on_monitor_peak);
+        m_monitor.paused.connect (on_monitor_paused);
+
+        in_channel.manager.bind_property ("enable-monitoring", m_monitor, "active", GLib.BindingFlags.SYNC_CREATE);
+        m_monitor.bind_property ("active", this, "sensitive");
+        in_channel.bind_property ("volume", this, "level", GLib.BindingFlags.SYNC_CREATE);
+    }
+
+    public VuMeter.plug (Plug in_plug) {
+        m_monitor = in_plug.create_monitor ();
+        m_monitor.peak.connect (on_monitor_peak);
+        m_monitor.paused.connect (on_monitor_paused);
+
+        in_plug.manager.bind_property ("enable-monitoring", m_monitor, "active", GLib.BindingFlags.SYNC_CREATE);
+        m_monitor.bind_property ("active", this, "sensitive");
+        in_plug.bind_property ("volume", this, "level", GLib.BindingFlags.SYNC_CREATE);
     }
 
     public override bool draw (Cairo.Context in_ctx)
@@ -54,8 +62,7 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
         int width = get_allocated_width ();
         int height = get_allocated_height ();
 
-        double remanence = 1;
-        double back_rem = 0.2;
+        double remanence = 0.3;
 
         // calculate size of bars
         int bar_width = 0;
@@ -88,16 +95,16 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
                 bar_y = (cpt * (bar_height + space));
             }
 
-            m_buffer.context.set_source_rgba (0.3, 0.3, 0.3, (1.0 - bar_percent) * back_rem);
+            m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff, (double)0xd4/(double)0xff, (double)0xd4/(double)0xff, (1.0 - bar_percent) * remanence);
             m_buffer.context.rectangle (bar_x, bar_y, bar_width, bar_height);
             m_buffer.context.fill_preserve ();
 
             if ((bar_range * cpt) >= red) {
-                m_buffer.context.set_source_rgba (1, 0, 0, bar_percent * remanence);
+                m_buffer.context.set_source_rgba ((double)0xc6/(double)0xff, (double)0x26/(double)0xff, (double)0x2e/(double)0xff, bar_percent);
             } else if ((bar_range * cpt) >= yellow) {
-                m_buffer.context.set_source_rgba (1, 0.4, 0, bar_percent * remanence);
+                m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff, (double)0x8e/(double)0xff, (double)0x15/(double)0xff, bar_percent);
             } else {
-                m_buffer.context.set_source_rgba (0, 0.8, 0, bar_percent * remanence);
+                m_buffer.context.set_source_rgba ((double)0x68/(double)0xff, (double)0xb7/(double)0xff, (double)0x23/(double)0xff, bar_percent);
             }
             m_buffer.context.fill();
         }
@@ -112,6 +119,16 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
         base.size_allocate (in_allocation);
 
         m_buffer = new Granite.Drawing.BufferSurface (in_allocation.width, in_allocation.height);
+    }
+
+    private void on_orientation_changed () {
+        if (orientation == Gtk.Orientation.VERTICAL) {
+            height_request = 8;
+            width_request = -1;
+        } else {
+            height_request = -1;
+            width_request = 8;
+        }
     }
 
     private bool on_tick (Gtk.Widget in_widget, Gdk.FrameClock in_frame_clock) {

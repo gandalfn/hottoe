@@ -91,7 +91,7 @@ public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         output_channels.show_labels = true;
         output_channels.show_balance = true;
         output_channels.icon_size = Icon.Size.EXTRA_LARGE;
-        output_channels.monitor_nb_bars = 20.0;
+        output_channels.monitor_nb_bars = 25.0;
         m_output_grid.add (output_channels);
 
         var output_equalizer = new Widgets.Equalizer(device);
@@ -109,7 +109,7 @@ public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         input_channels.show_labels = true;
         input_channels.show_balance = true;
         input_channels.icon_size = Icon.Size.EXTRA_LARGE;
-        input_channels.monitor_nb_bars = 20.0;
+        input_channels.monitor_nb_bars = 25.0;
         m_input_grid.add (input_channels);
 
         var input_plugs = new PlugSettingsList (device, Direction.INPUT);

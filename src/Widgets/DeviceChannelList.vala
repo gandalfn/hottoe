@@ -24,7 +24,7 @@ public class SukaHottoe.Widgets.DeviceChannelList : Gtk.Grid {
     public Icon.Size icon_size { get; set; default = Icon.Size.LARGE; }
     public bool show_labels { get; set; default = false; }
     public bool show_balance { get; set; default = false; }
-    public double monitor_nb_bars { get; set; default = 8.0; }
+    public double monitor_nb_bars { get; set; default = 10.0; }
 
     public DeviceChannelList (Device in_device, Direction in_direction = Direction.INPUT | Direction.OUTPUT) {
         Object (
