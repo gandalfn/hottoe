@@ -26,3 +26,17 @@ executable(
     ],
     install: false
 )
+
+executable(
+    'test-spectrum',
+    [
+        'TestSpectrum.vala'
+    ],
+    dependencies: [
+        suka_hottoe_dep,
+        dependency('granite'),
+        dependency('gtk+-3.0'),
+        dependency('gstreamer-1.0')
+    ],
+    install: false
+)

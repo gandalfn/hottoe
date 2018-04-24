@@ -70,7 +70,6 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             if (module.name == "module-null-sink") {
                 foreach (var arg in module.get_arguments ()) {
                     if (arg.name == "sink_name") {
-                        message (@"$(arg.val) == $(name)");
                         if (arg.val == name) {
                             m_sink_module = module;
                             break;
@@ -100,27 +99,25 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
                                                "application.id=com.github.gandalfn.suka-hottoe", null);
 
         m_source = Gst.ElementFactory.make ("pulsesrc", "source");
-        m_source.set_property ("volume", 1.0);
-        m_source.set_property ("mute", false);
-        m_source.set_property ("provide_clock", false);
-        m_source.set_property ("slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP);
-        m_source.set_property ("stream-properties", props);
+        m_source.set ("volume", 1.0,
+                      "mute", false,
+                      "provide-clock", false,
+                      "slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP,
+                      "stream-properties", props);
 
         m_equalizer = Gst.ElementFactory.make ("equalizer-10bands", "equalizer");
 
         m_sink = Gst.ElementFactory.make ("pulsesink", "sink");
-        m_sink.set_property ("volume", 1.0);
-        m_sink.set_property ("mute", false);
-        m_sink.set_property ("provide_clock", true);
-        m_sink.set_property ("stream-properties", props);
-        // TODO: manage device without output
-        m_sink.set_property ("device", device.get_output_channels ()[0].name);
+        m_sink.set ("volume", 1.0,
+                    "mute", false,
+                    "provide-clock", true,
+                    "stream-properties", props,
+                    // TODO: manage device without output
+                    "device", device.get_output_channels ()[0].name);
 
         m_pipeline.add (m_source);
         m_pipeline.add (m_equalizer);
         m_pipeline.add (m_sink);
-
-        debug ("create equalizer\n");
 
         m_source.link (m_equalizer);
         m_equalizer.link (m_sink);
@@ -157,7 +154,6 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
     }
 
     private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
-        debug (@"channel added $(in_channel.name) == $(name)");
         if (in_channel.direction == Direction.INPUT && in_channel.name == @"$(name).monitor") {
             in_channel.changed.connect (() => {
                 m_source.set_property ("device", @"$(name).monitor");

@@ -95,16 +95,28 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
                 bar_y = (cpt * (bar_height + space));
             }
 
-            m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff, (double)0xd4/(double)0xff, (double)0xd4/(double)0xff, (1.0 - bar_percent) * remanence);
+            m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff,
+                                              (double)0xd4/(double)0xff,
+                                              (double)0xd4/(double)0xff,
+                                              (1.0 - bar_percent) * remanence);
             m_buffer.context.rectangle (bar_x, bar_y, bar_width, bar_height);
             m_buffer.context.fill_preserve ();
 
             if ((bar_range * cpt) >= red) {
-                m_buffer.context.set_source_rgba ((double)0xc6/(double)0xff, (double)0x26/(double)0xff, (double)0x2e/(double)0xff, bar_percent);
+                m_buffer.context.set_source_rgba ((double)0xc6/(double)0xff,
+                                                  (double)0x26/(double)0xff,
+                                                  (double)0x2e/(double)0xff,
+                                                  bar_percent);
             } else if ((bar_range * cpt) >= yellow) {
-                m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff, (double)0x8e/(double)0xff, (double)0x15/(double)0xff, bar_percent);
+                m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff,
+                                                  (double)0x8e/(double)0xff,
+                                                  (double)0x15/(double)0xff,
+                                                  bar_percent);
             } else {
-                m_buffer.context.set_source_rgba ((double)0x68/(double)0xff, (double)0xb7/(double)0xff, (double)0x23/(double)0xff, bar_percent);
+                m_buffer.context.set_source_rgba ((double)0x68/(double)0xff,
+                                                  (double)0xb7/(double)0xff,
+                                                  (double)0x23/(double)0xff,
+                                                  bar_percent);
             }
             m_buffer.context.fill();
         }

@@ -15,7 +15,8 @@ shared_module(
         'OutputPlug.vala',
         'InputPlug.vala',
         'Module.vala',
-        'Equalizer.vala'
+        'Equalizer.vala',
+        'Spectrum.vala'
     ],
     dependencies: [
         suka_hottoe_dep,

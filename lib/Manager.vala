@@ -120,4 +120,6 @@ public abstract class SukaHottoe.Manager : GLib.Object {
     public abstract Client[] get_clients ();
     public abstract Plug[] get_input_plugs ();
     public abstract Plug[] get_output_plugs ();
+
+    public abstract Spectrum create_spectrum (Channel in_channel);
 }
