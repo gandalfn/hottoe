@@ -20,8 +20,11 @@ static int main (string[] in_args) {
                 spectrum.enabled = true;
                 spectrum.threshold = -90;
                 spectrum.updated.connect (() => {
+                    int cpt = 0;
                     foreach (float val in spectrum.get_magnitudes ()) {
-                        print("%f ", val + 20);
+                        double freq = (double) ((44100.0 / 2.0) * cpt + 44100.0 / 4.0) / 20;
+                        print("%f = %f ", freq, val + 20);
+                        cpt++;
                     }
                     print("\n");
                 });

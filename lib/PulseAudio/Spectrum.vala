@@ -51,6 +51,7 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
         m_spectrum = Gst.ElementFactory.make ("spectrum", "spectrum");
         m_spectrum.set ("bands", bands,
                         "threshold", threshold,
+                        "interval", 30000000,
                         "post-messages", true,
                         "message-phase", true);
 

@@ -94,8 +94,17 @@ public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         output_channels.monitor_nb_bars = 25.0;
         m_output_grid.add (output_channels);
 
+        var grid_eq_spec = new Gtk.Grid ();
+        grid_eq_spec.orientation = Gtk.Orientation.HORIZONTAL;
+        grid_eq_spec.column_spacing = 12;
+
         var output_equalizer = new Widgets.Equalizer(device);
-        m_output_grid.add (output_equalizer);
+        grid_eq_spec.add (output_equalizer);
+
+        var output_spectrum = new Widgets.Spectrum(device);
+        grid_eq_spec.add (output_spectrum);
+
+        m_output_grid.add (grid_eq_spec);
 
         var output_plugs = new PlugSettingsList (device, Direction.OUTPUT);
         m_output_grid.add (output_plugs);
