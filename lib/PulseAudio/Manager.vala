@@ -191,8 +191,8 @@ namespace SukaHottoe.PulseAudio {
             return m_clients.to_array ();
         }
 
-        public override SukaHottoe.Spectrum create_spectrum (SukaHottoe.Channel in_channel) {
-            return new Spectrum (in_channel);
+        public override SukaHottoe.Spectrum create_spectrum (SukaHottoe.Channel in_channel, int in_sample_rate, int in_interval) {
+            return new Spectrum (in_channel, in_sample_rate, in_interval);
         }
 
         private bool reconnect_timeout () {

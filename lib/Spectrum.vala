@@ -23,6 +23,8 @@ public abstract class SukaHottoe.Spectrum : GLib.Object {
     public unowned Channel channel { get; construct; }
     public uint bands { get; set; default = 20; }
     public int threshold { get; set; default = -80; }
+    public int sample_rate { get; construct; default = 44100; }
+    public int interval { get; construct; default = 100; }
     public bool enabled { get; set; default = false; }
 
     public signal void updated ();

@@ -16,7 +16,7 @@ static int main (string[] in_args) {
         foreach (var device in mgr.get_devices ()) {
             foreach (var channel in device.get_output_channels ()) {
                 print("channel %s\n", channel.name);
-                spectrum = mgr.create_spectrum (channel);
+                spectrum = mgr.create_spectrum (channel, 44100, 100);
                 spectrum.enabled = true;
                 spectrum.threshold = -90;
                 spectrum.updated.connect (() => {

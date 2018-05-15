@@ -18,18 +18,78 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.Spectrum : Gtk.DrawingArea {
+public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
+    private class Meter : Gtk.DrawingArea {
+        private unowned Spectrum m_spectrum;
+        private int m_band;
+        private double m_max;
+        private uint64 m_last_max;
+
+        construct {
+            width_request = 8;
+            hexpand = true;
+            vexpand = true;
+        }
+
+        public Meter (Spectrum in_spectrum, int in_band) {
+            m_spectrum = in_spectrum;
+            m_band = in_band;
+        }
+
+        public override bool draw (Cairo.Context in_ctx) {
+            int width = get_allocated_width ();
+            int height = get_allocated_height ();
+
+            var gradient = new Cairo.Pattern.linear (0, height, 0, 0);
+            gradient.add_color_stop_rgb (0.0,
+                                         (double)0x68/(double)0xff,
+                                         (double)0xb7/(double)0xff,
+                                         (double)0x23/(double)0xff);
+
+            gradient.add_color_stop_rgb (m_spectrum.iec_scale(-10),
+                                         (double)0xd4/(double)0xff,
+                                         (double)0x8e/(double)0xff,
+                                         (double)0x15/(double)0xff);
+
+            gradient.add_color_stop_rgb (m_spectrum.iec_scale(-5),
+                                         (double)0xc6/(double)0xff,
+                                         (double)0x26/(double)0xff,
+                                         (double)0x2e/(double)0xff);
+
+            double gain = m_spectrum[m_band];
+
+            in_ctx.set_source (gradient);
+            in_ctx.rectangle (0, height - height * gain, width, height * gain);
+            in_ctx.fill();
+
+            int64 now = GLib.get_monotonic_time ();
+
+            if (gain == 0.0 || gain >= m_max || now - m_last_max > 1 * 1000 * 1000) {
+                m_max = gain;
+                m_last_max = now;
+            }
+
+            in_ctx.rectangle (0, height - height * m_max, width, 4.0);
+            in_ctx.fill ();
+
+            return true;
+        }
+    }
+
     private SukaHottoe.Spectrum m_spectrum;
-    private int64 m_last_frame;
-    private Granite.Drawing.BufferSurface m_back;
-    private Granite.Drawing.BufferSurface m_front;
+    private double[] m_magnitudes;
 
     public unowned Device device { get; construct; }
+    public int interval { get; construct; default = 50; }
     public bool enabled { get; set; default = true; }
     public int nb_bars { get; set; default = 10; }
-    public int nb_bands { get; set; default = 20; }
+    public int nb_bands { get; set; default = 15; }
+    public double smoothing { get; set; default = 0.00007; }
 
     construct {
+        column_spacing = 6;
+        homogeneous = true;
+
         on_nb_bands_changed ();
 
         device.manager.channel_added.connect (on_channel_added);
@@ -41,80 +101,63 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.DrawingArea {
         notify["nb-bands"].connect (on_nb_bands_changed);
     }
 
-    public Spectrum (Device in_device) {
+    public Spectrum (Device in_device, int in_interval) {
         GLib.Object (
-            device: in_device
+            device: in_device,
+            interval: in_interval
         );
     }
 
-    public override bool draw (Cairo.Context in_ctx)
-        requires (nb_bars > 0) {
-        int width = get_allocated_width ();
-        int height = get_allocated_height ();
-
-        double yellow = iec_scale(-10);
-        double red = iec_scale(-5);
-
-        float[] magnitudes = m_spectrum.get_magnitudes ();
-
-        m_front.context.set_source_rgb ((double)245 / (double)255,
-                                        (double)245 / (double)255,
-                                        (double)245 / (double)255);
-        m_front.context.paint ();
-        m_front.context.set_source_surface (m_back.surface, 0, 0);
-        m_front.context.paint_with_alpha (0.85);
-
-        for (int band = 0; band < nb_bands; ++band) {
-            m_front.context.save ();
-            {
-                m_front.context.translate (band * 20, 0);
-                double val = iec_scale (20 + magnitudes[band]);
-                m_front.context.set_source_rgba ((double)0x68/(double)0xff,
-                                        (double)0xb7/(double)0xff,
-                                        (double)0x23/(double)0xff,
-                                        1.0);
-                m_front.context.rectangle (0, height - height * val, 12, height * val);
-                m_front.context.fill();
-            }
-            m_front.context.restore ();
-        }
-
-        in_ctx.set_source_surface (m_front.surface, 0, 0);
-        in_ctx.paint ();
-
-        m_back.context.set_source_surface (m_front.surface, 0, 0);
-        m_back.context.paint ();
-
-        return true;
-    }
-
-    public override void size_allocate (Gtk.Allocation in_allocation) {
-        base.size_allocate (in_allocation);
-
-        m_back = new Granite.Drawing.BufferSurface (in_allocation.width, in_allocation.height);
-        m_front = new Granite.Drawing.BufferSurface (in_allocation.width, in_allocation.height);
-    }
-
     private void on_nb_bands_changed () {
-        width_request = 20 * nb_bands;
+        // Remove all old band meter
+        get_children ().foreach ((child) => {
+            child.destroy ();
+        });
+
+        // Create new magnitudes array
+        m_magnitudes = new double[nb_bands];
+
+        // Add all band meter
+        for (int cpt = 0; cpt < nb_bands; ++cpt) {
+            var grid = new Gtk.Grid ();
+            grid.orientation = Gtk.Orientation.VERTICAL;
+            grid.add (new Meter (this, cpt));
+            double freq =  ((32000.0 / 2.0) * cpt + 32000.0 / 4.0) / nb_bands;
+            var str = "<span size='x-small'>%0.2g</span>".printf(freq / 1000.0);
+            var label = new Gtk.Label (str);
+            label.use_markup = true;
+            grid.add (label);
+            attach (grid, cpt, cpt + 1, 0, 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0);
+        }
     }
 
     private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
         if (m_spectrum == null && in_channel.direction == Direction.OUTPUT && in_channel in device) {
-            m_spectrum = in_manager.create_spectrum (in_channel);
+            m_spectrum = in_manager.create_spectrum (in_channel, 32000, interval);
             m_spectrum.threshold = -90;
+            m_spectrum.bands = nb_bands;
+            m_spectrum.updated.connect (on_spectrum_updated);
             bind_property ("enabled", m_spectrum, "enabled", GLib.BindingFlags.SYNC_CREATE);
-            add_tick_callback (on_tick);
         }
     }
 
-    private bool on_tick (Gtk.Widget in_widget, Gdk.FrameClock in_frame_clock) {
-        int64 current_frame = in_frame_clock.get_frame_time ();
-        if (current_frame - m_last_frame > 50) {
-            queue_draw ();
-            m_last_frame = current_frame;
+    private void on_spectrum_updated () {
+        float[] magnitudes = m_spectrum.get_magnitudes ();
+        bool updated = false;
+
+        for (int band = 0; band < nb_bands; ++band) {
+            double val = magnitudes[band];
+            double gain = (m_magnitudes[band] * smoothing) + (val * (1.0 - smoothing));
+
+            if (m_magnitudes[band] != gain) {
+                m_magnitudes[band] = gain;
+                updated = true;
+            }
         }
-        return true;
+
+        if (updated) {
+            queue_draw ();
+        }
     }
 
     private double
@@ -137,8 +180,13 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.DrawingArea {
         else if (inDB < 0.0)
             def = (inDB + 20.0) * 2.5 + 50.0;
         else
-            def = inDB * 5.0 + 90.0;
+            def = 100.0;
 
         return def / 100.0;
+    }
+
+    private new double @get(int in_index)
+        requires (in_index >= 0 && in_index < m_magnitudes.length) {
+        return iec_scale (20 + m_magnitudes[in_index]);
     }
 }

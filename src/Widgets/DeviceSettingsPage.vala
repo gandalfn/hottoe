@@ -101,7 +101,7 @@ public class SukaHottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         var output_equalizer = new Widgets.Equalizer(device);
         grid_eq_spec.add (output_equalizer);
 
-        var output_spectrum = new Widgets.Spectrum(device);
+        var output_spectrum = new Widgets.Spectrum(device, 30);
         grid_eq_spec.add (output_spectrum);
 
         m_output_grid.add (grid_eq_spec);

@@ -51,14 +51,14 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
         m_spectrum = Gst.ElementFactory.make ("spectrum", "spectrum");
         m_spectrum.set ("bands", bands,
                         "threshold", threshold,
-                        "interval", 30000000,
+                        "interval", interval * 1000 * 1000,
                         "post-messages", true,
                         "message-phase", true);
 
         m_sink = Gst.ElementFactory.make ("fakesink", "sink");
         m_sink.set ("sync", true);
 
-        var caps = new Gst.Caps.simple("audio/x-raw", "rate", typeof(int), 44100);
+        var caps = new Gst.Caps.simple("audio/x-raw", "rate", typeof(int), sample_rate);
 
         m_pipeline.add (m_source);
         m_pipeline.add (audioconvert);
@@ -81,9 +81,11 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
         });
     }
 
-    public Spectrum(SukaHottoe.Channel in_channel) {
+    public Spectrum(SukaHottoe.Channel in_channel, int in_sample_rate, int in_interval) {
         GLib.Object (
-            channel: in_channel
+            channel: in_channel,
+            sample_rate: in_sample_rate,
+            interval: in_interval
         );
     }
 
