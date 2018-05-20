@@ -21,8 +21,6 @@
 public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
     private Monitor m_monitor;
     private double m_value;
-    private int64 m_last_frame = 0;
-    private uint m_id_refresh;
     private Granite.Drawing.BufferSurface m_buffer;
 
     public double level { get; set; default = 100.0; }
@@ -33,8 +31,6 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
         on_orientation_changed ();
 
         notify["orientation"].connect (on_orientation_changed);
-
-        m_id_refresh = add_tick_callback (on_tick);
     }
 
     public VuMeter (Channel in_channel) {
@@ -62,7 +58,7 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
         int width = get_allocated_width ();
         int height = get_allocated_height ();
 
-        double remanence = 0.3;
+        double remanence = m_value == 0 ? 1.0 : 0.3;
 
         // calculate size of bars
         int bar_width = 0;
@@ -143,19 +139,14 @@ public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
         }
     }
 
-    private bool on_tick (Gtk.Widget in_widget, Gdk.FrameClock in_frame_clock) {
-        int64 current_frame = in_frame_clock.get_frame_time ();
-        if (current_frame - m_last_frame > 50) {
-            queue_draw ();
-            m_last_frame = current_frame;
-        }
-        return true;
-    }
-
     private void on_monitor_peak (float in_data) {
         double peak = iec_scale (20.0 * GLib.Math.log10(in_data * (level / 100.0)));
         if (m_value != peak) {
             m_value = peak;
+
+            if (is_visible ()) {
+                queue_draw ();
+            }
         }
     }
 
