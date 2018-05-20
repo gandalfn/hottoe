@@ -26,7 +26,17 @@ public class SukaHottoe.Indicator : Wingpanel.Indicator {
     private uint m_timeout_active;
 
     construct {
+        // TODO: Disable desktop notification since we have a problem when wingpanel has
+        // emitter and receiver of notification
+        Services.DesktopNotification.enabled = false;
+
         m_manager = Manager.get ("pulseaudio");
+        m_manager.start ();
+
+        m_indicator_icon = new Widgets.IndicatorIcon (m_manager);
+
+        m_indicator_view = new Widgets.IndicatorView (m_manager);
+        m_indicator_view.open_settings.connect (show_settings);
     }
 
     public Indicator (Wingpanel.IndicatorManager.ServerType in_server_type) {
@@ -34,31 +44,15 @@ public class SukaHottoe.Indicator : Wingpanel.Indicator {
         // sound indicator since they are sorted by name and type name
         Object (code_name: Wingpanel.Indicator.SYNC,
                 display_name: _("Sound Devices"),
-                description: _("The Sound Devices indicator"));
+                description: _("The Sound Devices indicator"),
+                visible: true);
     }
 
     public override Gtk.Widget get_display_widget () {
-        if (m_indicator_icon == null) {
-            m_indicator_icon = new Widgets.IndicatorIcon (m_manager);
-
-            m_manager.start ();
-
-            // TODO: Disable desktop notification since we have a problem when wingpanel has
-            // emitter and receiver of notification
-            Services.DesktopNotification.enabled = false;
-        }
-
         return m_indicator_icon;
     }
 
     public override Gtk.Widget? get_widget () {
-        if (m_indicator_view == null) {
-            m_indicator_view = new Widgets.IndicatorView (m_manager);
-            m_indicator_view.open_settings.connect (show_settings);
-        }
-
-        visible = true;
-
         return m_indicator_view;
     }
 
