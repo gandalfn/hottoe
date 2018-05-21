@@ -68,11 +68,8 @@ public class SukaHottoe.SwitchboardPlug : Switchboard.Plug {
     public override void search_callback (string in_location) {
     }
 
-    // 'search' returns results like ("Keyboard → Behavior → Duration", "keyboard<sep>behavior")
     public override async Gee.TreeMap<string, string> search (string in_search) {
-        var search_results = new Gee.TreeMap<string, string> ((GLib.CompareDataFunc<string>)GLib.strcmp,
-                                                              (Gee.EqualDataFunc<string>)GLib.str_equal);
-        return search_results;
+        return new Gee.TreeMap<string, string> (null, null);
     }
 }
 
