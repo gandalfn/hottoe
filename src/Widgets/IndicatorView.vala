@@ -38,7 +38,8 @@ public class SukaHottoe.Widgets.IndicatorView : Gtk.Box {
 
         add (m_client_list);
 
-        var settings_button = new Wingpanel.Widgets.Button (_("Sound Devices Settings…"));
+        var settings_button = new Gtk.ModelButton ();
+        settings_button.text = _("Sound Devices Settings…");
         add (settings_button);
         settings_button.clicked.connect (() => {
             open_settings ();
