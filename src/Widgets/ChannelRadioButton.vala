@@ -65,7 +65,7 @@ public class SukaHottoe.Widgets.ChannelRadioButton : Wingpanel.Widgets.Container
         var icon = new PortIcon (channel.port, Icon.Size.LARGE);
 
         m_check_icon = new Gtk.Image ();
-        m_check_icon.icon_name = "account-logged-in";
+        m_check_icon.icon_name = "emblem-default";
         m_check_icon.no_show_all = true;
         m_check_icon.halign = Gtk.Align.END;
         m_check_icon.valign = Gtk.Align.START;

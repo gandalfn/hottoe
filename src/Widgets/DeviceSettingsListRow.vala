@@ -74,7 +74,7 @@ private class SukaHottoe.Widgets.DeviceSettingsListRow : Gtk.ListBoxRow {
                                            GLib.BindingFlags.SYNC_CREATE, (b, f, ref t) => {
             unowned Device? default_device = (Device)f;
             if (default_device == page.device) {
-                t.set_string ("account-logged-in");
+                t.set_string ("emblem-default");
                 m_status_icon.show ();
             } else {
                 t.set_string ("");
