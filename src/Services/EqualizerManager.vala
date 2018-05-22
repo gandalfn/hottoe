@@ -29,9 +29,8 @@ public class SukaHottoe.Services.EqualizerManager : GLib.Object {
                 settings.enabled = true;
             }
 
-            device.enable_equalizer = settings.enabled;
-
             settings.notify["values"].connect (on_values_changed);
+            settings.bind_property("enabled", device, "enable_equalizer", GLib.BindingFlags.SYNC_CREATE);
             device.notify["enable_equalizer"].connect (on_device_equalizer_changed);
             device.notify["equalizer"].connect (on_device_equalizer_changed);
 
