@@ -47,7 +47,7 @@ public class SukaHottoe.Widgets.Equalizer : Gtk.Grid {
 
             int freq_val = int.parse (freq);
             string decibel = null;
-            if (freq_val > 1000) {
+            if (freq_val >= 1000) {
                 decibel = "%ik".printf(freq_val / 1000);
             } else {
                 decibel = "%i".printf(freq_val);
