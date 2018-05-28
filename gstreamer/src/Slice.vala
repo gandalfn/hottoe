@@ -96,7 +96,7 @@ public abstract class SukaHottoe.Gst.Slice : GLib.Object {
             float bin_power = inout_magnitudes[cpt];
             for (int offset = 0; offset < f_width; ++offset) {
                 global::Gst.FFT.F32Complex s = m_spectrum[f_start + offset];
-                float p = (4.0f * (s.r * s.r) + (s.i * s.i)) / (float)(m_buffer.length * m_buffer.length);
+                float p = (4.0f * (s.r * s.r) + (s.i * s.i)) / (float)(m_spectrum.length * m_spectrum.length);
                 if (p > bin_power) {
                     bin_power = p;
                 }
