@@ -336,6 +336,10 @@ namespace Gst {
 				[CCode (cname = "GST_AUDIO_FILTER_BPS")]
 				get;
 			}
+			public int rate {
+				[CCode (cname = "GST_AUDIO_FILTER_RATE")]
+				get;
+			}
 			[CCode (has_construct_function = false)]
 			protected Filter ();
 			[NoWrapper]

@@ -25,8 +25,48 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
 
     private GLib.Mutex m_lock;
     private Slice m_slice;
+    private float[] m_magnitudes;
+    private uint m_num_frames;
+    private uint64 m_interval;
+    private int m_frame_rate;
+    private uint64 m_frames_per_interval;
 
-    public uint bands { get; set; }
+    public uint bands {
+        get {
+            return m_magnitudes != null ? m_magnitudes.length : 10;
+        }
+        set {
+            if (m_magnitudes == null || m_magnitudes.length != value) {
+                m_lock.lock ();
+                m_magnitudes = new float [value];
+                flush ();
+                m_lock.unlock ();
+            }
+        }
+    }
+
+    public uint64 interval {
+        get {
+            return m_interval;
+        }
+        set {
+            m_lock.lock ();
+            if (m_interval != value) {
+                m_interval = value;
+                m_frames_per_interval = global::Gst.Util.uint64_scale (m_interval, m_frame_rate, global::Gst.SECOND / 10);
+                flush ();
+
+                global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
+                                       GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
+                                       this, @"interval: $m_interval frames_per_interval: $m_frames_per_interval");
+            }
+            m_lock.unlock ();
+        }
+    }
+
+    public float smoothing { get; set; default = 0.00007f; }
+    public float scale { get; set; default = 1.0f; }
+    public float threshold { get; set; default = -90.0f; }
 
     static construct {
         s_Debug.init ("SUKA_HOTTOE_SPECTRUM", 0, "suka hottoe audio spectrum analyser element");
@@ -51,6 +91,19 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
 
     construct {
         m_lock = GLib.Mutex ();
+
+        m_magnitudes = new float [10];
+        m_interval = global::Gst.SECOND / 10;
+
+        notify["interval"].connect (flush);
+    }
+
+    private void flush () {
+        GLib.Memory.set (m_magnitudes, 0, sizeof (float) * m_magnitudes.length);
+
+        m_slice.clear ();
+
+        m_num_frames = 0;
     }
 
     public override bool setup (global::Gst.Audio.Info in_info) {
@@ -89,6 +142,14 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
                 break;
         }
 
+        m_frame_rate = in_info.rate;
+        m_frames_per_interval = global::Gst.Util.uint64_scale (m_interval, m_frame_rate, global::Gst.SECOND / 10);
+        flush ();
+
+        global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
+                               GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
+                               this, @"interval: $m_interval frames_per_interval: $m_frames_per_interval");
+
         m_lock.unlock ();
 
         return ret;
@@ -98,6 +159,9 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
                                GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
                                this, "start spectrum");
+
+        flush ();
+
         return true;
     }
 
@@ -105,6 +169,8 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
                                GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
                                this, "stop spectrum");
+
+        flush ();
 
         return true;
     }
@@ -118,7 +184,6 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         uint8[] data = info.data;
         float max_value = (1UL << ((bps << 3) - 1)) - 1;
 
-        float[] magnitudes = new float[12];
         int pos = 0;
         int length = data.length;
         do {
@@ -126,25 +191,31 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
             pos = data.length - nb;
             length -= pos;
             if (nb > 0) {
+                m_slice.process (m_magnitudes, (float)GLib.Math.E, smoothing, scale);
+                m_slice.clear ();
+            }
+            m_num_frames += pos;
+            if (m_num_frames >= m_frames_per_interval) {
+                string vals = "";
+                for (int cpt = 0; cpt < m_magnitudes.length; ++cpt) {
+                    float v = 10.0f * (float)GLib.Math.log10 (m_magnitudes[cpt]);
+                    if (v < threshold) {
+                        v = threshold;
+                    }
+                    vals += @"$(v)|";
+                }
+
                 global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
                                        GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
-                                       this, @"nb: $nb, pos: $pos");
-                m_slice.process (magnitudes, 2.0f, 0.00007f, 0.05f);
-                m_slice.clear ();
+                                       this, vals);
+
+                flush ();
             }
             if (length <= 0) {
                 break;
             }
         } while (true);
 
-        string vals = "";
-        for (int cpt = 0; cpt < magnitudes.length; ++cpt) {
-            vals += @"$(magnitudes[cpt])|";
-        }
-
-        global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
-                               GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
-                               this, vals);
 
         in_buf.unmap (info);
         m_lock.unlock ();

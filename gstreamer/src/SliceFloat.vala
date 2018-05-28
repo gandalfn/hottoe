@@ -35,10 +35,10 @@ public class SukaHottoe.Gst.SliceFloat : SukaHottoe.Gst.Slice {
         requires (in_channels > 0)
         requires (in_max_value != 0.0) {
         int ret = 0;
-        unowned double[] input = (double[])in_input;
-        input.length = in_len;
+        unowned float[] input = (float[])in_input;
+        input.length = in_len / (int)sizeof(float);
 
-        for (int cpt = 0; cpt < in_len; cpt += (int)in_channels, ++ret) {
+        for (int cpt = 0; cpt < input.length; cpt += (int)in_channels, ++ret) {
             float total = 0.0f;
 
             // Get the average of each channels sample

@@ -76,7 +76,7 @@ public abstract class SukaHottoe.Gst.Slice : GLib.Object {
     public void process (float[] inout_magnitudes, float in_gamma, float in_smoothing, float in_scale) {
         // Process FFT
         m_fft.window (m_buffer, global::Gst.FFT.Window.HAMMING);
-	    m_fft.fft (m_buffer, m_spectrum);
+        m_fft.fft (m_buffer, m_spectrum);
 
         int f_start = 0;
         int freqs = m_spectrum.length / 2;
@@ -93,18 +93,13 @@ public abstract class SukaHottoe.Gst.Slice : GLib.Object {
                 f_width = 1;
             }
 
-            float bin_power = 0.0f;
+            float bin_power = inout_magnitudes[cpt];
             for (int offset = 0; offset < f_width; ++offset) {
                 global::Gst.FFT.F32Complex s = m_spectrum[f_start + offset];
-                float p = (s.r * s.r) + (s.i * s.i);
+                float p = (4.0f * (s.r * s.r) + (s.i * s.i)) / (float)(m_buffer.length * m_buffer.length);
                 if (p > bin_power) {
                     bin_power = p;
                 }
-            }
-
-            bin_power = 5.0f * (float)GLib.Math.log(bin_power);
-            if (bin_power < 0.0f) {
-                bin_power = 0.0f;
             }
 
             inout_magnitudes[cpt] = inout_magnitudes[cpt] * smoothing + (bin_power * in_scale * (1.0f - smoothing));
