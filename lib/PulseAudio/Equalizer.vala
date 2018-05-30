@@ -60,8 +60,10 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
     }
 
     static construct {
-        unowned string[]? args = null;
-        Gst.init (ref args);
+        string[]? args = {};
+        args += "--gst-debug=SUKA_HOTTOE_SPECTRUM:9";
+        unowned string[]? a = args;
+        Gst.init (ref a);
     }
 
     construct {

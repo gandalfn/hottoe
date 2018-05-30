@@ -33,11 +33,12 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
 
     public uint bands {
         get {
-            return m_magnitudes != null ? m_magnitudes.length : 10;
+            return m_magnitudes != null ? m_magnitudes.length : 15;
         }
         set {
             if (m_magnitudes == null || m_magnitudes.length != value) {
                 m_lock.lock ();
+                message(@"magintude: $value");
                 m_magnitudes = new float [value];
                 flush ();
                 m_lock.unlock ();
@@ -92,7 +93,7 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     construct {
         m_lock = GLib.Mutex ();
 
-        m_magnitudes = new float [10];
+        m_magnitudes = new float [15];
         m_interval = global::Gst.SECOND / 10;
 
         notify["interval"].connect (flush);
@@ -101,7 +102,9 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     private void flush () {
         GLib.Memory.set (m_magnitudes, 0, sizeof (float) * m_magnitudes.length);
 
-        m_slice.clear ();
+        if (m_slice != null) {
+            m_slice.clear ();
+        }
 
         m_num_frames = 0;
     }
@@ -191,23 +194,13 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
             pos = data.length - nb;
             length -= pos;
             if (nb > 0) {
-                m_slice.process (m_magnitudes, (float)GLib.Math.E, smoothing, scale);
+                m_slice.process (m_magnitudes, (float)1.8, smoothing, scale);
                 m_slice.clear ();
             }
             m_num_frames += pos;
             if (m_num_frames >= m_frames_per_interval) {
-                string vals = "";
-                for (int cpt = 0; cpt < m_magnitudes.length; ++cpt) {
-                    float v = 10.0f * (float)GLib.Math.log10 (m_magnitudes[cpt]);
-                    if (v < threshold) {
-                        v = threshold;
-                    }
-                    vals += @"$(v)|";
-                }
-
-                global::Gst.Debug.log (s_Debug, global::Gst.DebugLevel.DEBUG,
-                                       GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,
-                                       this, vals);
+                var msg = new Message(m_magnitudes);
+                msg.post (this);
 
                 flush ();
             }

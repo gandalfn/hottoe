@@ -27,8 +27,10 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
     private float[] m_magnitudes;
 
     static construct {
-        unowned string[]? args = null;
-        Gst.init (ref args);
+        string[]? args = {};
+        args += "--gst-debug=SUKA_HOTTOE_SPECTRUM:9";
+        unowned string[]? a = args;
+        Gst.init (ref a);
     }
 
     construct {
@@ -48,12 +50,10 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
 
         var audioconvert = Gst.ElementFactory.make ("audioconvert", "audioconvert");
 
-        m_spectrum = Gst.ElementFactory.make ("spectrum", "spectrum");
+        m_spectrum = Gst.ElementFactory.make ("shspectrum", "shspectrum");
         m_spectrum.set ("bands", bands,
-                        "threshold", threshold,
-                        "interval", interval * 1000 * 1000,
-                        "post-messages", true,
-                        "message-phase", true);
+                        "threshold", (float)threshold,
+                        "interval", (uint64)(interval * 1000 * 1000));
 
         m_sink = Gst.ElementFactory.make ("fakesink", "sink");
         m_sink.set ("sync", true);
@@ -106,7 +106,7 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
                 unowned Gst.Structure struct = in_message.get_structure();
                 string name = struct.get_name ();
 
-                if (name == "spectrum") {
+                if (name == "shspectrum") {
                     var vals = struct.get_value ("magnitude");
                     for (int cpt = 0; cpt < bands; ++cpt) {
                         var mag = Gst.ValueList.get_value(vals, cpt);

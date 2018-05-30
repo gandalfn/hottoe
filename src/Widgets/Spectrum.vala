@@ -83,7 +83,7 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
     public int interval { get; construct; default = 50; }
     public bool enabled { get; set; default = true; }
     public int nb_bars { get; set; default = 10; }
-    public int nb_bands { get; set; default = 15; }
+    public int nb_bands { get; set; default = 35; }
     public double smoothing { get; set; default = 0.00007; }
 
     construct {
@@ -122,11 +122,11 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
             var grid = new Gtk.Grid ();
             grid.orientation = Gtk.Orientation.VERTICAL;
             grid.add (new Meter (this, cpt));
-            double freq =  ((32000.0 / 2.0) * cpt + 32000.0 / 4.0) / nb_bands;
-            var str = "<span size='x-small'>%0.2g</span>".printf(freq / 1000.0);
-            var label = new Gtk.Label (str);
-            label.use_markup = true;
-            grid.add (label);
+            //  double freq =  ((32000.0 / 2.0) * cpt + 32000.0 / 4.0) / nb_bands;
+            //  var str = "<span size='x-small'>%0.2g</span>".printf(freq / 1000.0);
+            //  var label = new Gtk.Label (str);
+            //  label.use_markup = true;
+            //  grid.add (label);
             attach (grid, cpt, cpt + 1, 0, 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0);
         }
     }
@@ -134,7 +134,7 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
     private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
         if (m_spectrum == null && in_channel.direction == Direction.OUTPUT && in_channel in device) {
             m_spectrum = in_manager.create_spectrum (in_channel, 32000, interval);
-            m_spectrum.threshold = -90;
+            m_spectrum.threshold = -80;
             m_spectrum.bands = nb_bands;
             m_spectrum.updated.connect (on_spectrum_updated);
             bind_property ("enabled", m_spectrum, "enabled", GLib.BindingFlags.SYNC_CREATE);
@@ -147,10 +147,10 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
 
         for (int band = 0; band < nb_bands; ++band) {
             double val = magnitudes[band];
-            double gain = (m_magnitudes[band] * smoothing) + (val * (1.0 - smoothing));
+            //  double gain = (m_magnitudes[band] * smoothing) + (val * (1.0 - smoothing));
 
-            if (m_magnitudes[band] != gain) {
-                m_magnitudes[band] = gain;
+            if (m_magnitudes[band] != val) {
+                m_magnitudes[band] = val;
                 updated = true;
             }
         }
@@ -187,6 +187,6 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
 
     private new double @get(int in_index)
         requires (in_index >= 0 && in_index < m_magnitudes.length) {
-        return iec_scale (20 + m_magnitudes[in_index]);
+        return iec_scale (m_magnitudes[in_index]);
     }
 }

@@ -9,6 +9,7 @@ shared_module(
         'src/SliceS32.vala',
         'src/SliceDouble.vala',
         'src/SliceFloat.vala',
+        'src/Message.vala',
         'src/Spectrum.vala',
         'src/plugin.c'
     ],
