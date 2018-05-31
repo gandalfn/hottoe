@@ -79,7 +79,7 @@ public abstract class SukaHottoe.Gst.Slice : GLib.Object {
         m_fft.fft (m_buffer, m_spectrum);
 
         int f_start = 0;
-        int freqs = m_spectrum.length / 2;
+        int freqs = m_buffer.length / 2;
         float smoothing = GLib.Math.powf (in_smoothing, (float)m_buffer.length / (float)sample_rate);
 
         for (int cpt = 0; cpt < inout_magnitudes.length; ++cpt) {
@@ -96,7 +96,7 @@ public abstract class SukaHottoe.Gst.Slice : GLib.Object {
             float bin_power = inout_magnitudes[cpt];
             for (int offset = 0; offset < f_width; ++offset) {
                 global::Gst.FFT.F32Complex s = m_spectrum[f_start + offset];
-                float p = (4.0f * (s.r * s.r) + (s.i * s.i)) / (float)(m_spectrum.length * m_spectrum.length);
+                float p = (4.0f * (s.r * s.r) + (s.i * s.i)) / (float)(m_buffer.length * m_buffer.length);
                 if (p > bin_power) {
                     bin_power = p;
                 }

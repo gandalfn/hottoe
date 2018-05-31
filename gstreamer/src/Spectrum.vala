@@ -194,7 +194,7 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
             pos = data.length - nb;
             length -= pos;
             if (nb > 0) {
-                m_slice.process (m_magnitudes, (float)1.8, smoothing, scale);
+                m_slice.process (m_magnitudes, (float)2.0, smoothing, scale);
                 m_slice.clear ();
             }
             m_num_frames += pos;
