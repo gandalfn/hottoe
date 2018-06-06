@@ -162,7 +162,6 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
     private double
     iec_scale (double inDB)
     {
-        //return (70.0 + inDB)/ 70.0;
         double def = 0.0;
 
         if (inDB < -70.0)
