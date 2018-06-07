@@ -1,6 +1,6 @@
 wingpanel_dep = dependency('wingpanel-2.0')
 
-libsuka_hottoe_widgets = static_library (
+libhottoe_widgets = static_library (
     meson.project_name() + '.widgets',
     [
         'Widgets/MaxWidthLabel.vala',
@@ -18,7 +18,7 @@ libsuka_hottoe_widgets = static_library (
         'Settings/Equalizer.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('libcanberra'),
@@ -44,13 +44,13 @@ shared_module(
         'Services/EqualizerManager.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         wingpanel_dep,
         dependency('granite'),
         dependency('libwnck-3.0')
     ],
     link_with: [
-        libsuka_hottoe_widgets
+        libhottoe_widgets
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,
@@ -74,13 +74,13 @@ shared_module(
         'Widgets/PlugChooserRow.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         switchboard_dep,
         dependency('granite'),
         dependency('libwnck-3.0')
     ],
     link_with: [
-        libsuka_hottoe_widgets
+        libhottoe_widgets
     ],
     c_args: [ '-DWNCK_I_KNOW_THIS_IS_UNSTABLE' ],
     install: true,

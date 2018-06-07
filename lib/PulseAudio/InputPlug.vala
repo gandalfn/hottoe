@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.InputPlug : Plug {
+internal class Hottoe.PulseAudio.InputPlug : Plug {
     private bool m_is_muted;
 
     public override double volume {
@@ -65,7 +65,7 @@ internal class SukaHottoe.PulseAudio.InputPlug : Plug {
     }
 
     [CCode (notify = false)]
-    public override unowned SukaHottoe.Channel? channel {
+    public override unowned Hottoe.Channel? channel {
         get {
             return m_channel;
         }
@@ -97,7 +97,7 @@ internal class SukaHottoe.PulseAudio.InputPlug : Plug {
     public InputPlug (Manager in_manager, global::PulseAudio.SourceOutputInfo in_info) {
         GLib.Object (
             manager: in_manager,
-            direction: SukaHottoe.Direction.INPUT,
+            direction: Hottoe.Direction.INPUT,
             index: in_info.index,
             id: in_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
             name: in_info.name

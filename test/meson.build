@@ -4,7 +4,7 @@ executable(
         'TestManager.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0')
     ],
@@ -19,7 +19,7 @@ executable(
         'TestEqualizer.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('gstreamer-1.0')
@@ -33,7 +33,7 @@ executable(
         'TestSpectrum.vala'
     ],
     dependencies: [
-        suka_hottoe_dep,
+        hottoe_dep,
         dependency('granite'),
         dependency('gtk+-3.0'),
         dependency('gstreamer-1.0')

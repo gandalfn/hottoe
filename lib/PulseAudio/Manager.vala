@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-namespace SukaHottoe.PulseAudio {
-    internal class Manager : SukaHottoe.Manager {
+namespace Hottoe.PulseAudio {
+    internal class Manager : Hottoe.Manager {
         private global::PulseAudio.Context m_context;
         private global::PulseAudio.GLibMainLoop m_loop;
         private int m_cpt_init_list = 0;
@@ -37,9 +37,9 @@ namespace SukaHottoe.PulseAudio {
 
         public Operations operations { get; private set; }
 
-        public override unowned SukaHottoe.Channel? default_input_channel {
+        public override unowned Hottoe.Channel? default_input_channel {
             get {
-                unowned SukaHottoe.Channel? ret = null;
+                unowned Hottoe.Channel? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_source_name);
                     ret = channel;
@@ -48,9 +48,9 @@ namespace SukaHottoe.PulseAudio {
             }
         }
 
-        public override unowned SukaHottoe.Channel? default_output_channel {
+        public override unowned Hottoe.Channel? default_output_channel {
             get {
-                unowned SukaHottoe.Channel? ret = null;
+                unowned Hottoe.Channel? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_sink_name);
                     ret = channel;
@@ -60,9 +60,9 @@ namespace SukaHottoe.PulseAudio {
         }
 
         [CCode (notify = false)]
-        public override unowned SukaHottoe.Device? default_input_device {
+        public override unowned Hottoe.Device? default_input_device {
             get {
-                unowned SukaHottoe.Device? ret = null;
+                unowned Hottoe.Device? ret = null;
                 if (m_default_source_name != null) {
                     var channel = get_channel (m_default_source_name);
                     if (channel != null) {
@@ -96,9 +96,9 @@ namespace SukaHottoe.PulseAudio {
         }
 
         [CCode (notify = false)]
-        public override unowned SukaHottoe.Device? default_output_device {
+        public override unowned Hottoe.Device? default_output_device {
             get {
-                unowned SukaHottoe.Device? ret = null;
+                unowned Hottoe.Device? ret = null;
                 if (m_default_sink_name != null) {
                     var channel = get_channel (m_default_sink_name);
                     if (channel != null) {
@@ -173,8 +173,8 @@ namespace SukaHottoe.PulseAudio {
             return m_modules.to_array ();
         }
 
-        public override SukaHottoe.Channel get_channel (string in_channel_name) {
-            SukaHottoe.Channel ret = m_input_channels.first_match ((c) => {
+        public override Hottoe.Channel get_channel (string in_channel_name) {
+            Hottoe.Channel ret = m_input_channels.first_match ((c) => {
                 return c.name == in_channel_name;
             });
 
@@ -191,7 +191,7 @@ namespace SukaHottoe.PulseAudio {
             return m_clients.to_array ();
         }
 
-        public override SukaHottoe.Spectrum create_spectrum (SukaHottoe.Channel in_channel, int in_sample_rate, int in_interval) {
+        public override Hottoe.Spectrum create_spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
             return new Spectrum (in_channel, in_sample_rate, in_interval);
         }
 
@@ -212,7 +212,7 @@ namespace SukaHottoe.PulseAudio {
             }
 
             var props = new global::PulseAudio.Proplist ();
-            props.sets (global::PulseAudio.Proplist.PROP_APPLICATION_ID, "com.github.gandalfn.suka-hottoe");
+            props.sets (global::PulseAudio.Proplist.PROP_APPLICATION_ID, "com.gitlab.mithrandirn.hottoe");
             m_context = new global::PulseAudio.Context (m_loop.get_api (), null, props);
             m_context.set_state_callback (context_state_callback);
 
@@ -654,8 +654,8 @@ namespace SukaHottoe.PulseAudio {
         }
     }
 
-    [CCode (cname = "suka_hottoe_pulseaudio_load")]
-    public static SukaHottoe.Manager? load () {
+    [CCode (cname = "hottoe_pulseaudio_load")]
+    public static Hottoe.Manager? load () {
         return new Manager ();
     }
 }

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.PlugChooser : Gtk.Popover {
+public class Hottoe.Widgets.PlugChooser : Gtk.Popover {
     private Gtk.ListBox m_plug_list;
 
     public unowned Device device { get; construct; }

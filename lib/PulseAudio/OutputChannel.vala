@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.OutputChannel : Channel {
+internal class Hottoe.PulseAudio.OutputChannel : Channel {
     private bool m_is_muted;
     private double m_base_volume;
 
@@ -72,7 +72,7 @@ internal class SukaHottoe.PulseAudio.OutputChannel : Channel {
     }
 
     [CCode (notify = false)]
-    public override unowned SukaHottoe.Port? port {
+    public override unowned Hottoe.Port? port {
         get {
             return m_active_port;
         }
@@ -103,7 +103,7 @@ internal class SukaHottoe.PulseAudio.OutputChannel : Channel {
     public OutputChannel (Manager in_manager, global::PulseAudio.SinkInfo in_sink_info) {
         GLib.Object (
             manager: in_manager,
-            direction: SukaHottoe.Direction.OUTPUT,
+            direction: Hottoe.Direction.OUTPUT,
             index: in_sink_info.index,
             id: in_sink_info.proplist.gets (global::PulseAudio.Proplist.PROP_APPLICATION_ID),
             monitor_index: in_sink_info.monitor_source,

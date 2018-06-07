@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Equalizer : GLib.Object {
+public abstract class Hottoe.Equalizer : GLib.Object {
     public struct Frequency {
         public int freq;
         public int val;

@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class SukaHottoe.Settings.Equalizer : Granite.Services.Settings {
+public class Hottoe.Settings.Equalizer : Granite.Services.Settings {
     public string device;
 
     public bool enabled { get; set; }
@@ -27,8 +27,8 @@ public class SukaHottoe.Settings.Equalizer : Granite.Services.Settings {
     public string[] values { get; set; }
 
     public Equalizer (string in_device) {
-        base.with_path ("com.github.gandalfn.suka-hottoe.equalizer",
-                        "/com/github/gandalfn/suka-hottoe/" + in_device + "/");
+        base.with_path ("com.gitlab.mithrandirn.hottoe.equalizer",
+                        "/com/github/gandalfn/hottoe/" + in_device + "/");
         device = in_device;
     }
 }

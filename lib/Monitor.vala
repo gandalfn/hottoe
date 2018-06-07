@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Monitor : GLib.Object {
+public abstract class Hottoe.Monitor : GLib.Object {
     public signal void peak (float in_value);
     public signal void paused ();
 

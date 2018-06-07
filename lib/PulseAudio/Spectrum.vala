@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
+internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
     private dynamic Gst.Element m_source;
     private dynamic Gst.Element m_spectrum;
     private dynamic Gst.Element m_sink;
@@ -36,11 +36,11 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
     construct {
         message("create spectrum");
         m_magnitudes = new float[bands];
-        m_pipeline = new Gst.Pipeline ("suka-hottoe-spectrum");
+        m_pipeline = new Gst.Pipeline ("hottoe-spectrum");
 
         var props = Gst.Structure.from_string ("props," +
                                                "media.role=music," +
-                                               "application.id=com.github.gandalfn.suka-hottoe", null);
+                                               "application.id=com.gitlab.mithrandirn.hottoe", null);
 
         m_source = Gst.ElementFactory.make ("pulsesrc", "source");
         m_source.set ("volume", 1.0,
@@ -81,7 +81,7 @@ internal class SukaHottoe.PulseAudio.Spectrum : SukaHottoe.Spectrum {
         });
     }
 
-    public Spectrum(SukaHottoe.Channel in_channel, int in_sample_rate, int in_interval) {
+    public Spectrum(Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
         GLib.Object (
             channel: in_channel,
             sample_rate: in_sample_rate,

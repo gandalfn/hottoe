@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.ClientView : Gtk.Grid {
+public class Hottoe.Widgets.ClientView : Gtk.Grid {
     private Gtk.Revealer m_content;
     private Gtk.Grid m_plugs;
 

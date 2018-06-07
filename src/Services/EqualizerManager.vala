@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class SukaHottoe.Services.EqualizerManager : GLib.Object {
+public class Hottoe.Services.EqualizerManager : GLib.Object {
     public class Item : GLib.Object {
         public Settings.Equalizer settings { get; construct; }
         public unowned Device device { get; construct; }

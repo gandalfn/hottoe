@@ -6,14 +6,14 @@ static int main (string[] in_args) {
 
     var loop = new MainLoop ();
 
-    SukaHottoe.Manager? mgr = SukaHottoe.Manager.get ("pulseaudio");
+    Hottoe.Manager? mgr = Hottoe.Manager.get ("pulseaudio");
 
     mgr.start ();
 
-    SukaHottoe.Services.EqualizerManager eq_mgr = null;
+    Hottoe.Services.EqualizerManager eq_mgr = null;
 
     mgr.notify["is-ready"].connect (() => {
-        eq_mgr = new SukaHottoe.Services.EqualizerManager (mgr);
+        eq_mgr = new Hottoe.Services.EqualizerManager (mgr);
     });
 
     loop.run ();

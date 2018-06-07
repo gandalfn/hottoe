@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.PlugChannelList : Gtk.Grid {
+public class Hottoe.Widgets.PlugChannelList : Gtk.Grid {
     private Gee.LinkedList<ChannelRadioButton> m_group;
 
     public unowned Plug plug { get; construct; }

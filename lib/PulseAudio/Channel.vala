@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal abstract class SukaHottoe.PulseAudio.Channel : SukaHottoe.Channel {
-    internal class Monitor : SukaHottoe.Channel.Monitor, SukaHottoe.PulseAudio.Monitor {
+internal abstract class Hottoe.PulseAudio.Channel : Hottoe.Channel {
+    internal class Monitor : Hottoe.Channel.Monitor, Hottoe.PulseAudio.Monitor {
         private bool m_active;
         private global::PulseAudio.Stream m_stream;
 
@@ -103,11 +103,11 @@ internal abstract class SukaHottoe.PulseAudio.Channel : SukaHottoe.Channel {
 
     public override bool is_mine {
         get {
-            return id == "com.github.gandalfn.suka-hottoe";
+            return id == "com.gitlab.mithrandirn.hottoe";
         }
     }
 
-    public override SukaHottoe.Channel.Monitor create_monitor () {
+    public override Hottoe.Channel.Monitor create_monitor () {
         return new Monitor (this);
     }
 

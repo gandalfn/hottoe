@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class SukaHottoe.Widgets.Equalizer : Gtk.Grid {
+public class Hottoe.Widgets.Equalizer : Gtk.Grid {
     private Settings.Equalizer m_settings;
     private GLib.List<unowned Gtk.Scale> m_scales;
 

@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Port : GLib.Object {
+public abstract class Hottoe.Port : GLib.Object {
     public unowned Device device { get; construct; }
     public string name { get; construct; }
     public string description { get; construct; }

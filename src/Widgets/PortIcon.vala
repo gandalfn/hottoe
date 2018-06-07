@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.PortIcon : SukaHottoe.Widgets.Icon {
+public class Hottoe.Widgets.PortIcon : Hottoe.Widgets.Icon {
     private unowned Port m_port;
     private GLib.Binding m_port_icon_bind;
     private GLib.Binding m_port_symbol_bind;

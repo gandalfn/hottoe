@@ -20,7 +20,7 @@
  */
 
 [Flags]
-public enum SukaHottoe.Direction {
+public enum Hottoe.Direction {
     INPUT,
     OUTPUT;
 

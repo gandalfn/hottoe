@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.PlugChooserRow : Gtk.Grid {
+public class Hottoe.Widgets.PlugChooserRow : Gtk.Grid {
     public unowned Plug plug { get; construct; }
 
     construct {

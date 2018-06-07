@@ -19,16 +19,16 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
+internal class Hottoe.PulseAudio.Equalizer : Hottoe.Equalizer {
     private Module m_sink_module;
     private dynamic Gst.Element m_source;
     private dynamic Gst.Element m_equalizer;
     private dynamic Gst.Element m_sink;
     private Gst.Pipeline m_pipeline;
     private bool m_channel_set;
-    private SukaHottoe.Equalizer.Preset m_preset;
+    private Hottoe.Equalizer.Preset m_preset;
 
-    public override SukaHottoe.Equalizer.Preset preset {
+    public override Hottoe.Equalizer.Preset preset {
         get {
             return m_preset;
         }
@@ -61,9 +61,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
 
     static construct {
         string[]? args = {};
-        args += "--gst-debug=SUKA_HOTTOE_SPECTRUM:9";
-        unowned string[]? a = args;
-        Gst.init (ref a);
+        Gst.init (ref args);
     }
 
     construct {
@@ -89,7 +87,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
             args += Module.Arg ("sink_properties", "device.icon_name='media-eq-symbolic'" +
                                                    @"device.description='$(description)'" +
                                                    "device.equalizer='1'" +
-                                                   "application.id='com.github.gandalfn.suka-hottoe'");
+                                                   "application.id='com.gitlab.mithrandirn.hottoe'");
             args += Module.Arg ("channels", "2");
             m_sink_module.load.begin (args);
         }
@@ -98,7 +96,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
 
         var props = Gst.Structure.from_string ("props," +
                                                "media.role=music," +
-                                               "application.id=com.github.gandalfn.suka-hottoe", null);
+                                               "application.id=com.gitlab.mithrandirn.hottoe", null);
 
         m_source = Gst.ElementFactory.make ("pulsesrc", "source");
         m_source.set ("volume", 1.0,
@@ -155,7 +153,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         }
     }
 
-    private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
+    private void on_channel_added (Hottoe.Manager in_manager, Hottoe.Channel in_channel) {
         if (in_channel.direction == Direction.INPUT && in_channel.name == @"$(name).monitor") {
             in_channel.changed.connect (() => {
                 m_source.set_property ("device", @"$(name).monitor");

@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Channel : GLib.Object {
-    public abstract class Monitor : SukaHottoe.Monitor {
+public abstract class Hottoe.Channel : GLib.Object {
+    public abstract class Monitor : Hottoe.Monitor {
         public unowned Channel? channel { get; construct; }
     }
 

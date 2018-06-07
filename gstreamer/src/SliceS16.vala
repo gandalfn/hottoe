@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Gst.SliceS16 : SukaHottoe.Gst.Slice {
+public class Hottoe.Gst.SliceS16 : Hottoe.Gst.Slice {
     public SliceS16 (int in_rate, int in_sample_rate) {
         global::Gst.Debug.log (Spectrum.s_Debug, global::Gst.DebugLevel.DEBUG,
                                GLib.Log.FILE, GLib.Log.METHOD, GLib.Log.LINE,

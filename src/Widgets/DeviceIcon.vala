@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.DeviceIcon : SukaHottoe.Widgets.Icon {
+public class Hottoe.Widgets.DeviceIcon : Hottoe.Widgets.Icon {
     public unowned Device device { get; construct; }
 
     public override GLib.Icon gicon {

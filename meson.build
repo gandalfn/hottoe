@@ -1,4 +1,4 @@
-project('com.github.gandalfn.suka-hottoe', [ 'c', 'vala' ], version: '0.2.0')
+project('com.gitlab.mithrandirn.hottoe', [ 'c', 'vala' ], version: '0.2.0')
 
 gettext_name = meson.project_name()
 

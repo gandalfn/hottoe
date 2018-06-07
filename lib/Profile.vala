@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Profile : GLib.Object {
+public abstract class Hottoe.Profile : GLib.Object {
     public string name { get; construct; }
     public string description { get; construct; }
 

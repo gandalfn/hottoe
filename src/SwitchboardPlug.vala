@@ -20,7 +20,7 @@
  */
 
 
-public class SukaHottoe.SwitchboardPlug : Switchboard.Plug {
+public class Hottoe.SwitchboardPlug : Switchboard.Plug {
     private Manager m_manager;
     private Widgets.DeviceSettingsView? m_view;
 
@@ -33,7 +33,7 @@ public class SukaHottoe.SwitchboardPlug : Switchboard.Plug {
         settings.set ("sound-devices", null);
         Object (
             category: Category.HARDWARE,
-            code_name: "hardware-suka-hottoe",
+            code_name: "hardware-hottoe",
             display_name: _("Sound Devices"),
             description: _("Configure sound devices"),
             icon: "audio-card",
@@ -76,5 +76,5 @@ public class SukaHottoe.SwitchboardPlug : Switchboard.Plug {
 
 public Switchboard.Plug get_plug (GLib.Module in_module) {
     debug ("Activating Sound Device plug");
-    return new SukaHottoe.SwitchboardPlug ();
+    return new Hottoe.SwitchboardPlug ();
 }

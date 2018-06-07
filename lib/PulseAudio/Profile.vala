@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.Profile : SukaHottoe.Profile {
+internal class Hottoe.PulseAudio.Profile : Hottoe.Profile {
     public uint32 priority { get; construct; }
 
     public Profile (global::PulseAudio.CardProfileInfo in_info) {

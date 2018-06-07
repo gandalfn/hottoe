@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal class SukaHottoe.PulseAudio.Client : SukaHottoe.Client {
+internal class Hottoe.PulseAudio.Client : Hottoe.Client {
     private Gee.TreeSet<unowned Plug> m_plugs;
 
     public uint32 index { get; construct; }
@@ -27,7 +27,7 @@ internal class SukaHottoe.PulseAudio.Client : SukaHottoe.Client {
 
     public override bool is_mine {
         get {
-            return pid == Posix.getpid () || id == "com.github.gandalfn.suka-hottoe";
+            return pid == Posix.getpid () || id == "com.gitlab.mithrandirn.hottoe";
         }
     }
 
@@ -51,11 +51,11 @@ internal class SukaHottoe.PulseAudio.Client : SukaHottoe.Client {
         );
     }
 
-    public override void plug_added (SukaHottoe.Plug in_plug) {
+    public override void plug_added (Hottoe.Plug in_plug) {
         m_plugs.add ((Plug) in_plug);
     }
 
-    public override void plug_removed (SukaHottoe.Plug in_plug) {
+    public override void plug_removed (Hottoe.Plug in_plug) {
         m_plugs.remove ((Plug) in_plug);
     }
 

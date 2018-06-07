@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="com.github.gandalfn.suka-hottoe.equalizer">
+  <schema id="com.gitlab.mithrandirn.hottoe.equalizer">
     <key type="s" name="name">
       <default>''</default>
       <summary>Equalizer name</summary>

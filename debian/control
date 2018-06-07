@@ -1,9 +1,9 @@
 
-Source: com.github.gandalfn.suka-hottoe
+Source: com.gitlab.mithrandirn.hottoe
 Section: x11
 Priority: extra
 Maintainer: Nicolas Bruguier <gandalfn@club-internet.fr>
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper (>= 10),
                libgranite-dev,
                libgtk-3-dev,
                libwingpanel-2.0-dev,
@@ -16,11 +16,11 @@ Build-Depends: debhelper (>= 9),
                valac
 Standards-Version: 3.9.6
 
-Package: com.github.gandalfn.suka-hottoe
+Package: com.gitlab.mithrandirn.hottoe
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: Suka Hottoe Sound Controller
- Suka Hottoe is a simple Elementary based volume  control tool
+Description: Hottoe Sound Controller
+ Hottoe is a simple Elementary based volume  control tool
  (mixer).In contrast to classic mixer tools this one allows
  you to control both the volume of hardware devices and of
  each playback stream separately. It also allows you to redirect

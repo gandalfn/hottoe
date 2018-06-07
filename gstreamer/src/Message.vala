@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Gst.Message : GLib.Object {
+public class Hottoe.Gst.Message : GLib.Object {
     private global::Gst.Structure m_structure;
 
     public Message (float[] in_magnitudes) {

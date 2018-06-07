@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public abstract class SukaHottoe.Gst.Slice : GLib.Object {
+public abstract class Hottoe.Gst.Slice : GLib.Object {
     private global::Gst.FFT.F32 m_fft;
     private float[] m_buffer;
     private global::Gst.FFT.F32Complex[] m_spectrum;

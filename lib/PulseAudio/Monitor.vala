@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-internal interface SukaHottoe.PulseAudio.Monitor : SukaHottoe.Monitor {
+internal interface Hottoe.PulseAudio.Monitor : Hottoe.Monitor {
     protected global::PulseAudio.Stream start (Channel in_channel, int in_plug_index = -1) {
         var ss = global::PulseAudio.SampleSpec () {
             channels = 1,

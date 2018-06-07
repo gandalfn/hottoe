@@ -1,6 +1,6 @@
-# Suka Hottoe
+# Hottoe
 
-Suka Hottoe is an application which can control sound devices. The main functionality of this app is to detect a new plug sound device (HDMI cable for example) and associate easely a sound application on it. It purpose more or less the same fonctionnalities than pulseaudio pavucontrol app, but integrated to [elementary desktop](http://elementary.io).
+Hottoe is an application which can control sound devices. The main functionality of this app is to detect a new plug sound device (HDMI cable for example) and associate easely a sound application on it. It purpose more or less the same fonctionnalities than pulseaudio pavucontrol app, but integrated to [elementary desktop](http://elementary.io).
 
 It is composed of an indicator and a switchboard plug. The indicator applet detect new sound devices and new sound applications, and allows to associate any sound applications to particular device. The switchboard plug allow a more advanced configuration tool of each devices and each sound applications.
 

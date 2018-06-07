@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.VuMeter : Gtk.DrawingArea {
+public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
     private Monitor m_monitor;
     private double m_value;
     private Granite.Drawing.BufferSurface m_buffer;

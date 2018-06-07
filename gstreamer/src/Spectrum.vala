@@ -20,7 +20,7 @@
  */
 
 
-public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
+public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     public static global::Gst.DebugCategory? s_Debug;
 
     private GLib.Mutex m_lock;
@@ -70,11 +70,11 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     public float threshold { get; set; default = -90.0f; }
 
     static construct {
-        s_Debug.init ("SUKA_HOTTOE_SPECTRUM", 0, "suka hottoe audio spectrum analyser element");
+        s_Debug.init ("HOTTOE_SPECTRUM", 0, "hottoe audio spectrum analyser element");
 
         passthrough_on_same_caps = true;
 
-        set_static_metadata ("SukaHottoe Spectrum analyzer",
+        set_static_metadata ("Hottoe Spectrum analyzer",
                              "Filter/Analyzer/Audio",
                              "Run an FFT on the audio signal, output logarithm spectrum data",
                              "Nicolas Bruguier <gandalfn@club-internet.fr>");
@@ -216,7 +216,7 @@ public class SukaHottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     }
 }
 
-[CCode (cname = "suka_hottoe_gst_spectrum_init")]
+[CCode (cname = "hottoe_gst_spectrum_init")]
 public static bool plugin_init (Gst.Plugin in_plugin) {
-    return Gst.Element.register (in_plugin, "shspectrum", Gst.Rank.NONE, typeof (SukaHottoe.Gst.Spectrum));
+    return Gst.Element.register (in_plugin, "shspectrum", Gst.Rank.NONE, typeof (Hottoe.Gst.Spectrum));
 }

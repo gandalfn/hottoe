@@ -6,11 +6,11 @@ static int main (string[] in_args) {
 
     var loop = new MainLoop ();
 
-    SukaHottoe.Manager? mgr = SukaHottoe.Manager.get ("pulseaudio");
+    Hottoe.Manager? mgr = Hottoe.Manager.get ("pulseaudio");
 
     mgr.start ();
 
-    SukaHottoe.Spectrum spectrum = null;
+    Hottoe.Spectrum spectrum = null;
 
     mgr.notify["is-ready"].connect (() => {
         foreach (var device in mgr.get_devices ()) {

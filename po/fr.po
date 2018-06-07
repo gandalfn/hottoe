@@ -1,12 +1,12 @@
-# French translation for suka-hottoe.
-# Copyright (C) 2018 Suka Hottoe 2018
-# This file is distributed under the same license as the suka-hottoe package.
+# French translation for hottoe.
+# Copyright (C) 2018 Hottoe 2018
+# This file is distributed under the same license as the hottoe package.
 # Nicolas Bruguier <gandalfn@club-internet.fr>, 2018.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: suka-hottoe\n"
+"Project-Id-Version: hottoe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-02 18:56+0100\n"
 "PO-Revision-Date: 2018-02-02 18:48+0100\n"

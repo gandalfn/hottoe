@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
+public class Hottoe.Widgets.Spectrum : Gtk.Table {
     private class Meter : Gtk.DrawingArea {
         private unowned Spectrum m_spectrum;
         private int m_band;
@@ -76,7 +76,7 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
         }
     }
 
-    private SukaHottoe.Spectrum m_spectrum;
+    private Hottoe.Spectrum m_spectrum;
     private double[] m_magnitudes;
 
     public unowned Device device { get; construct; }
@@ -131,7 +131,7 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
         }
     }
 
-    private void on_channel_added (SukaHottoe.Manager in_manager, SukaHottoe.Channel in_channel) {
+    private void on_channel_added (Hottoe.Manager in_manager, Hottoe.Channel in_channel) {
         if (m_spectrum == null && in_channel.direction == Direction.OUTPUT && in_channel in device) {
             m_spectrum = in_manager.create_spectrum (in_channel, 32000, interval);
             m_spectrum.threshold = -70;
@@ -186,6 +186,6 @@ public class SukaHottoe.Widgets.Spectrum : Gtk.Table {
 
     private new double @get(int in_index)
         requires (in_index >= 0 && in_index < m_magnitudes.length) {
-        return iec_scale (m_magnitudes[in_index]);
+        return iec_scale (10.0 + m_magnitudes[in_index]);
     }
 }

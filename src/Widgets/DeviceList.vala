@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.DeviceList : Gtk.ScrolledWindow {
+public class Hottoe.Widgets.DeviceList : Gtk.ScrolledWindow {
     private Gtk.Grid m_list_grid;
     private Gtk.RadioButton m_default_device_group;
 

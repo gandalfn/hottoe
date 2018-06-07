@@ -18,6 +18,6 @@
  * Boston, MA 02110-1301 USA
  */
 
-public abstract class SukaHottoe.Services.Notification : GLib.Object {
+public abstract class Hottoe.Services.Notification : GLib.Object {
     public abstract void send ();
 }

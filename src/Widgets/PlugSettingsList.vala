@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.PlugSettingsList : Gtk.Grid {
+public class Hottoe.Widgets.PlugSettingsList : Gtk.Grid {
     private Gtk.ListBox m_plugs;
     private PlugChooser m_plugs_chooser;
 

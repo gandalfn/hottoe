@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public abstract class SukaHottoe.Spectrum : GLib.Object {
+public abstract class Hottoe.Spectrum : GLib.Object {
     public unowned Channel channel { get; construct; }
     public uint bands { get; set; default = 20; }
     public int threshold { get; set; default = -80; }

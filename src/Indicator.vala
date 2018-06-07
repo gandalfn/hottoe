@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Indicator : Wingpanel.Indicator {
+public class Hottoe.Indicator : Wingpanel.Indicator {
     private Manager m_manager;
     private Widgets.IndicatorIcon? m_indicator_icon;
     private Widgets.IndicatorView m_indicator_view;
@@ -108,7 +108,7 @@ public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorMan
         return null;
     }
 
-    var indicator = new SukaHottoe.Indicator (in_server_type);
+    var indicator = new Hottoe.Indicator (in_server_type);
     return indicator;
 }
 

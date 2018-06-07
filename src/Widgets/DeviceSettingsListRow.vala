@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-private class SukaHottoe.Widgets.DeviceSettingsListRow : Gtk.ListBoxRow {
+private class Hottoe.Widgets.DeviceSettingsListRow : Gtk.ListBoxRow {
     private Gtk.Revealer m_content;
     private Gtk.Image m_status_icon;
     private Gtk.Label m_status_label;

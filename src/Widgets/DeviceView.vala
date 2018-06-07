@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.DeviceView : Gtk.Grid {
+public class Hottoe.Widgets.DeviceView : Gtk.Grid {
     private int m_nb_ports;
     private Gtk.Label m_title_label;
     private Gtk.Revealer m_content;

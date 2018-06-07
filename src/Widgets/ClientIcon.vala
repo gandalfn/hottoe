@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class SukaHottoe.Widgets.ClientIcon : SukaHottoe.Widgets.Icon {
+public class Hottoe.Widgets.ClientIcon : Hottoe.Widgets.Icon {
     private Wnck.Window m_window;
     private Gdk.Pixbuf m_window_icon;
 

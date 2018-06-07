@@ -20,15 +20,15 @@
 
 #include <gst/gst.h>
 
-#include "suka-hottoe.h"
+#include "hottoe.h"
 
 GST_PLUGIN_DEFINE(
     GST_VERSION_MAJOR,
     GST_VERSION_MINOR,
-    suka_hottoe,
+    hottoe,
     "Run an FFT on the audio signal, output logarithm spectrum data",
-    suka_hottoe_gst_spectrum_init,
+    hottoe_gst_spectrum_init,
     VERSION,
     "LGPL",
-    "SukaHottoe Spectrum",
-    "https://github.com/gandalfn/suka-hottoe")
+    "Hottoe Spectrum",
+    "https://gitlab.com/mithrandirn/hottoe")
