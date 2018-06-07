@@ -60,7 +60,7 @@ internal class Hottoe.PulseAudio.Equalizer : Hottoe.Equalizer {
     }
 
     static construct {
-        string[]? args = {};
+        unowned string[]? args = null;
         Gst.init (ref args);
     }
 
