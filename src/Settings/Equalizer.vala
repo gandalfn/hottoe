@@ -28,7 +28,7 @@ public class Hottoe.Settings.Equalizer : Granite.Services.Settings {
 
     public Equalizer (string in_device) {
         base.with_path ("com.gitlab.mithrandirn.hottoe.equalizer",
-                        "/com/github/gandalfn/hottoe/" + in_device + "/");
+                        "/com/gitlab/mithrandirn/hottoe/" + in_device + "/");
         device = in_device;
     }
 }
