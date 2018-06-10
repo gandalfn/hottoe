@@ -20,12 +20,13 @@ static int main (string[] in_args) {
                 spectrum.enabled = true;
                 spectrum.threshold = -70;
                 spectrum.updated.connect (() => {
+                    string msg = "magnitudes: ";
                     int cpt = 0;
                     foreach (float val in spectrum.get_magnitudes ()) {
-                        print("%f ", val);
+                        msg += "%2.1f ".printf (val);
                         cpt++;
                     }
-                    print("\n");
+                    message(msg);
                 });
                 return;
             }
