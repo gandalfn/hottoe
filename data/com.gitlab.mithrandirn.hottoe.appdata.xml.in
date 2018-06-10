@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>com.gitlab.mithrandirn.hottoe</id>
+  <extends>io.elementary.switchboard</extends>
+  <name>Sound Devices</name>
+  <summary>Configure sound devices</summary>
+  <url type="homepage">https://gitlab.com/mithrandirn/hottoe</url>
+  <url type="bugtracker">https://gitlab.com/mithrandirn/hottoe/issues</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-2.1-or-later</project_license>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://gitlab.com/mithrandirn/hottoe/raw/master/data/switchboard-screenshot.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://gitlab.com/mithrandirn/hottoe/raw/master/data/indicator-screenshot.png</image>
+    </screenshot>
+  </screenshots>
+</component>
