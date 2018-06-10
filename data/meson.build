@@ -16,3 +16,8 @@ install_data(
     meson.project_name() + '.gschema.xml',
     install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 )
+
+run_target('validate', command : ['appstreamcli',
+                                  'validate',
+                                  '--pedantic',
+                                  join_paths(meson.current_build_dir(), meson.project_name() + '.appdata.xml')])

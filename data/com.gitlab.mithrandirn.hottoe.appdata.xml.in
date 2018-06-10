@@ -4,15 +4,38 @@
   <extends>io.elementary.switchboard</extends>
   <name>Sound Devices</name>
   <summary>Configure sound devices</summary>
+  <description>
+    <p>
+    Hottoe is a simple Elementary based volume control tool
+    (mixer).In contrast to classic mixer tools this one allows you
+    to control both the volume of hardware devices and of each
+    playback stream separately. It also allows you to redirect a
+    playback stream to another output device without interrupting
+    playback.
+    </p>
+  </description>
+  <releases>
+    <release version="0.3.0" date="2018-06-10" urgency="medium">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+  <provides>
+    <library>libcom.gitlab.mithrandirn.hottoe.so.0</library>
+  </provides>
+  <developer_name>Nicolas Bruguier</developer_name>
   <url type="homepage">https://gitlab.com/mithrandirn/hottoe</url>
   <url type="bugtracker">https://gitlab.com/mithrandirn/hottoe/issues</url>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
   <screenshots>
     <screenshot type="default">
+      <caption>Switchboard Hottoe extension</caption>
       <image>https://gitlab.com/mithrandirn/hottoe/raw/master/data/switchboard-screenshot.png</image>
     </screenshot>
     <screenshot>
+      <caption>Wingpanel Hottoe indicator</caption>
       <image>https://gitlab.com/mithrandirn/hottoe/raw/master/data/indicator-screenshot.png</image>
     </screenshot>
   </screenshots>
