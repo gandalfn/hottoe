@@ -160,8 +160,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Table {
     }
 
     private double
-    iec_scale (double inDB)
-    {
+    iec_scale (double inDB) {
         double def = 0.0;
 
         if (inDB < -70.0)

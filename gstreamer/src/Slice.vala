@@ -27,7 +27,7 @@ public abstract class Hottoe.Gst.Slice : GLib.Object {
 
     public int rate { get; construct; }
     public int sample_rate { get; construct; }
-    public int length  {
+    public int length {
         get {
             return m_length;
         }
@@ -37,7 +37,7 @@ public abstract class Hottoe.Gst.Slice : GLib.Object {
         // calculate the number of samples in slice
         int samples = 2;
 
-	    while (samples * rate < sample_rate) {
+       while (samples * rate < sample_rate) {
             samples <<= 1;
         }
 

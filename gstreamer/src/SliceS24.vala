@@ -46,7 +46,7 @@ public class Hottoe.Gst.SliceS24 : Hottoe.Gst.Slice {
             for (uint channel = 0; channel < in_channels; ++channel) {
                 int32 v = 0;
 
-                if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN)   {
+                if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
                     v = global::Gst.read_uint24_le (&input[cpt + (3 * channel)]);
                 } else {
                     v = global::Gst.read_uint24_be (&input[cpt + (3 * channel)]);

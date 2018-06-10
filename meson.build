@@ -17,6 +17,10 @@ add_project_arguments(['--vapidir', join_paths(meson.current_source_dir(), 'vapi
 
 meson.add_install_script('meson/post_install.py')
 
+run_target('lint', command : ['io.elementary.vala-lint',
+                              '-d',
+                              meson.source_root()])
+
 subdir('gstreamer')
 subdir('lib')
 subdir('src')

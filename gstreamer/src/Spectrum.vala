@@ -80,7 +80,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
                              "Nicolas Bruguier <gandalfn@club-internet.fr>");
 
         string formats = null;
-        if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN)   {
+        if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
             formats = global::Gst.Audio.caps_make ("{ S16LE, S24LE, S32LE, F32LE, F64LE }");
         } else {
             formats = global::Gst.Audio.caps_make ("{ S16BE, S24BE, S32BE, F32BE, F64BE }");

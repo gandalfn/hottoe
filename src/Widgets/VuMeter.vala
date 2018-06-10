@@ -69,7 +69,7 @@ public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
             bar_height = height;
             space = (int)((double)bar_width* 0.1);
             bar_width -= space;
-        } else  {
+        } else {
             bar_height = (int)((double)height / (double)nb_bars);
             bar_width = width;
             space = (int)((double)bar_height* 0.1);
@@ -155,8 +155,7 @@ public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
     }
 
     private double
-    iec_scale (double inDB)
-    {
+    iec_scale (double inDB) {
         double def = 0.0;
 
         if (inDB < -70.0)
