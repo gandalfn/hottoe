@@ -34,7 +34,6 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
     }
 
     construct {
-        message("create spectrum");
         m_magnitudes = new float[bands];
         m_pipeline = new Gst.Pipeline ("hottoe-spectrum");
 
@@ -50,7 +49,7 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
 
         var audioconvert = Gst.ElementFactory.make ("audioconvert", "audioconvert");
 
-        m_spectrum = Gst.ElementFactory.make ("shspectrum", "shspectrum");
+        m_spectrum = Gst.ElementFactory.make ("hspectrum", "hspectrum");
         m_spectrum.set ("bands", bands,
                         "threshold", (float)threshold,
                         "interval", (uint64)(interval * 1000 * 1000));
@@ -106,7 +105,7 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
                 unowned Gst.Structure struct = in_message.get_structure();
                 string name = struct.get_name ();
 
-                if (name == "shspectrum") {
+                if (name == "hspectrum") {
                     var vals = struct.get_value ("magnitude");
                     for (int cpt = 0; cpt < bands; ++cpt) {
                         var mag = Gst.ValueList.get_value(vals, cpt);

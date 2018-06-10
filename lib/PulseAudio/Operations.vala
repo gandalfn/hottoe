@@ -1063,7 +1063,6 @@ internal class Hottoe.PulseAudio.Operations : GLib.Object {
                            string in_name,
                            string? in_args,
                            owned Callback? in_callback) {
-            message (@"load module $(in_name) $(in_args) operation");
             name = in_name;
             args = in_args;
             callback = (owned)in_callback;
@@ -1077,7 +1076,6 @@ internal class Hottoe.PulseAudio.Operations : GLib.Object {
         }
 
         private void on_finish (global::PulseAudio.Context in_context, uint32 in_index) {
-            message (@"finish load module $(in_index)");
             if (callback != null) {
                 callback (in_index);
             }

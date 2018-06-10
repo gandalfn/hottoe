@@ -38,7 +38,6 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         set {
             if (m_magnitudes == null || m_magnitudes.length != value) {
                 m_lock.lock ();
-                message(@"magintude: $value");
                 m_magnitudes = new float [value];
                 flush ();
                 m_lock.unlock ();
@@ -218,5 +217,5 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
 
 [CCode (cname = "hottoe_gst_spectrum_init")]
 public static bool plugin_init (Gst.Plugin in_plugin) {
-    return Gst.Element.register (in_plugin, "shspectrum", Gst.Rank.NONE, typeof (Hottoe.Gst.Spectrum));
+    return Gst.Element.register (in_plugin, "hspectrum", Gst.Rank.NONE, typeof (Hottoe.Gst.Spectrum));
 }

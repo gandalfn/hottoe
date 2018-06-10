@@ -23,7 +23,7 @@ public class Hottoe.Gst.Message : GLib.Object {
     private global::Gst.Structure m_structure;
 
     public Message (float[] in_magnitudes) {
-        m_structure = new global::Gst.Structure ("shspectrum",
+        m_structure = new global::Gst.Structure ("hspectrum",
                                                  "bands", typeof(int), 0);
 
         GLib.Value container = GLib.Value (typeof (global::Gst.ValueList));
