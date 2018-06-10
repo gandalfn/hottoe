@@ -67,8 +67,7 @@ static int main (string[] in_args) {
     stdin.add_watch(GLib.IOCondition.OUT, (source, condition) => {
         char key = 0;
         size_t size = 1;
-        try
-        {
+        try {
             source.read_chars((char[])&key, out size);
             if (size > 0) {
                 if (key == 'q') {
@@ -76,8 +75,7 @@ static int main (string[] in_args) {
                     return false;
                 }
             }
-        }
-        catch(GLib.Error err) {
+        } catch(GLib.Error err) {
         }
         return true;
     });
