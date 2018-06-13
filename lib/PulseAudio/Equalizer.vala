@@ -104,7 +104,7 @@ internal class SukaHottoe.PulseAudio.Equalizer : SukaHottoe.Equalizer {
         m_source.set ("volume", 1.0,
                       "mute", false,
                       "provide-clock", false,
-                      "slave-method", Gst.Audio.BaseSrcSlaveMethod.RE_TIMESTAMP,
+                      "slave-method", Gst.Audio.BaseSrcSlaveMethod.RETIMESTAMP,
                       "stream-properties", props);
 
         m_equalizer = Gst.ElementFactory.make ("equalizer-10bands", "equalizer");

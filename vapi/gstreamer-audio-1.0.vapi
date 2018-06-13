@@ -599,7 +599,7 @@ namespace Gst {
 		[GIR (name = "AudioBaseSrcSlaveMethod")]
 		public enum BaseSrcSlaveMethod {
 			RESAMPLE,
-			RE_TIMESTAMP,
+			RETIMESTAMP,
 			SKEW,
 			NONE
 		}
