@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301 USA
  */
 
-public class Hottoe.Widgets.Spectrum : Gtk.Table {
+public class Hottoe.Widgets.Spectrum : Gtk.Grid {
     private class Meter : Gtk.DrawingArea {
         private unowned Spectrum m_spectrum;
         private int m_band;
@@ -78,19 +78,35 @@ public class Hottoe.Widgets.Spectrum : Gtk.Table {
 
     private Hottoe.Spectrum m_spectrum;
     private double[] m_magnitudes;
+    private Gtk.Grid m_bands;
 
     public unowned Device device { get; construct; }
     public int interval { get; construct; default = 50; }
     public bool enabled { get; set; default = true; }
     public int nb_bars { get; set; default = 10; }
-    public int nb_bands { get; set; default = 30; }
+    public int nb_bands { get; set; default = 20; }
     public double smoothing { get; set; default = 0.00007; }
 
     construct {
-        column_spacing = 6;
-        homogeneous = true;
+        orientation = Gtk.Orientation.VERTICAL;
+
+        m_bands = new Gtk.Grid();
+        m_bands.orientation = Gtk.Orientation.HORIZONTAL;
+        m_bands.column_spacing = 6;
+        m_bands.row_homogeneous = true;
+        m_bands.column_homogeneous = true;
 
         on_nb_bands_changed ();
+
+        var db_label = new Gtk.Label("-70");
+        db_label.margin_end = 5;
+        attach (db_label, 0, 0);
+
+        var freq_label = new Gtk.Label("1.0");
+        freq_label.margin_top = 5;
+        attach (freq_label, 0, 1);
+
+        attach (m_bands, 1, 0);
 
         device.manager.channel_added.connect (on_channel_added);
 
@@ -119,22 +135,16 @@ public class Hottoe.Widgets.Spectrum : Gtk.Table {
 
         // Add all band meter
         for (int cpt = 0; cpt < nb_bands; ++cpt) {
-            var grid = new Gtk.Grid ();
-            grid.orientation = Gtk.Orientation.VERTICAL;
-            grid.add (new Meter (this, cpt));
-            //  double freq =  ((32000.0 / 2.0) * cpt + 32000.0 / 4.0) / nb_bands;
-            //  var str = "<span size='x-small'>%0.2g</span>".printf(freq / 1000.0);
-            //  var label = new Gtk.Label (str);
-            //  label.use_markup = true;
-            //  grid.add (label);
-            attach (grid, cpt, cpt + 1, 0, 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0);
+            m_bands.attach (new Meter (this, cpt), cpt, 0);
         }
+
+        show_all ();
     }
 
     private void on_channel_added (Hottoe.Manager in_manager, Hottoe.Channel in_channel) {
         if (m_spectrum == null && in_channel.direction == Direction.OUTPUT && in_channel in device) {
             m_spectrum = in_manager.create_spectrum (in_channel, 32000, interval);
-            m_spectrum.threshold = -70;
+            m_spectrum.threshold = -80;
             m_spectrum.bands = nb_bands;
             m_spectrum.updated.connect (on_spectrum_updated);
             bind_property ("enabled", m_spectrum, "enabled", GLib.BindingFlags.SYNC_CREATE);
@@ -186,5 +196,71 @@ public class Hottoe.Widgets.Spectrum : Gtk.Table {
     private new double @get(int in_index)
         requires (in_index >= 0 && in_index < m_magnitudes.length) {
         return iec_scale (10.0 + m_magnitudes[in_index]);
+    }
+
+    public override bool draw (Cairo.Context in_ctx) {
+        // Draw scales
+        in_ctx.save ();
+        {
+            Gtk.Allocation allocation;
+            get_allocation (out allocation);
+
+            Gtk.Allocation bands_allocation;
+            m_bands.get_allocation (out bands_allocation);
+            bands_allocation.x -= allocation.x;
+            bands_allocation.y -= allocation.y;
+
+            foreach (var child in m_bands.get_children ()) {
+                Gtk.Allocation band_allocation;
+                child.get_allocation (out band_allocation);
+
+                in_ctx.save ();
+                {
+                    in_ctx.translate (band_allocation.x - allocation.x, band_allocation.y - allocation.y);
+
+                    in_ctx.set_source_rgb((double)0xfa/(double)0xff,
+                                          (double)0xfa/(double)0xff,
+                                          (double)0xfa/(double)0xff);
+
+                    in_ctx.rectangle (0, 0, band_allocation.width, band_allocation.height);
+                    in_ctx.fill();
+                }
+                in_ctx.restore ();
+            }
+
+            in_ctx.set_source_rgb ((double)0x7e/(double)0xff,
+                                   (double)0x80/(double)0xff,
+                                   (double)0x87/(double)0xff);
+            in_ctx.save ();
+            {
+                in_ctx.set_dash ({1, 1}, 0);
+
+                int[] db_range = { 0, -10, -20, -30, -40, -50, -60, -70 };
+                foreach (int db in db_range) {
+                    double x = bands_allocation.x;
+                    double y = bands_allocation.y + (bands_allocation.height * iec_scale (db));
+
+                    in_ctx.move_to (x, y);
+                    in_ctx.line_to (x + bands_allocation.width, y);
+                    in_ctx.stroke ();
+                }
+            }
+            in_ctx.restore ();
+
+            in_ctx.move_to (bands_allocation.x - 1.5, bands_allocation.y);
+            in_ctx.line_to (bands_allocation.x - 1.5, bands_allocation.y + bands_allocation.height + 1.5);
+            in_ctx.line_to (bands_allocation.x + 1.5 + bands_allocation.width, bands_allocation.y + 1.5 + bands_allocation.height);
+            in_ctx.set_line_width (3.0);
+            in_ctx.stroke();
+
+            message(@"x: $(bands_allocation.x) y: $(bands_allocation.y) width: $(bands_allocation.width) heigth: $(bands_allocation.height)");
+
+            // Draw bands
+            in_ctx.translate (bands_allocation.x, bands_allocation.y);
+            m_bands.draw (in_ctx);
+        }
+        in_ctx.restore ();
+
+        return true;
     }
 }

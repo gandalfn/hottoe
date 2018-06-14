@@ -84,7 +84,7 @@ public class Hottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
 
         m_output_grid = new Gtk.Grid ();
         m_output_grid.orientation = Gtk.Orientation.VERTICAL;
-        m_output_grid.row_spacing = 24;
+        m_output_grid.row_spacing = 12;
         m_output_grid.margin_start = 12;
 
         var output_channels = new DeviceChannelList (device, Direction.OUTPUT);
@@ -102,6 +102,7 @@ public class Hottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         grid_eq_spec.add (output_equalizer);
 
         var output_spectrum = new Widgets.Spectrum(device, 40);
+        output_spectrum.margin = 12;
         grid_eq_spec.add (output_spectrum);
 
         m_output_grid.add (grid_eq_spec);
