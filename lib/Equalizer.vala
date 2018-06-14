@@ -35,6 +35,7 @@ public abstract class Hottoe.Equalizer : GLib.Object {
 
         public string name { get; set; }
         public abstract int length { get; }
+        public bool is_default { get; set; default = false; }
 
         public signal void changed (int in_index);
 
@@ -101,6 +102,22 @@ public abstract class Hottoe.Equalizer : GLib.Object {
             base (in_name);
         }
 
+        public Preset10Bands.with_gains (string in_name, int[] in_freqs)
+            requires (in_freqs.length == 10) {
+            this (in_name);
+
+            m_frequencies[0] = Frequency (60, in_freqs [0]);
+            m_frequencies[1] = Frequency (170, in_freqs [1]);
+            m_frequencies[2] = Frequency (310, in_freqs [2]);
+            m_frequencies[3] = Frequency (600, in_freqs [3]);
+            m_frequencies[4] = Frequency (1000, in_freqs [4]);
+            m_frequencies[5] = Frequency (3000, in_freqs [5]);
+            m_frequencies[6] = Frequency (6000, in_freqs [6]);
+            m_frequencies[7] = Frequency (12000, in_freqs [7]);
+            m_frequencies[8] = Frequency (14000, in_freqs [8]);
+            m_frequencies[9] = Frequency (16000, in_freqs [9]);
+        }
+
         public override Preset copy () {
             var ret = new Preset10Bands (name);
 
@@ -115,4 +132,32 @@ public abstract class Hottoe.Equalizer : GLib.Object {
     public string description { get; construct; }
 
     public abstract Preset preset { get; set; }
+
+    private static Gee.TreeSet<Preset> ? s_default_presets = null;
+    public static Gee.Collection<Preset> get_default_presets () {
+        if (s_default_presets == null) {
+            s_default_presets = new Gee.TreeSet<Preset> ();
+
+            s_default_presets.add (new Preset10Bands.with_gains (_("Flat"), {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Classical"), {0, 0, 0, 0, 0, 0, -40, -40, -40, -50}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Club"), {0, 0, 20, 30, 30, 30, 20, 0, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Dance"), {50, 35, 10, 0, 0, -30, -40, -40, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Full Bass"), {70, 70, 70, 40, 20, -45, -50, -55, -55, -55}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Full Treble"), {-50, -50, -50, -25, 15, 55, 80, 80, 80, 80}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Full Bass + Treble"), {35, 30, 0, -40, -25, 10, 45, 55, 60, 60}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Headphones"), {25, 50, 25, -20, 0, -30, -40, -40, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Large Hall"), {50, 50, 30, 30, 0, -25, -25, -25, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Live"), {-25, 0, 20, 25, 30, 30, 20, 15, 15, 10}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Party"), {35, 35, 0, 0, 0, 0, 0, 0, 35, 35}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Pop"), {-10, 25, 35, 40, 25, -5, -15, -15, -10, -10}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Reggae"), {0, 0, -5, -30, 0, -35, -35, 0, 0, 0}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Rock"), {40, 25, -30, -40, -20, 20, 45, 55, 55, 55}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Soft"), {25, 10, -5, -15, -5, 20, 45, 50, 55, 60}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Ska"), {-15, -25, -25, -5, 20, 30, 45, 50, 55, 50}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Soft Rock"), {20, 20, 10, -5, -25, -30, -20, -5, 15, 45}));
+            s_default_presets.add (new Preset10Bands.with_gains (_("Techno"), {40, 30, 0, -30, -25, 0, 40, 50, 50, 45}));
+        }
+
+        return s_default_presets;
+    }
 }
