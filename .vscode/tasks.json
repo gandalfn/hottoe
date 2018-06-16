@@ -1,0 +1,119 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "process",
+            "command": "ninja",
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": true,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "vala",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/build"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*?):(\\d+)[:\\.](\\d+)(?:-(\\d+)\\.(\\d+))?:\\s+(warning|error):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "endLine": 4,
+                        "endColumn": 5,
+                        "severity": 6,
+                        "message": 7
+                    }
+                ]
+            },
+        },
+        {
+            "label": "clean",
+            "type": "process",
+            "command": "ninja",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "vala",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*?):(\\d+)[:\\.](\\d+)(?:-(\\d+)\\.(\\d+))?:\\s+(warning|error):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "endLine": 4,
+                        "endColumn": 5,
+                        "severity": 6,
+                        "message": 7
+                    }
+                ]
+            },
+        },
+        {
+            "label": "lint",
+            "type": "process",
+            "command": "ninja",
+            "args": [
+                "lint"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": true,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "vala",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "severity": "warning",
+                "pattern": [
+                    {
+                        "regexp": "^([^\\s].*)$",
+                        "file": 1
+                    },
+                    {
+                        "regexp": "^\\s+(\\d+).(\\d+)\\s\\s+(.*)\\s\\s+(.*)$",
+                        "line": 1,
+                        "column": 2,
+                        "message": 3,
+                        "code": 4,
+                        "loop": true
+                    }
+                ]
+            }
+        }
+    ]
+}
