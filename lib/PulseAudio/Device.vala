@@ -265,7 +265,7 @@ internal class Hottoe.PulseAudio.Device : Hottoe.Device {
         if  (!manager.is_ready || !enable_equalizer) {
             m_equalizer = null;
         }
-        notify_property("equalizer");
+        notify_property ("equalizer");
     }
 
     private void on_active_profile_destroyed (GLib.Object in_object) {

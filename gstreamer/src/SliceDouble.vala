@@ -36,7 +36,7 @@ public class Hottoe.Gst.SliceDouble : Hottoe.Gst.Slice {
         requires (in_max_value != 0.0) {
         int ret = 0;
         unowned double[] input = (double[])in_input;
-        input.length = in_len / (int)sizeof(double);
+        input.length = in_len / (int)sizeof (double);
 
         for (int cpt = 0; cpt < input.length; cpt += (int)in_channels, ++ret) {
             float total = 0.0f;

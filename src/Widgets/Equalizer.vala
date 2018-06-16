@@ -53,9 +53,9 @@ public class Hottoe.Widgets.Equalizer : Gtk.Grid {
             int freq_val = int.parse (freq);
             string decibel = null;
             if (freq_val >= 1000) {
-                decibel = "%ik".printf(freq_val / 1000);
+                decibel = "%ik".printf (freq_val / 1000);
             } else {
-                decibel = "%i".printf(freq_val);
+                decibel = "%i".printf (freq_val);
             }
             var label = new Gtk.Label (decibel);
 
@@ -115,9 +115,9 @@ public class Hottoe.Widgets.Equalizer : Gtk.Grid {
 
         add (layout);
 
-        preset_combo.bind_property("active", m_settings, "enabled",
-                                   GLib.BindingFlags.SYNC_CREATE |
-                                   GLib.BindingFlags.BIDIRECTIONAL);
+        preset_combo.bind_property ("active", m_settings, "enabled",
+                                    GLib.BindingFlags.SYNC_CREATE |
+                                    GLib.BindingFlags.BIDIRECTIONAL);
     }
 
     public Equalizer (Device in_device) {
@@ -129,7 +129,7 @@ public class Hottoe.Widgets.Equalizer : Gtk.Grid {
     private void on_scale_value_changed () {
         string[] values = {};
         foreach (var scale in m_scales) {
-            values += "%i".printf((int)scale.get_value ());
+            values += "%i".printf ((int)scale.get_value ());
         }
         m_settings.values = values;
     }

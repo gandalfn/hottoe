@@ -98,10 +98,10 @@ public class Hottoe.Widgets.DeviceSettingsPage : Granite.SettingsPage {
         grid_eq_spec.orientation = Gtk.Orientation.HORIZONTAL;
         grid_eq_spec.column_spacing = 12;
 
-        var output_equalizer = new Widgets.Equalizer(device);
+        var output_equalizer = new Widgets.Equalizer (device);
         grid_eq_spec.add (output_equalizer);
 
-        var output_spectrum = new Widgets.Spectrum(device, 40);
+        var output_spectrum = new Widgets.Spectrum (device, 40);
         output_spectrum.margin = 12;
         grid_eq_spec.add (output_spectrum);
 

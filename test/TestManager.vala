@@ -57,32 +57,32 @@ static int main (string[] in_args) {
     mgr.start ();
 
     Posix.termios ios_old;
-    Posix.tcgetattr(0, out ios_old);
+    Posix.tcgetattr (0, out ios_old);
     Posix.termios ios_new = ios_old;
     ios_new.c_lflag &= ~(Posix.ICANON);
     ios_new.c_lflag &= ~(Posix.ECHO);
-    Posix.tcsetattr(0, Posix.TCSANOW, ios_new);
+    Posix.tcsetattr (0, Posix.TCSANOW, ios_new);
 
     var stdin = new GLib.IOChannel.unix_new (0);
-    stdin.add_watch(GLib.IOCondition.OUT, (source, condition) => {
+    stdin.add_watch (GLib.IOCondition.OUT, (source, condition) => {
         char key = 0;
         size_t size = 1;
         try {
-            source.read_chars((char[])&key, out size);
+            source.read_chars ((char[])&key, out size);
             if (size > 0) {
                 if (key == 'q') {
-                    loop.quit();
+                    loop.quit ();
                     return false;
                 }
             }
-        } catch(GLib.Error err) {
+        } catch (GLib.Error err) {
         }
         return true;
     });
 
     loop.run ();
 
-    Posix.tcsetattr(0, Posix.TCSANOW, ios_old);
+    Posix.tcsetattr (0, Posix.TCSANOW, ios_old);
 
     return 0;
 }

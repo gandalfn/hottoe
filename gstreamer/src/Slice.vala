@@ -54,7 +54,7 @@ public abstract class Hottoe.Gst.Slice : GLib.Object {
         m_fft = new global::Gst.FFT.F32 (samples, false);
 
         // create spectrum complex array
-        m_spectrum = global::Gst.FFT.F32Complex.alloc((samples / 2) + 1);
+        m_spectrum = global::Gst.FFT.F32Complex.alloc ((samples / 2) + 1);
     }
 
     public bool push (float in_value)
@@ -65,10 +65,10 @@ public abstract class Hottoe.Gst.Slice : GLib.Object {
     }
 
     public void clear () {
-        GLib.Memory.set (m_buffer, 0, sizeof(float) * m_buffer.length);
+        GLib.Memory.set (m_buffer, 0, sizeof (float) * m_buffer.length);
         m_length = 0;
 
-        GLib.Memory.set (m_spectrum, 0, sizeof(global::Gst.FFT.F32Complex) * m_spectrum.length);
+        GLib.Memory.set (m_spectrum, 0, sizeof (global::Gst.FFT.F32Complex) * m_spectrum.length);
     }
 
     public abstract int collect (void* in_input, int in_len, uint in_channels, float in_max_value);
@@ -83,7 +83,7 @@ public abstract class Hottoe.Gst.Slice : GLib.Object {
         float smoothing = GLib.Math.powf (in_smoothing, (float)m_buffer.length / (float)sample_rate);
 
         for (int cpt = 0; cpt < inout_magnitudes.length; ++cpt) {
-            int f_end = (int)GLib.Math.round(GLib.Math.powf(((float)(cpt + 1)) / (float)inout_magnitudes.length, in_gamma) * freqs);
+            int f_end = (int)GLib.Math.round (GLib.Math.powf (((float)(cpt + 1)) / (float)inout_magnitudes.length, in_gamma) * freqs);
             if (f_end > freqs) {
                 f_end = freqs;
             }

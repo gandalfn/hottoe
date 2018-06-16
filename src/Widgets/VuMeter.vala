@@ -76,12 +76,12 @@ public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
             bar_height -= space;
         }
 
-        double yellow = iec_scale(-10);
-        double red = iec_scale(-5);
+        double yellow = iec_scale (-10);
+        double red = iec_scale (-5);
 
         double bar_range = 1.0 / (double)nb_bars;
         for (int cpt = 0; cpt < nb_bars; ++cpt) {
-            double bar_percent = double.min(1.0, double.max (0.0, m_value - (bar_range * cpt)) / bar_range);
+            double bar_percent = double.min (1.0, double.max (0.0, m_value - (bar_range * cpt)) / bar_range);
             double bar_x = 0, bar_y = 0;
             if (orientation == Gtk.Orientation.VERTICAL) {
                 bar_x = (cpt * (bar_width + space));
@@ -91,30 +91,30 @@ public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
                 bar_y = (cpt * (bar_height + space));
             }
 
-            m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff,
-                                              (double)0xd4/(double)0xff,
-                                              (double)0xd4/(double)0xff,
+            m_buffer.context.set_source_rgba ((double)0xd4 / (double)0xff,
+                                              (double)0xd4 / (double)0xff,
+                                              (double)0xd4 / (double)0xff,
                                               (1.0 - bar_percent) * remanence);
             m_buffer.context.rectangle (bar_x, bar_y, bar_width, bar_height);
             m_buffer.context.fill_preserve ();
 
             if ((bar_range * cpt) >= red) {
-                m_buffer.context.set_source_rgba ((double)0xc6/(double)0xff,
-                                                  (double)0x26/(double)0xff,
-                                                  (double)0x2e/(double)0xff,
+                m_buffer.context.set_source_rgba ((double)0xc6 / (double)0xff,
+                                                  (double)0x26 / (double)0xff,
+                                                  (double)0x2e / (double)0xff,
                                                   bar_percent);
             } else if ((bar_range * cpt) >= yellow) {
-                m_buffer.context.set_source_rgba ((double)0xd4/(double)0xff,
-                                                  (double)0x8e/(double)0xff,
-                                                  (double)0x15/(double)0xff,
+                m_buffer.context.set_source_rgba ((double)0xd4 / (double)0xff,
+                                                  (double)0x8e / (double)0xff,
+                                                  (double)0x15 / (double)0xff,
                                                   bar_percent);
             } else {
-                m_buffer.context.set_source_rgba ((double)0x68/(double)0xff,
-                                                  (double)0xb7/(double)0xff,
-                                                  (double)0x23/(double)0xff,
+                m_buffer.context.set_source_rgba ((double)0x68 / (double)0xff,
+                                                  (double)0xb7 / (double)0xff,
+                                                  (double)0x23 / (double)0xff,
                                                   bar_percent);
             }
-            m_buffer.context.fill();
+            m_buffer.context.fill ();
         }
 
         in_ctx.set_source_surface (m_buffer.surface, 0, 0);
@@ -140,7 +140,7 @@ public class Hottoe.Widgets.VuMeter : Gtk.DrawingArea {
     }
 
     private void on_monitor_peak (float in_data) {
-        double peak = iec_scale (20.0 * GLib.Math.log10(in_data * (level / 100.0)));
+        double peak = iec_scale (20.0 * GLib.Math.log10 (in_data * (level / 100.0)));
         if (m_value != peak) {
             m_value = peak;
 

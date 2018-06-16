@@ -36,7 +36,7 @@ public class Hottoe.Gst.SliceS16 : Hottoe.Gst.Slice {
         requires (in_max_value != 0.0) {
         int ret = 0;
         unowned int16[] input = (int16[])in_input;
-        input.length = in_len / (int)sizeof(int16);
+        input.length = in_len / (int)sizeof (int16);
 
         for (int cpt = 0; cpt < input.length; cpt += (int)in_channels) {
             float total = 0.0f;

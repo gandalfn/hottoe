@@ -189,7 +189,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         int pos = 0;
         int length = data.length;
         do {
-            int nb = m_slice.collect(data[pos:data.length], length, channels, max_value);
+            int nb = m_slice.collect (data[pos:data.length], length, channels, max_value);
             pos = data.length - nb;
             length -= pos;
             if (nb > 0) {
@@ -198,7 +198,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
             }
             m_num_frames += pos;
             if (m_num_frames >= m_frames_per_interval) {
-                var msg = new Message(m_magnitudes);
+                var msg = new Message (m_magnitudes);
                 msg.post (this);
 
                 flush ();

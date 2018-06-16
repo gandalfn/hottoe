@@ -91,25 +91,25 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
         m_store.set (iter, 0, null, 1, SEPARATOR_NAME);
     }
 
-    public void addPreset(Hottoe.Equalizer.Preset in_preset) {
+    public void addPreset (Hottoe.Equalizer.Preset in_preset) {
         m_modifying_list = true;
 
         if (!in_preset.is_default) {
             /* If the number of custom presets is zero, add a separator */
             if (m_ncustompresets < 1)
-                addSeparator();
+                addSeparator ();
 
             m_ncustompresets++;
         }
 
         Gtk.TreeIter iter;
-        m_store.append(out iter);
-        m_store.set(iter, 0, in_preset, 1, in_preset.name);
+        m_store.append (out iter);
+        m_store.set (iter, 0, in_preset, 1, in_preset.name);
 
         m_modifying_list = false;
         m_automatic_selected = false;
 
-        set_active_iter(iter);
+        set_active_iter (iter);
     }
 
     public void removeCurrentPreset () {
@@ -123,7 +123,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
             if (o != null && o is Hottoe.Equalizer.Preset && ((Hottoe.Equalizer.Preset)o) == last_selected_preset) {
                 if (!((Hottoe.Equalizer.Preset)o).is_default) {
                     m_ncustompresets--;
-                    m_store.remove(ref iter);
+                    m_store.remove (ref iter);
                     break;
                 }
             }
@@ -136,7 +136,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
 
         m_modifying_list = false;
 
-        selectAutomaticPreset();
+        selectAutomaticPreset ();
     }
 
     public virtual void listSelectionChange () {
@@ -172,19 +172,19 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
         }
     }
 
-    public void selectAutomaticPreset() {
+    public void selectAutomaticPreset () {
         m_automatic_selected = true;
         automatic_preset_chosen ();
         set_active (0);
     }
 
-    public void selectPreset(string? in_preset_name) {
+    public void selectPreset (string? in_preset_name) {
 
         if (!(in_preset_name == null || in_preset_name.length < 1)) {
             Gtk.TreeIter iter;
-            for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string()); ++i) {
+            for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string ()); ++i) {
                 GLib.Object o;
-                m_store.get(iter, 0, out o);
+                m_store.get (iter, 0, out o);
 
                 if (o != null && o is Hottoe.Equalizer.Preset && (o as Hottoe.Equalizer.Preset).name == in_preset_name) {
                     set_active_iter (iter);
@@ -201,10 +201,10 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
     public Hottoe.Equalizer.Preset? getSelectedPreset () {
         Hottoe.Equalizer.Preset? ret = null;
         Gtk.TreeIter it;
-        get_active_iter(out it);
+        get_active_iter (out it);
 
         GLib.Object o;
-        m_store.get(it, 0, out o);
+        m_store.get (it, 0, out o);
 
         if (o != null && o is Hottoe.Equalizer.Preset) {
             ret = o as Hottoe.Equalizer.Preset;
@@ -217,7 +217,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
         var rv = new Gee.LinkedList<Hottoe.Equalizer.Preset> ();
 
         Gtk.TreeIter iter;
-        for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string()); ++i) {
+        for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string ()); ++i) {
             GLib.Object o;
             m_store.get (iter, 0, out o);
 
@@ -231,7 +231,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
 
     private void remove_delete_option () {
         Gtk.TreeIter iter;
-        for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string()); ++i) {
+        for (int i = 0; m_store.get_iter_from_string (out iter, i.to_string ()); ++i) {
             string text;
             m_store.get (iter, 1, out text);
 
@@ -248,7 +248,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
         int count = 0, nitems = m_store.iter_n_children (null);
         Gtk.TreeIter iter;
 
-        for (int i = nitems - 1; m_store.get_iter_from_string(out iter, i.to_string()); --i) {
+        for (int i = nitems - 1; m_store.get_iter_from_string (out iter, i.to_string ()); --i) {
             count++;
             string text;
             m_store.get (iter, 1, out text);
@@ -264,7 +264,7 @@ public class Hottoe.Widgets.PresetList : Gtk.ComboBox {
         bool already_added = false;
         Gtk.TreeIter last_iter, new_iter;
 
-        for (int i = 0; m_store.get_iter_from_string(out last_iter, i.to_string()); ++i) {
+        for (int i = 0; m_store.get_iter_from_string (out last_iter, i.to_string ()); ++i) {
             string text;
             m_store.get (last_iter, 1, out text);
 

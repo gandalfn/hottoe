@@ -24,18 +24,18 @@ public class Hottoe.Gst.Message : GLib.Object {
 
     public Message (float[] in_magnitudes) {
         m_structure = new global::Gst.Structure ("hspectrum",
-                                                 "bands", typeof(int), 0);
+                                                 "bands", typeof (int), 0);
 
         GLib.Value container = GLib.Value (typeof (global::Gst.ValueList));
 
         foreach (float magnitude in in_magnitudes) {
-            global::Gst.ValueList.append_value(container, 10.0f * (float)GLib.Math.log10(magnitude));
+            global::Gst.ValueList.append_value (container, 10.0f * (float)GLib.Math.log10 (magnitude));
         }
         m_structure.set_value ("magnitude", container);
     }
 
-    public void post(global::Gst.Element in_element) {
-        global::Gst.Message msg = new global::Gst.Message.element(in_element, (owned)m_structure);
+    public void post (global::Gst.Element in_element) {
+        global::Gst.Message msg = new global::Gst.Message.element (in_element, (owned)m_structure);
         in_element.post_message (msg);
     }
 }

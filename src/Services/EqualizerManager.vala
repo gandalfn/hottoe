@@ -30,7 +30,7 @@ public class Hottoe.Services.EqualizerManager : GLib.Object {
             }
 
             settings.notify["values"].connect (on_values_changed);
-            settings.bind_property("enabled", device, "enable_equalizer", GLib.BindingFlags.SYNC_CREATE);
+            settings.bind_property ("enabled", device, "enable_equalizer", GLib.BindingFlags.SYNC_CREATE);
             device.notify["enable_equalizer"].connect (on_device_equalizer_changed);
             device.notify["equalizer"].connect (on_device_equalizer_changed);
 

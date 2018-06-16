@@ -57,7 +57,7 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
         m_sink = Gst.ElementFactory.make ("fakesink", "sink");
         m_sink.set ("sync", true);
 
-        var caps = new Gst.Caps.simple("audio/x-raw", "rate", typeof(int), sample_rate);
+        var caps = new Gst.Caps.simple ("audio/x-raw", "rate", typeof (int), sample_rate);
 
         m_pipeline.add (m_source);
         m_pipeline.add (audioconvert);
@@ -68,8 +68,8 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
         audioconvert.link_filtered (m_spectrum, caps);
         m_spectrum.link (m_sink);
 
-        bind_property("bands", m_spectrum, "bands");
-        bind_property("threshold", m_spectrum, "threshold");
+        bind_property ("bands", m_spectrum, "bands");
+        bind_property ("threshold", m_spectrum, "threshold");
 
         Gst.Bus bus = m_pipeline.get_bus ();
         bus.add_watch (0, on_bus_callback);
@@ -80,7 +80,7 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
         });
     }
 
-    public Spectrum(Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
+    public Spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
         GLib.Object (
             channel: in_channel,
             sample_rate: in_sample_rate,
@@ -102,19 +102,19 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
     private bool on_bus_callback (Gst.Bus in_bus, Gst.Message in_message) {
         switch (in_message.type) {
             case Gst.MessageType.ELEMENT:
-                unowned Gst.Structure struct = in_message.get_structure();
+                unowned Gst.Structure struct = in_message.get_structure ();
                 string name = struct.get_name ();
 
                 if (name == "hspectrum") {
                     var vals = struct.get_value ("magnitude");
                     for (int cpt = 0; cpt < bands; ++cpt) {
-                        var mag = Gst.ValueList.get_value(vals, cpt);
+                        var mag = Gst.ValueList.get_value (vals, cpt);
 
                         if (mag != null) {
                             m_magnitudes[cpt] = (float)mag;
                         }
                     }
-                    updated();
+                    updated ();
                 }
                 break;
             default:

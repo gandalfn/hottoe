@@ -41,32 +41,32 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
 
             var gradient = new Cairo.Pattern.linear (0, height, 0, 0);
             gradient.add_color_stop_rgb (0.0,
-                                         (double)0x68/(double)0xff,
-                                         (double)0xb7/(double)0xff,
-                                         (double)0x23/(double)0xff);
+                                         (double)0x68 / (double)0xff,
+                                         (double)0xb7 / (double)0xff,
+                                         (double)0x23 / (double)0xff);
 
-            gradient.add_color_stop_rgb (m_spectrum.iec_scale(-10),
-                                         (double)0xd4/(double)0xff,
-                                         (double)0x8e/(double)0xff,
-                                         (double)0x15/(double)0xff);
+            gradient.add_color_stop_rgb (m_spectrum.iec_scale (-10),
+                                         (double)0xd4 / (double)0xff,
+                                         (double)0x8e / (double)0xff,
+                                         (double)0x15 / (double)0xff);
 
-            gradient.add_color_stop_rgb (m_spectrum.iec_scale(-5),
-                                         (double)0xc6/(double)0xff,
-                                         (double)0x26/(double)0xff,
-                                         (double)0x2e/(double)0xff);
+            gradient.add_color_stop_rgb (m_spectrum.iec_scale (-5),
+                                         (double)0xc6 / (double)0xff,
+                                         (double)0x26 / (double)0xff,
+                                         (double)0x2e / (double)0xff);
 
             double gain = m_spectrum[m_band];
 
             in_ctx.set_source (gradient);
             in_ctx.rectangle (0, height - height * gain, width, height * gain);
-            in_ctx.fill();
+            in_ctx.fill ();
 
             if (gain >= m_max) {
                 m_max = gain;
             } else {
                 double pos = (double)height * m_max;
                 pos -= 4.0;
-                m_max = double.max(0.0, pos / (double)height);
+                m_max = double.max (0.0, pos / (double)height);
             }
 
             in_ctx.rectangle (0, height - height * m_max, width, 4.0);
@@ -90,7 +90,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
     construct {
         orientation = Gtk.Orientation.VERTICAL;
 
-        m_bands = new Gtk.Grid();
+        m_bands = new Gtk.Grid ();
         m_bands.orientation = Gtk.Orientation.HORIZONTAL;
         m_bands.column_spacing = 6;
         m_bands.row_homogeneous = true;
@@ -98,11 +98,11 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
 
         on_nb_bands_changed ();
 
-        var db_label = new Gtk.Label("-70");
+        var db_label = new Gtk.Label ("-70");
         db_label.margin_end = 5;
         attach (db_label, 0, 0);
 
-        var freq_label = new Gtk.Label("1.0");
+        var freq_label = new Gtk.Label ("1.0");
         freq_label.margin_top = 5;
         attach (freq_label, 0, 1);
 
@@ -193,7 +193,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
         return def / 100.0;
     }
 
-    private new double @get(int in_index)
+    private new double @get (int in_index)
         requires (in_index >= 0 && in_index < m_magnitudes.length) {
         return iec_scale (10.0 + m_magnitudes[in_index]);
     }
@@ -218,19 +218,19 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
                 {
                     in_ctx.translate (band_allocation.x - allocation.x, band_allocation.y - allocation.y);
 
-                    in_ctx.set_source_rgb((double)0xfa/(double)0xff,
-                                          (double)0xfa/(double)0xff,
-                                          (double)0xfa/(double)0xff);
+                    in_ctx.set_source_rgb ((double)0xfa / (double)0xff,
+                                           (double)0xfa / (double)0xff,
+                                           (double)0xfa / (double)0xff);
 
                     in_ctx.rectangle (0, 0, band_allocation.width, band_allocation.height);
-                    in_ctx.fill();
+                    in_ctx.fill ();
                 }
                 in_ctx.restore ();
             }
 
-            in_ctx.set_source_rgb ((double)0x7e/(double)0xff,
-                                   (double)0x80/(double)0xff,
-                                   (double)0x87/(double)0xff);
+            in_ctx.set_source_rgb ((double)0x7e / (double)0xff,
+                                   (double)0x80 / (double)0xff,
+                                   (double)0x87 / (double)0xff);
             in_ctx.save ();
             {
                 in_ctx.set_dash ({1, 1}, 0);
@@ -251,9 +251,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
             in_ctx.line_to (bands_allocation.x - 1.5, bands_allocation.y + bands_allocation.height + 1.5);
             in_ctx.line_to (bands_allocation.x + 1.5 + bands_allocation.width, bands_allocation.y + 1.5 + bands_allocation.height);
             in_ctx.set_line_width (3.0);
-            in_ctx.stroke();
-
-            message(@"x: $(bands_allocation.x) y: $(bands_allocation.y) width: $(bands_allocation.width) heigth: $(bands_allocation.height)");
+            in_ctx.stroke ();
 
             // Draw bands
             in_ctx.translate (bands_allocation.x, bands_allocation.y);
