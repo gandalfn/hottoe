@@ -25,6 +25,7 @@ public abstract class Hottoe.Spectrum : GLib.Object {
     public int threshold { get; set; default = -80; }
     public int sample_rate { get; construct; default = 44100; }
     public int interval { get; construct; default = 100; }
+    public float gamma { get; construct; default = 2.0f; }
     public bool enabled { get; set; default = false; }
 
     public signal void updated ();

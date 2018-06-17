@@ -121,5 +121,5 @@ public abstract class Hottoe.Manager : GLib.Object {
     public abstract Plug[] get_input_plugs ();
     public abstract Plug[] get_output_plugs ();
 
-    public abstract Spectrum create_spectrum (Channel in_channel, int in_sample_rate, int in_interval);
+    public abstract Spectrum create_spectrum (Channel in_channel, int in_sample_rate, int in_interval, float in_gamma);
 }

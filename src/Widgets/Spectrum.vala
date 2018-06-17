@@ -72,22 +72,26 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
             in_ctx.rectangle (0, height - height * m_max, width, 4.0);
             in_ctx.fill ();
 
+            m_spectrum.m_update |= m_max > 0;
+
             return true;
         }
     }
 
     private const int c_sample_rate = 34000;
     private const int c_offset = 10;
+    private const float c_gamma = 2.2f;
 
     private Hottoe.Spectrum m_spectrum;
     private double[] m_magnitudes;
     private Gtk.Grid m_bands;
+    private bool m_update;
 
     public unowned Device device { get; construct; }
     public int interval { get; construct; default = 50; }
     public bool enabled { get; set; default = true; }
     public int nb_bars { get; set; default = 10; }
-    public int nb_bands { get; set; default = 25; }
+    public int nb_bands { get; set; default = 20; }
     public double smoothing { get; set; default = 0.00007; }
 
     construct {
@@ -139,8 +143,8 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
 
     private void on_channel_added (Hottoe.Manager in_manager, Hottoe.Channel in_channel) {
         if (m_spectrum == null && in_channel.direction == Direction.OUTPUT && in_channel in device) {
-            m_spectrum = in_manager.create_spectrum (in_channel, c_sample_rate, interval);
-            m_spectrum.threshold = -70 - c_offset;
+            m_spectrum = in_manager.create_spectrum (in_channel, c_sample_rate, interval, c_gamma);
+            m_spectrum.threshold = -70 + c_offset;
             m_spectrum.bands = nb_bands;
             m_spectrum.updated.connect (on_spectrum_updated);
             bind_property ("enabled", m_spectrum, "enabled", GLib.BindingFlags.SYNC_CREATE);
@@ -149,20 +153,19 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
 
     private void on_spectrum_updated () {
         float[] magnitudes = m_spectrum.get_magnitudes ();
-        bool updated = false;
 
         for (int band = 0; band < nb_bands; ++band) {
             double val = magnitudes[band];
 
             if (m_magnitudes[band] != val) {
                 m_magnitudes[band] = val;
-                updated = true;
+                m_update = true;
             }
         }
 
-        //if (updated) {
+        if (m_update) {
             queue_draw ();
-        //}
+        }
     }
 
     private double
@@ -228,7 +231,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
                 var preset = new Hottoe.Equalizer.Preset10Bands ("fake");
                 for (int cpt = 0; cpt < preset.length; ++cpt) {
                     int freq = preset[cpt].freq;
-                    double ratio = GLib.Math.sqrt ((double)freq / (c_sample_rate / 2.0));
+                    double ratio = GLib.Math.pow ((double)freq / (c_sample_rate / 2.0), 1.0 / c_gamma);
 
                     double x = bands_allocation.x + (bands_allocation.width * (ratio));
                     double y = bands_allocation.y;
@@ -245,6 +248,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
 
             // Draw bands
             in_ctx.translate (bands_allocation.x, bands_allocation.y);
+            m_update = false;
             m_bands.draw (in_ctx);
         }
         in_ctx.restore ();

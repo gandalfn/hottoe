@@ -52,7 +52,8 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
         m_spectrum = Gst.ElementFactory.make ("hspectrum", "hspectrum");
         m_spectrum.set ("bands", bands,
                         "threshold", (float)threshold,
-                        "interval", (uint64)(interval * 1000 * 1000));
+                        "interval", (uint64)(interval * 1000 * 1000),
+                        "gamma", (float)gamma);
 
         m_sink = Gst.ElementFactory.make ("fakesink", "sink");
         m_sink.set ("sync", true);
@@ -80,11 +81,12 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
         });
     }
 
-    public Spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
+    public Spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval, float in_gamma) {
         GLib.Object (
             channel: in_channel,
             sample_rate: in_sample_rate,
-            interval: in_interval
+            interval: in_interval,
+            gamma: in_gamma
         );
     }
 

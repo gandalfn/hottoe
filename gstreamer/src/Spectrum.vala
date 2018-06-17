@@ -67,6 +67,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
     public float smoothing { get; set; default = 0.00007f; }
     public float scale { get; set; default = 1.0f; }
     public float threshold { get; set; default = -90.0f; }
+    public float gamma { get; set; default = 2.0f; }
 
     static construct {
         s_Debug.init ("HOTTOE_SPECTRUM", 0, "hottoe audio spectrum analyser element");
@@ -193,7 +194,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
             pos = data.length - nb;
             length -= pos;
             if (nb > 0) {
-                m_slice.process (m_magnitudes, (float)2.0, smoothing, scale);
+                m_slice.process (m_magnitudes, gamma, smoothing, scale);
                 m_slice.clear ();
             }
             m_num_frames += pos;

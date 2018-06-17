@@ -191,8 +191,8 @@ namespace Hottoe.PulseAudio {
             return m_clients.to_array ();
         }
 
-        public override Hottoe.Spectrum create_spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval) {
-            return new Spectrum (in_channel, in_sample_rate, in_interval);
+        public override Hottoe.Spectrum create_spectrum (Hottoe.Channel in_channel, int in_sample_rate, int in_interval, float in_gamma) {
+            return new Spectrum (in_channel, in_sample_rate, in_interval, in_gamma);
         }
 
         private bool reconnect_timeout () {
