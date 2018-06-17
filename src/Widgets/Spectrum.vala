@@ -95,18 +95,11 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
         m_bands.column_spacing = 6;
         m_bands.row_homogeneous = true;
         m_bands.column_homogeneous = true;
+        m_bands.margin = 5;
 
         on_nb_bands_changed ();
 
-        var db_label = new Gtk.Label ("-70");
-        db_label.margin_end = 5;
-        attach (db_label, 0, 0);
-
-        var freq_label = new Gtk.Label ("1.0");
-        freq_label.margin_top = 5;
-        attach (freq_label, 0, 1);
-
-        attach (m_bands, 1, 0);
+        add (m_bands);
 
         device.manager.channel_added.connect (on_channel_added);
 
@@ -202,6 +195,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
         // Draw scales
         in_ctx.save ();
         {
+            double line_width = 2.0;
             Gtk.Allocation allocation;
             get_allocation (out allocation);
 
@@ -210,30 +204,13 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
             bands_allocation.x -= allocation.x;
             bands_allocation.y -= allocation.y;
 
-            foreach (var child in m_bands.get_children ()) {
-                Gtk.Allocation band_allocation;
-                child.get_allocation (out band_allocation);
-
-                in_ctx.save ();
-                {
-                    in_ctx.translate (band_allocation.x - allocation.x, band_allocation.y - allocation.y);
-
-                    in_ctx.set_source_rgb ((double)0xfa / (double)0xff,
-                                           (double)0xfa / (double)0xff,
-                                           (double)0xfa / (double)0xff);
-
-                    in_ctx.rectangle (0, 0, band_allocation.width, band_allocation.height);
-                    in_ctx.fill ();
-                }
-                in_ctx.restore ();
-            }
-
             in_ctx.set_source_rgb ((double)0x7e / (double)0xff,
                                    (double)0x80 / (double)0xff,
                                    (double)0x87 / (double)0xff);
             in_ctx.save ();
             {
-                in_ctx.set_dash ({1, 1}, 0);
+                in_ctx.set_dash ({2, 1}, 0);
+                in_ctx.set_line_width (line_width / 2.0);
 
                 int[] db_range = { 0, -10, -20, -30, -40, -50, -60, -70 };
                 foreach (int db in db_range) {
@@ -244,13 +221,29 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
                     in_ctx.line_to (x + bands_allocation.width, y);
                     in_ctx.stroke ();
                 }
+
+                var preset = new Hottoe.Equalizer.Preset10Bands("fake");
+                for (int cpt = 0; cpt < preset.length; ++cpt) {
+                    int freq = preset[cpt].freq;
+                    double ratio = GLib.Math.sqrt ((double)freq / (22000));
+
+                    double x = bands_allocation.x + (bands_allocation.width * (ratio));
+                    double y = bands_allocation.y;
+                    in_ctx.move_to (x, y);
+                    in_ctx.line_to (x, y + bands_allocation.height);
+                    in_ctx.stroke ();
+                }
             }
             in_ctx.restore ();
 
-            in_ctx.move_to (bands_allocation.x - 1.5, bands_allocation.y);
-            in_ctx.line_to (bands_allocation.x - 1.5, bands_allocation.y + bands_allocation.height + 1.5);
-            in_ctx.line_to (bands_allocation.x + 1.5 + bands_allocation.width, bands_allocation.y + 1.5 + bands_allocation.height);
-            in_ctx.set_line_width (3.0);
+            //  in_ctx.move_to (bands_allocation.x - (line_width / 2.0), bands_allocation.y);
+            //  in_ctx.line_to (bands_allocation.x - (line_width / 2.0),
+                            //  bands_allocation.y + bands_allocation.height + (line_width / 2.0));
+            //  in_ctx.line_to (bands_allocation.x + (line_width / 2.0) + bands_allocation.width,
+                            //  bands_allocation.y + (line_width / 2.0) + bands_allocation.height);
+            //  in_ctx.set_line_width (line_width);
+            in_ctx.rectangle(bands_allocation.x  - (line_width / 2.0), bands_allocation.y  - (line_width / 2.0),
+                             bands_allocation.width + line_width, bands_allocation.height + line_width);
             in_ctx.stroke ();
 
             // Draw bands
