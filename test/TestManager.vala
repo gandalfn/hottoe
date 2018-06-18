@@ -64,7 +64,7 @@ static int main (string[] in_args) {
     Posix.tcsetattr (0, Posix.TCSANOW, ios_new);
 
     var stdin = new GLib.IOChannel.unix_new (0);
-    stdin.add_watch (GLib.IOCondition.OUT, (source, condition) => {
+    stdin.add_watch (GLib.IOCondition.IN, (source, condition) => {
         char key = 0;
         size_t size = 1;
         try {
