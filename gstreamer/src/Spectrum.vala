@@ -184,7 +184,7 @@ public class Hottoe.Gst.Spectrum : global::Gst.Audio.Filter {
         global::Gst.MapInfo info;
         in_buf.map (out info, global::Gst.MapFlags.READ);
 
-        uint8[] data = info.data;
+        unowned uint8[]? data = info.data;
         float max_value = (1UL << ((bps << 3) - 1)) - 1;
 
         int pos = 0;

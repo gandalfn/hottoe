@@ -78,7 +78,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
         }
     }
 
-    private const int c_sample_rate = 34000;
+    private const int c_sample_rate = 40000;
     private const int c_offset = 10;
     private const float c_gamma = 2.2f;
 
@@ -152,7 +152,7 @@ public class Hottoe.Widgets.Spectrum : Gtk.Grid {
     }
 
     private void on_spectrum_updated () {
-        float[] magnitudes = m_spectrum.get_magnitudes ();
+        unowned float[] magnitudes = m_spectrum.get_magnitudes ();
 
         for (int band = 0; band < nb_bands; ++band) {
             double val = magnitudes[band];

@@ -108,9 +108,9 @@ internal class Hottoe.PulseAudio.Spectrum : Hottoe.Spectrum {
                 string name = struct.get_name ();
 
                 if (name == "hspectrum") {
-                    var vals = struct.get_value ("magnitude");
+                    unowned GLib.Value? vals = struct.get_value ("magnitude");
                     for (int cpt = 0; cpt < bands; ++cpt) {
-                        var mag = Gst.ValueList.get_value (vals, cpt);
+                        unowned GLib.Value? mag = Gst.ValueList.get_value (vals, cpt);
 
                         if (mag != null) {
                             m_magnitudes[cpt] = (float)mag;
