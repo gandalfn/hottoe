@@ -1,18 +1,18 @@
-# French translation for hottoe.
-# Copyright (C) 2018 Hottoe 2018
-# This file is distributed under the same license as the hottoe package.
-# Nicolas Bruguier <gandalfn@club-internet.fr>, 2018.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.gitlab.mithrandirn.hottoe package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hottoe\n"
+"Project-Id-Version: com.gitlab.mithrandirn.hottoe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-28 20:49+0200\n"
-"PO-Revision-Date: 2018-02-02 18:48+0100\n"
-"Last-Translator: Nicolas Bruguier <gandalfn@club-internet.fr>,\n"
-"Language-Team: French <fr@li.org>\n"
-"Language: fr\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,47 +95,47 @@ msgstr ""
 
 #: src/Services/DesktopNotification.vala:29
 msgid "Sound device available"
-msgstr "Périphérique audio disponible"
+msgstr ""
 
 #: src/Services/DesktopNotification.vala:41
 msgid "Sound device disconnected"
-msgstr "Périphérique audio déconnecté"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:70
 msgid "<small>Left</small>"
-msgstr "<small>Gauche</small>"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:71
 msgid "<small>Center</small>"
-msgstr "<small>Centre</small>"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:72
 msgid "<small>Right</small>"
-msgstr "<small>Droit</small>"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:150
 msgid "<small>Min</small>"
-msgstr "<small>Min</small>"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:153
 msgid "<small>100% (0dB)</small>"
-msgstr "<small>100% (0dB)</small>"
+msgstr ""
 
 #: src/Widgets/ChannelView.vala:157
 msgid "<small>Unamplified</small>"
-msgstr "<small>Non amplifié</small>"
+msgstr ""
 
 #: src/Widgets/DeviceSettingsPage.vala:138
 msgid "Output"
-msgstr "Sortie"
+msgstr ""
 
 #: src/Widgets/DeviceSettingsPage.vala:139
 msgid "Input"
-msgstr "Entrée"
+msgstr ""
 
 #: src/Widgets/IndicatorView.vala:42
 msgid "Sound Devices Settings…"
-msgstr "Paramètres des périphériques audio"
+msgstr ""
 
 #: src/Widgets/PresetList.vala:30
 msgid "Automatic"
@@ -151,25 +151,25 @@ msgstr ""
 
 #: src/Widgets/PlugSettingsList.vala:35
 msgid "Clients:"
-msgstr "Clients:"
+msgstr ""
 
 #: src/Widgets/PlugSettingsList.vala:46
 msgid "Add Client…"
-msgstr "Ajouter un client"
+msgstr ""
 
 #: src/Indicator.vala:46 src/SwitchboardPlug.vala:37
 #: data/com.gitlab.mithrandirn.hottoe.appdata.xml.in:5
 msgid "Sound Devices"
-msgstr "Périphériques Audio"
+msgstr ""
 
 #: src/Indicator.vala:47
 msgid "The Sound Devices indicator"
-msgstr "L'indicateur des périphériques audio"
+msgstr ""
 
 #: src/SwitchboardPlug.vala:38
 #: data/com.gitlab.mithrandirn.hottoe.appdata.xml.in:6
 msgid "Configure sound devices"
-msgstr "Configuration des périphériques audio"
+msgstr ""
 
 #: data/com.gitlab.mithrandirn.hottoe.appdata.xml.in:8
 msgid ""
@@ -195,6 +195,3 @@ msgstr ""
 #: data/com.gitlab.mithrandirn.hottoe.appdata.xml.in:38
 msgid "Wingpanel Hottoe indicator"
 msgstr ""
-
-#~ msgid "Scan Sound Devices…"
-#~ msgstr "Recherche des périphériques audio…"
